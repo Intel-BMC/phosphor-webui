@@ -30,7 +30,7 @@ window.angular && (function(angular) {
                 } else {
                   $scope.firstLevel = 'overview';
                 }
-                $scope.showSubMenu = false;
+                $scope.showSubMenu = true;
               });
               $scope.$watch('showNavigation', function() {
                 var paddingTop = 0;
@@ -40,12 +40,6 @@ window.angular && (function(angular) {
                 } else {
                   $scope.firstLevel = 'overview';
                 }
-
-                if ($scope.showNavigation) {
-                  paddingTop = document.getElementById('header').offsetHeight;
-                }
-                dataService.bodyStyle = {'padding-top': paddingTop + 'px'};
-                $scope.navStyle = {'top': paddingTop + 'px'};
               });
             }
           ],
@@ -56,7 +50,7 @@ window.angular && (function(angular) {
 
               if (scope.showSubMenu) {
                 scope.$apply(function() {
-                  scope.showSubMenu = false;
+                  scope.showSubMenu = true;
                 });
               }
             });

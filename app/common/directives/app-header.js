@@ -122,6 +122,8 @@ window.angular && (function(angular) {
 
             loadData();
 
+            var myUsername = sessionStorage.getItem('LOGIN_ID');
+
             $scope.logout = function() {
               userModel.logout(function(status, error) {
                 if (status) {
@@ -145,11 +147,27 @@ window.angular && (function(angular) {
               }, 2000);
             };
 
+            var myRefreshHover =
+                angular.element(document.querySelector('.refresh-hover'));
+            $scope.openRefreshHover = function() {
+              myRefreshHover.addClass('opened');
+            };
+            $scope.hideRefreshHover = function() {
+              myRefreshHover.removeClass('opened');
+            };
+
+            var myLoginHover =
+                angular.element(document.querySelector('.login-hover'));
+            $scope.openLoginHover = function() {
+              myLoginHover.addClass('opened');
+            };
+            $scope.hideLoginHover = function() {
+              myLoginHover.removeClass('opened');
+            };
             var loginListener =
                 $rootScope.$on('user-logged-in', function(event, arg) {
                   loadData();
                 });
-
             $scope.$on('$destroy', function() {
               loginListener();
             });
