@@ -7,7 +7,7 @@
   <section class="row">
     <div class="column large-8">
       <!-- Server Metadata -->
-      <div class="row overview__server-metadata">
+      <div class="row overview__server-metadata page-content-box">
         <div class="column large-4">
           <h2 class="h3">Server information</h2>
         </div>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <!-- BMC Metadata -->
-      <div class="row overview__server-metadata">
+      <div class="row overview__server-metadata page-content-box">
         <div class="column large-4">
           <h2 class="h3">BMC information</h2>
         </div>
@@ -75,7 +75,7 @@
         </div>
       </div>
       <!-- Power metadata -->
-      <div class="row overview__server-metadata">
+      <div class="row overview__server-metadata page-content-box">
         <div class="column large-4">
           <h2 class="h3">Power information</h2>
         </div>
@@ -120,11 +120,11 @@
               <label for="toggle__switch-round" tabindex="0">Server LED is <span
                   class="uid-switch__status">{{dataService.LED_state}}</span></label>
             </div>
-          <span>
+            <span>
               {{ dataService.LED_state == 'on' ? "On" : "Off" }}
-          </span>
+            </span>
+          </div>
         </div>
-      </div>
         <a href="#/server-control/remote-console" class="no-icon quick-links__item">
           <p class="inline quick-links__label">Serial over LAN console</p>
           <icon file="icon-launch.svg" class="float-right"></icon>

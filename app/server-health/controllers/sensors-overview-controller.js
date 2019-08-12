@@ -12,7 +12,6 @@ window.angular && (function(angular) {
     '$scope', '$log', '$window', 'APIUtils', 'dataService', 'Constants',
     function($scope, $log, $window, APIUtils, dataService, Constants) {
       $scope.dataService = dataService;
-
       $scope.dropdown_selected = false;
 
       $scope.$log = $log;

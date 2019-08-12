@@ -2,17 +2,11 @@
 @mixin status-light-before {
   content: '';
   display: inline-block;
-  margin-right: -12%;
-  transform: translateY(-2px);
-  left: 0;
-  top: 0;
   width: 16px;
   height: 16px;
-  position: absolute;
 }
 
 @mixin status-light-header {
-  padding-left: 1.6em;
   margin-top: .7em;
   position: relative;
 }
