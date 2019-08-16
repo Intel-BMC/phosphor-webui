@@ -47,6 +47,16 @@ window.angular && (function(angular) {
       this.info = function(title, message) {
         initToast('info', title, message);
       };
+      this.alert = function(message) {
+        var errorMessage = $sce.trustAsHtml(
+            '<div role="alert"><b>Alert</b><br>' + message + '</div>');
+        ngToast.create({className: 'danger', content: errorMessage});
+      };
+      this.warning = function(message) {
+        var errorMessage = $sce.trustAsHtml(
+            '<div role="alert"><b>Warning</b><br>' + message + '</div>');
+        ngToast.create({className: 'warning', content: errorMessage});
+      };
     }
   ]);
 })(window.angular);

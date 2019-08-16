@@ -5,7 +5,7 @@ $color--blue-50: #0f8dc3;
 $color--blue-40: #00aeef;
 $color--blue-38: #8acfea;
 $color--blue-35: #a8cbe3;
-$color--blue-30: #c4e6f3;
+$color--blue-30: #bde3f3;
 $color--blue-20: #e3f1f8;
 $color--blue-10: #e1edf8;
 $color--blue-05: #f0f7fb;
@@ -31,7 +31,7 @@ $color--teal-20: #CCF0F5;
 
 $color--green-50: #0A7D06;
 $color--green-40: #26af5e;
-$color--green-30: #3bbe72;
+$color--green-30: #34bc6e;
 $color--green-20: #C6E8C5;
 $color--green-10: #e7f6f1;
 
@@ -47,6 +47,22 @@ $color--red-30: #e36669;
 $color--red-20: #FAD3D3;
 $color--red-10: #fdf7f2;
 
+@mixin whitefilter {
+  filter: brightness(0) saturate(100%) invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
+}
+@mixin greentowhitefilter {
+  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(326deg) brightness(255%) contrast(103%);
+}
+@mixin SuperLtBluefilter {
+   filter: brightness(0) saturate(100%) invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
+}
+@mixin LtBluefilter {
+  filter: brightness(0) saturate(100%) invert(87%) sepia(27%) saturate(6400%) hue-rotate(166deg) brightness(96%) contrast(88%);
+}
+
+@mixin Greyfilter {
+  filter: brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(298%) hue-rotate(252deg) brightness(92%) contrast(88%);
+}
 @mixin bg-gradient{
     background: rgb(20,160,210);
     background: linear-gradient(90deg, rgba(20,160,210,1) 0%, rgba(16,126,184,1) 100%);
@@ -60,7 +76,7 @@ $base-01--04: $color--blue-30;
 $base-01--05: $color--blue-20;
 $base-01--06: $color--blue-10;
 
-$base-02--01: $color--grey-100;
+$base-02--01: $color--grey-90;
 $base-02--02: $color--grey-80;
 $base-02--03: $color--grey-60;
 $base-02--04: $color--grey-40;
@@ -106,6 +122,7 @@ $border-color-02: $base-02--03;
 
 $box-shadow-color: $base-02--05;
 
+
 $status-error: $accent-04--01;
 $status-ok: $accent-02--01;
 $status-warn: $accent-03--01;
@@ -150,25 +167,13 @@ $color-status-warning: $color--yellow-60;
 $color-status-warning-text: $color--yellow-60;
 $color-status-warning-bg: $color--yellow-10;
 
-$color-status-good: $color--green-30;
-$color-status-good-text: $color--green-40;
-$color-status-good-bg:  $color--green-10;
+$color-status-success: $color--blue-30;
+$color-status-success-text: $color--blue-40;
+$color-status-success-bg:  $color--blue-10;
 
 $color-status-info: $color--blue-50;
 $color-status-info-text: $color--blue-50;
 $color-status-info-bg: $color--blue-05;
-
-// Status colors
-$error-color: $color--red-50;
-$status-ok: #34bc6e;
-$status-ok-light: #cceedf;
-$status-warn: #ffb000;
-
-// Alerts
-$alert__error: rgb(230, 35, 37);
-$alert__warning: rgb(255, 127, 0);
-$alert__message: rgb(203, 221, 235);
-$alert__danger: #fad3D3;
 
 
 $notification-info--dark: $color--blue-40;
@@ -179,6 +184,18 @@ $notification-warn--dark: $color--yellow-50;
 $notification-warn--light: $color--yellow-10;
 $notification-error--dark: $color--red-50;
 $notification-error--light: $color--red-10;
+
+// Status colors
+$error-color: $color--red-50;
+$status-ok: $color--green-30;
+$status-ok-light: #cceedf;
+$status-warn: #ffb000;
+
+// Alerts
+$alert__error: rgb(230, 35, 37);
+$alert__warning: rgb(255, 127, 0);
+$alert__message: rgb(203, 221, 235);
+$alert__danger: #fad3D3;
 
 // Severity
 $critical-lightbg: #da1416;

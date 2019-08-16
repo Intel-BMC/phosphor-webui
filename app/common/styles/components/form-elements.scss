@@ -18,6 +18,16 @@
   box-sizing: border-box;
 }
 
+@mixin bg-icon {
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  text-align:left;
+  padding-left: 35px;
+  @include mediaQuery(small) {
+    background-size: 3em;
+    background-position: 0 5px;
+  }
+}
 
 /* FORM STYLE */
 input[type='email'], input[type='number'], input[type='password'], input[type='search'], input[type='tel'], input[type='url'], input[type='text'], input[type='date'], input[type='time'], textarea {
@@ -28,8 +38,6 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
     @include input-highlight-format($color--blue-50);
   }
 }
-
-
 
 /* SELECT DROPDOWN */
 select {
@@ -433,53 +441,4 @@ select.classic:focus {
   .visible {
     visibility: visible;
   }
-}
-
-// Old code from forms.scss
-//Foundation overwrite
-
-button,
-.btn,
-[type='button'] {
-  box-shadow: none;
-}
-
-[type=color], [type=date], [type=datetime-local], [type=datetime], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], textarea {
-  border-color: $input-border;
-}
-
-input[readonly],
-input[readonly]:focus{
-  box-shadow: 0 0 0;
-  background: $field__disabled;
-  border: 1px solid $lightbg__grey;
-}
-
-textarea { padding: .2em;
-  height: auto;}
-input[type="submit"], .submit {
-  margin: 1em 0;
-  width: 100%;
-}
-
-//Custom select
-select{
-  border-radius: 0px;
-  height: auto;
-  padding-right: 0.5rem; //override inherited Foundation style
-  border-color: $input-border;
-  @include fastTransition-all;
-  @include bgImage__arrowDown-primary;
-  &:focus {
-    box-shadow: 0 0 0;
-  }
-  &[disabled] {
-    @include bgImage__arrowDown-disabled;
-  }
-}
-
-
-.form__validation-message {
-  color: $error-color;
-  font-size: 0.9em;
 }

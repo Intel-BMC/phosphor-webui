@@ -4,11 +4,11 @@
   }
   @mixin page-roundcorners{
     border-radius: 8px;
-    padding:2% 4%;
+    padding:0 3%;
   }
   @mixin page-boxcorners{
     border-radius:0px;
-    padding:2% 4%;
+    padding:.8% 3%;
   }
   @mixin page-dropshadow{
     box-shadow: 0px 4px 35px 6px rgba(153,182,255,0.32); //shadow is #99B6FF
@@ -20,7 +20,7 @@
   }
 
   @mixin page-spaceafter{
-    margin-bottom:22px;
+    margin-bottom:8px;
   }
 
   .page-title{
@@ -43,10 +43,14 @@
     @include page-boxformatting;
   }
 
-  .text-outro,.text-outro a{
+  .text-intro,.text-intro a.text-outro,.text-outro a{
       color: $color--grey-80;
       font-size: 12px;
       text-transform: capitalize;
       font-weight: 600;
-      padding: 5px 0;
+      padding: 5px 5px 0 0;
+      float:right;
+  }
+  .text-outro,.text-outro a{
+      padding-bottom:5px;
   }

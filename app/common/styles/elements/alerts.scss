@@ -1,4 +1,11 @@
 @mixin alert-format($alert-type){
+  border-right:0;
+  border-bottom:0;
+  border-top:0;
+  width: fit-content;
+  transition: all .2s ease;
+  box-shadow: 0px 4px 35px 6px rgba(153,182,255,0.32); //shadow is #99B6FF
+
   @if ($alert-type=="warning") {
     background-color: $color-status-warning-bg;
     background-image: url(../assets/icons/icon-alert-warning.png);
@@ -9,10 +16,10 @@
     background-image: url(../assets/icons/icon-alert-error.png);
     border-left: solid 4px $color-status-error;
   }
-  @if ($alert-type=="good") {
-    background-color: $color-status-good-bg;
+  @if ($alert-type=="success") {
+    background-color: $color-status-success-bg;
     background-image: url(../assets/icons/icon-alert-good.png);
-    border-left: solid 4px $color-status-good;
+    border-left: solid 4px $color-status-success;
   }
   @if ($alert-type=="info") {
     background-color: $color-status-info-bg;
@@ -24,12 +31,16 @@
   line-height: 18px;
   overflow: hidden;
   padding: 15px 40px 15px 60px;
-  border-radius: 6px;
+  border-radius: 0px;
   text-align: left;
   font-size: 14px;
-  width: 100%;
+  transition: all .2s ease-in-out; /*make it smooth*/
   margin: 15px auto;
   color: #333;
+}
+
+.alert-box{
+  @include alert-format('')
 }
 
 .alert-danger{
@@ -40,8 +51,8 @@
     @include alert-format(warning)
 }
 
-.alert-good{
-  @include alert-format(good)
+.alert-success{
+  @include alert-format(success)
 }
 
 .alert-info{
@@ -54,13 +65,13 @@
 .alert-text-warning{
   color: $color-status-warning-text;
 }
-.alert-text-good{
-  color: $color-status-good-text;
+.alert-text-success,.alert-text-ok{
+  color: $color-status-success-text;
 }
 .alert-text-info{
   color: $color-status-info-text;
 }
-.alert-text-neutral{
+.alert-text-neutral,.alert-text-all{
   color: $color--grey-50;
 }
 
@@ -81,7 +92,6 @@
   margin-bottom: 24px;
   border-style: solid;
   border-width: 1px;
-  position: relative;
 }
 
 .notification-banner__text {
@@ -98,16 +108,15 @@
 .notification-banner--warning {
   background-color: $accent-03--03;
   border-color: $accent-03--02;
-  .icon {
-    position: absolute;
-    left: 10px;
-    top: 8px;
-    bottom: 8px;
-    width: 18px;
-    height: 30px;
-    margin: auto;
-  }
   .notification-banner__text {
-    padding-left: 24px;
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      vertical-align: bottom;
+      margin-right: 0.5em;
+      background-image: url(../assets/images/icon-warning.svg);
+    }
   }
 }
