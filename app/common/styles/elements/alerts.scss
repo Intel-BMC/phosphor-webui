@@ -54,13 +54,13 @@
 .alert-text-warning{
   color: $color-status-warning-text;
 }
-.alert-text-good{
+.alert-text-good,.alert-text-ok{
   color: $color-status-good-text;
 }
 .alert-text-info{
   color: $color-status-info-text;
 }
-.alert-text-neutral{
+.alert-text-neutral,.alert-text-all{
   color: $color--grey-50;
 }
 

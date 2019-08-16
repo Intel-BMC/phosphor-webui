@@ -33,28 +33,13 @@
   }
 }
 
-.content__container div:first-child{
- border:0;
+.content__container{
+  background-image: url('../assets/images/logo-OpenBmc-builton.png');
+  background-position: bottom 8px right 50px;
+  background-repeat: no-repeat;
+  padding-bottom:64px;
+  min-height:400px;
 }
-.content__container2>div:nth-child(2){
-  @include page-contentborder;
-  @include page-dropshadow;
-  @include page-boxcorners;
-  @include page-spaceafter;
-}
-.content__container div>form{
-  @include page-contentborder;
-  @include page-dropshadow;
-  @include page-roundcorners;
-  @include page-spaceafter;
-}
-.content__container2 div:nth-child(3){
-  @include page-contentborder;
-  @include page-dropshadow;
-  @include page-roundcorners;
-  @include page-spaceafter;
-}
-
 
 .content-header {
   font-weight: 700;
@@ -90,5 +75,22 @@ label {
   }
   @include mediaQuery(small) {
     display:inherit;
+  }
+}
+
+.trim-text-medium{
+  @include mediaQuery(x-small) {
+    display:none;
+  }
+  @include mediaQuery(medium) {
+    display:block;
+  }
+}
+.trim-text-small{
+  @include mediaQuery(x-small) {
+    display:none;
+  }
+  @include mediaQuery(small) {
+    display:block;
   }
 }

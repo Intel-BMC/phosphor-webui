@@ -2,33 +2,40 @@
   <!-- HEADER -->
 
   <div class="header">
-      <div class="header__info-section">
-          <span class="header__title">{{ dataService.hostname | limitTo: 15 }}{{dataService.hostname.length > 15 ? '...' : ''}}</span>
-      </div>
-      <div class="header__functions-section">
-        <div class="header__functions">
-            <a href="#/server-health/event-log"> H<span class="header__textlink">ealth</span> <span ng-class="{'status-light__error': dataService.server_health == 'Critical', 'status-light__warn': dataService.server_health == 'Warning', 'status-light__good': dataService.server_health == 'Good'}"></span></a>
-            <a href="#/server-control/power-operations" role="button"> P<span class="header__textlink">ower</span> <span ng-class="{'status-light__off': dataService.server_state == 'Off', 'status-light__disabled': dataService.server_state == 'Unreachable', 'status-light__good': dataService.server_state == 'Running', 'status-light__error': dataService.server_state == 'Quiesced'}"></span></a>
-            <a href="#" class="header__page-refresh" ng-click="refresh()" ng-mouseover="openRefreshHover()"  ng-mouseleave="hideRefreshHover()" aria-label="refresh page data">
-              <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-refresh.png"> <span class="header__textlink">Refresh data</span>
-            </a>
-              <div class="refresh-hover header__hover-box">
-                <span class="small-text">Last Refreshed</span><br>
-                <span class="small-text black"><span>{{dataService.last_updated | localeDate}}</span>
-              </div>
-            <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="openLoginHover()"  ng-mouseleave="hideLoginHover()">
-                <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.png"> <span class="header__textlink">Logout</span>
-            </a>
-                <div class="login-hover header__hover-box">
-                  <span class="small-text">Logged in as</span><br>
-                  <span class="small-text black"><span>{{dataService.user_id}}</span>
-                </div>
-            <a href="#" ng-mouseover="openHelpHover()" ng-mouseleave="hideHelpHover()">
-                <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-help.png"></a>
-                <div class="help-hover header__hover-box" ng-mouseleave="hideHelpHover()">
-                    <div class="small-text" ng-bind-html="helpText">Help text goes here</div>
-                </div>
+    <div class="header__info-section">
+      <span
+        class="header__title">{{ dataService.hostname | limitTo: 15 }}{{dataService.hostname.length > 15 ? '...' : ''}}</span>
+    </div>
+    <div class="header__functions-section">
+      <div class="header__functions">
+        <a class="header__status" href="#/server-health/event-log"> H<span class="header__textlink">ealth</span> <span
+            ng-class="{'status-light__error': dataService.server_health == 'Critical', 'status-light__warn': dataService.server_health == 'Warning', 'status-light__good': dataService.server_health == 'Good'}"></span></a>
+        <a class="header__status" href="#/server-control/power-operations" role="button"> P<span
+            class="header__textlink">ower</span> <span
+            ng-class="{'status-light__off': dataService.server_state == 'Off', 'status-light__disabled': dataService.server_state == 'Unreachable', 'status-light__good': dataService.server_state == 'Running', 'status-light__error': dataService.server_state == 'Quiesced'}"></span></a>
+        <a class="header__page-refresh" ng-click="refresh()" ng-mouseover="openRefreshHover()"
+          ng-mouseleave="hideRefreshHover()" aria-label="refresh page data">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-refresh.png"> <span
+            class="header__textlink">Refresh data</span>
+        </a>
+        <div class="refresh-hover header__hover-box">
+          <span class="small-text">Last Refreshed</span><br>
+          <span class="small-text black"><span>{{dataService.last_updated | localeDate}}</span>
+        </div>
+        <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="openLoginHover()"
+          ng-mouseleave="hideLoginHover()">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.png"> <span
+            class="header__textlink">Logout</span>
+        </a>
+        <div class="login-hover header__hover-box">
+          <span class="small-text">Logged in as</span><br>
+          <span class="small-text black"><span>{{dataService.user_id}}</span>
+        </div>
+        <a href="#" ng-hide="true" ng-mouseover="openHelpHover()" ng-mouseleave="hideHelpHover()">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-help.png"></a>
+        <div class="help-hover header__hover-box" ng-mouseleave="hideHelpHover()">
+          <div class="small-text" ng-bind-html="helpText">Help text goes here</div>
         </div>
       </div>
-  </div>
+    </div>
 </header>

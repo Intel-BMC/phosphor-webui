@@ -1,7 +1,28 @@
 // Content layout styles (Moved from content.scss b/c need for header)
 $nav__toplvlWidth: 240px;
 $nav__seclvlWidth: 240px;
+$header_height: 50px;
 
+@mixin header-height($location) {
+  @include mediaQuery(x-small) {
+    $header_height: 80px;
+    @if ($location=="header"){
+      height: $header_height;
+    }
+    @if ($location=="page-container"){
+      margin-top: $header_height;
+    }
+  }
+  @include mediaQuery(small) {
+    $header_height: 50px;
+    @if ($location=="header"){
+      height: $header_height;
+    }
+    @if ($location=="page-container"){
+      margin-top: $header_height;
+    }
+  }
+}
 
 
 html, body {

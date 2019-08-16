@@ -1,148 +1,197 @@
-
-// Table Header
-.table-header {
-  width: 100%;
-  color: $primary-dark;
-  line-height: 30px;
-  padding: .8em 0 0;
-  margin-bottom: .8em;
-  border-bottom: 1px solid $border-color-01;
-  font-size: 1.25em;
-  @include mediaQuery(medium) {
-    margin: 1.8em 0;
-  }
-}
-
-// Table
-.table {
-  width: 100%;
-}
-
-.table__body {
-  width: 100%;
-}
-
-.table__row {
-  display: flex;
-  width: 100%;
-  max-width: calc(100vw - 10px);
-  flex-wrap: wrap;
-  font-weight: 400;
-  position: relative;
-  &.disabled {
-    background-color: $background-03;
-    color: $text-02;
-  }
-}
-
-.table__row-save {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height:100%;
-  background: $background-04;
-  z-index:200;
-  color: $primary-light;
-  padding: .8em 1em;
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
-.table__cell {
-  flex: 0 0 100%;
-  line-height: 2.8em;
-  padding: .5em 1em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-bottom: 1px solid $border-color-01;
-  @include mediaQuery(small) {
+@mixin flex{
+  //  border:1px solid  blue;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    flex-basis: auto;
+    white-space: nowrap;
+    overflow: hidden;
     flex: 1;
-  }
-  //
-  //@include mediaQuery(large) {
-  //  padding: 15px 30px;
-  //}
-}
-
-.table__cell-label {
-  display: inline-block;
-  font-weight: 700;
-  min-width: 50%;
-  padding-right: 15px;
-
-  @include mediaQuery(small) {
-    display: none;
-  }
-}
-
-// Table Head
-.table__head {
-   width: 100%;
-  .table__row {
-    display: none;
-    font-weight: 700;
-    border-bottom: 1px solid $border-color-01;
-    background-color: $background-05;
-    color: $primary-light;
-
+    text-overflow: ellipsis;
     @include mediaQuery(small) {
+    //  border:1px solid  white;
       display: flex;
+      // flex: 0 0 100%;
+      flex-wrap: nowrap;
+      flex-direction: row;
+    //  flex-basis: auto;
     }
 
-    .table__cell {
-      @include fastTransition-all();
-      position: relative;
-      border: 0;
-      &:last-child {
-        border: 0;
+  }
+
+
+  // Table
+  .table, .table__body {
+    width: 100%;
+  }
+
+  // Table Head
+  .table__head {
+    width: 100%;
+   .table__row {
+     font-weight: 700;
+     background-color: $background-05;
+     color: $primary-light;
+     background:$color--grey-10;
+     border-bottom: 1px solid $color--grey-40;
+     color: $primary-dark;
+     font-weight: 500;
+     font-size: 14px;
+     padding:0;
+     text-align:left;
+     vertical-align:middle;
+
+     .table__cell, th {
+       @include fastTransition-all();
+       position: relative;
+       border: 0;
+       &:last-child {
+         border: 0;
+       }
+     }
+    &:hover {
+      background:$color--grey-10;
+      color: $primary-dark;
+    }
+   }
+  }
+
+  // Table Row
+  .table__row {
+    @include flex;
+    width: 100%;
+    max-width: calc(100vw - 10px);
+    font-weight: 400;
+    position: relative;
+    text-align:center;
+    &.disabled {
+      background-color: $background-03;
+      color: $text-02;
+    }
+    &:hover {
+      background:$color--grey-30;
+      transition: all .2s ease;
+    }
+  }
+
+  // Table Cell
+  .table__cell {
+    @include flex;
+    line-height: 2.8em;
+    padding: .5em 1em;
+    border-bottom: 1px solid $border-color-01;
+    &.align-left{
+      text-align: left;
+    }
+    padding:10px;
+    text-align:center;
+    vertical-align:middle;
+    margin-right:3px;
+    .status-icon{
+      border-right: 0px solid #ffffff;
+      margin:0px;
+    }
+  }
+
+
+  .table__cell-label {
+    display: inline-block;
+    font-weight: 700;
+    min-width: 50%;
+    padding-right: 15px;
+
+    @include mediaQuery(small) {
+      display: none;
+    }
+  }
+
+  .table__row-uploading {
+    color: $text-02;
+    font-weight: 700;
+    @include indeterminate-bar;
+  }
+
+  .fixed-table-header{
+    position: sticky;
+    top: $header-height;
+    z-index: 1;
+  }
+
+  //sortable heading
+  .sort-heading {
+    position: relative;
+    color: $text-03;
+    &::after {
+      content: '\025be';
+      position: absolute;
+      right: -20px;
+      top: -1px;
+      font-size: 1.3em;
+    }
+    &::before {
+      content: '\025be';
+      position: absolute;
+      right: -20px;
+      top: -10px;
+      font-size: 1.3em;
+      transform: rotate(180deg);
+    }
+    &.sort-up {
+      &::before {
+        color: $primary-accent;
+      }
+    }
+    &.sort-down {
+      &::after {
+        color: $primary-accent;
       }
     }
   }
-}
 
-.table__row-uploading {
-  color: $text-02;
-  font-weight: 700;
-  @include indeterminate-bar;
-}
 
-// sensor fixed table header on scroll
-.fixed-table-header{
-  position: sticky;
-  top: 130px;
-  z-index: 1;
-}
 
-//sortable heading
-.sort-heading {
-  position: relative;
-  color: $text-03;
-  &::after {
-    content: '\025be';
-    position: absolute;
-    right: -20px;
-    top: -1px;
-    font-size: 1.3em;
-  }
-  &::before {
-    content: '\025be';
-    position: absolute;
-    right: -20px;
-    top: -10px;
-    font-size: 1.3em;
-    transform: rotate(180deg);
-  }
-  &.sort-up {
-    &::before {
-      color: $primary-accent;
+  .fixed-table-header .table__cell{
+    background-color: #f1f4f5;
+    cursor: pointer;
+    &.status-icon{
+      border-right: 0px solid #ffffff;
+      margin:0px;
     }
   }
-  &.sort-down {
-    &::after {
-      color: $primary-accent;
-    }
+
+  .merge-left{
+    margin-left: -3px;
   }
-}
+  // Status table cells for sensor and event log
+  .status-icon{
+    max-width: 32px;
+    margin-right: 0px;
+    padding:0px;
+  }
+  .status-row__OK{
+    color: inherit;
+  }
+  .status-row__Warning{
+    //color: $color-status-warning;
+    border-bottom:2px solid $color-status-warning;
+    background: $color-status-warning-bg;
+  }
+  .status-row__Critical{
+   // color: $color-status-error;
+    font-weight:500;
+    border-bottom:2px solid $color-status-error;
+    background: $color-status-error-bg;
+  }
+  .status__OK{
+    @include bg-icon;
+    background-image: url(../assets/icons/icon-alert-good.png);
+  }
+  .status__Critical{
+    @include bg-icon;
+    background-image: url(../assets/icons/icon-alert-error.png);
+  }
+  .status__Warning{
+    @include bg-icon;
+    background-image: url(../assets/icons/icon-alert-warning.png);
+  }
+

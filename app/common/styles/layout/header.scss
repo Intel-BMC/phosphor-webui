@@ -9,27 +9,15 @@
   border-radius: 6px 6px;
 }
 
-$header_Height: 50px;
 
-@mixin header-height($location) {
-  @include mediaQuery(x-small) {
-    $header_Height: 80px;
-    @if ($location=="header"){
-      height: $header_Height;
-    }
-    @if ($location=="page-container"){
-      margin-top: $header_Height;
-    }
-  }
-  @include mediaQuery(small) {
-    $header_Height: 50px;
-    @if ($location=="header"){
-      height: $header_Height;
-    }
-    @if ($location=="page-container"){
-      margin-top: $header_Height;
-    }
-  }
+
+.header__functions a:hover{
+  opacity: .7;
+}
+
+.header__status span:nth-child(2):hover{
+ // opacity: .5;
+ // border:1px solid red;
 }
 
 .header {

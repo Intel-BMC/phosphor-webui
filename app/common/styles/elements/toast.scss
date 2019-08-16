@@ -16,3 +16,12 @@
     text-align: left;
   }
 }
+
+.ng-toast.ng-toast--right .ng-toast__list {
+  left: auto;
+  right: 0;
+  margin-right: 0px;
+}
+.ng-toast.ng-toast--top .ng-toast__list {
+  top: -90px;
+}

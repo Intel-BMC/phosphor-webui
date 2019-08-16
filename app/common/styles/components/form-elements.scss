@@ -18,6 +18,16 @@
   box-sizing: border-box;
 }
 
+@mixin bg-icon {
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  text-align:left;
+  padding-left: 35px;
+  @include mediaQuery(small) {
+    background-size: 3em;
+    background-position: 0 5px;
+  }
+}
 
 /* FORM STYLE */
 input[type='email'], input[type='number'], input[type='password'], input[type='search'], input[type='tel'], input[type='url'], input[type='text'], input[type='date'], input[type='time'], textarea {
@@ -28,8 +38,6 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
     @include input-highlight-format($color--blue-50);
   }
 }
-
-
 
 /* SELECT DROPDOWN */
 select {
@@ -474,8 +482,79 @@ select{
   }
 }
 
-
 .form__validation-message {
   color: $error-color;
   font-size: 0.9em;
+}
+
+.filter-box span{
+  font-weight:800;
+}
+
+.filter-box{
+  @include mediaQuery(small) {
+    width:18%;
+  }
+  float:left;
+  box-sizing: border-box;
+  margin-right:1%;
+}
+
+.filter-btn{
+  min-width: 85px;
+}
+
+.search-box{
+  min-width: 76%;
+  float:left;
+  box-sizing: border-box;
+  margin-right:1%;
+}
+
+select.minimal {
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  background-image:
+    linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding-right: 5px;
+  padding-top: 4px;
+  height: 3em;
+  max-height: none;
+  position: relative;
+  color:  #5b5b5b;
+  box-sizing: border-box;
+  box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+  &:focus,&:active {
+      background-image:
+        linear-gradient(45deg, #0f8dc3 50%, transparent 50%),
+        linear-gradient(135deg, transparent 50%, #0f8dc3 50%),
+        linear-gradient(to right, #ccc, #ccc);
+      background-position:
+        calc(100% - 15px) 1em,
+        calc(100% - 20px) 1em,
+        calc(100% - 2.5em) 0.5em;
+      background-size:
+        5px 5px,
+        5px 5px,
+        1px 1.5em;
+      background-repeat: no-repeat;
+      border-color: #0f8dc3;
+      outline: 0;
+  }
 }
