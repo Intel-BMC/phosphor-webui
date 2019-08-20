@@ -1,5 +1,3 @@
-
-
 // Page header
 .page-header {
   width: 100%;
@@ -47,14 +45,14 @@
   margin-top: 2em;
 }
 
-// TODO: Determine if label and content-label are the same - remove generic element selector
+//TODO: Determine if label and content-label are the same - remove generic element selector
 .content-label,
 label {
   color: $text-02;
   margin-bottom: 0;
 }
 
-// TODO: Remove and replace with page and page-title pattern
+// Page header
 .page-header {
   width: 100%;
   position: relative;
@@ -62,7 +60,6 @@ label {
   margin: 0.5em 0 2.2em;
   padding-left: 0;
 }
-// TODO: Remove and replace with the .section and .section-title pattern
 .subhead {
   width: 100%;
   border-bottom: 1px solid $border-color-01;

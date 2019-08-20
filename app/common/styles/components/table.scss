@@ -1,197 +1,239 @@
-@mixin flex{
-  //  border:1px solid  blue;
+$upTriangle: "\25b2";
+$downTriangle: "\25bc";
+
+.table {
+  width: 100%;
+}
+
+// Table Head
+.table__head, th {
+  width: 100%;
+ .table__row {
+   display: none;
+   font-weight: 700;
+   background-color: $background-05;
+   color: $primary-light;
+   background:$color--grey-10;
+   border-bottom: 1px solid $color--grey-40;
+   color: $primary-dark;
+   font-weight: 500;
+   font-size: 14px;
+   padding:0;
+   text-align:left;
+   vertical-align:middle;
+   @include mediaQuery(small) {
+     display: flex;
+   }
+   .table__cell {
+     @include fastTransition-all();
+     position: relative;
+     border: 0;
+     &:last-child {
+       border: 0;
+     }
+   }
+  &:hover {
+    background:$color--grey-10;
+    color: $primary-dark;
+    cursor: pointer;
+  }
+ }
+}
+
+.table__body, .bmc-table {
+  width: 100%;
+}
+
+.table__row, .bmc-table__row {
+  width: 100%;
+  max-width: calc(100vw - 10px);
+  font-weight: 400;
+  position: relative;
+  text-align:center;
+  &.disabled {
+    background-color: $background-03;
+    color: $text-02;
+  }
+  &:hover {
+    background:$color--grey-30;
+    transition: all .2s ease;
+   // color:#FFFFFF;
+  }
+  @include mediaQuery(small) {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    flex-basis: auto;
-    white-space: nowrap;
-    overflow: hidden;
-    flex: 1;
-    text-overflow: ellipsis;
-    @include mediaQuery(small) {
-    //  border:1px solid  white;
-      display: flex;
-      // flex: 0 0 100%;
-      flex-wrap: nowrap;
-      flex-direction: row;
-    //  flex-basis: auto;
-    }
-
   }
+}
 
+.table__cell, {
+ flex: 1;
+  line-height: 2.8em;
+  padding: .5em 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid $border-color-01;
 
-  // Table
-  .table, .table__body {
-    width: 100%;
+  &.align-left{
+    text-align: left;
   }
-
-  // Table Head
-  .table__head {
-    width: 100%;
-   .table__row {
-     font-weight: 700;
-     background-color: $background-05;
-     color: $primary-light;
-     background:$color--grey-10;
-     border-bottom: 1px solid $color--grey-40;
-     color: $primary-dark;
-     font-weight: 500;
-     font-size: 14px;
-     padding:0;
-     text-align:left;
-     vertical-align:middle;
-
-     .table__cell, th {
-       @include fastTransition-all();
-       position: relative;
-       border: 0;
-       &:last-child {
-         border: 0;
-       }
-     }
-    &:hover {
-      background:$color--grey-10;
-      color: $primary-dark;
-    }
-   }
-  }
-
-  // Table Row
-  .table__row {
-    @include flex;
-    width: 100%;
-    max-width: calc(100vw - 10px);
-    font-weight: 400;
-    position: relative;
-    text-align:center;
-    &.disabled {
-      background-color: $background-03;
-      color: $text-02;
-    }
-    &:hover {
-      background:$color--grey-30;
-      transition: all .2s ease;
-    }
-  }
-
-  // Table Cell
-  .table__cell {
-    @include flex;
-    line-height: 2.8em;
-    padding: .5em 1em;
-    border-bottom: 1px solid $border-color-01;
-    &.align-left{
-      text-align: left;
-    }
-    padding:10px;
-    text-align:center;
-    vertical-align:middle;
+  padding:10px;
+  text-align:center;
+  vertical-align:middle;
+  margin-right:0px;
+  @include mediaQuery(medium) {
     margin-right:3px;
-    .status-icon{
-      border-right: 0px solid #ffffff;
-      margin:0px;
-    }
   }
-
-
-  .table__cell-label {
-    display: inline-block;
-    font-weight: 700;
-    min-width: 50%;
-    padding-right: 15px;
-
-    @include mediaQuery(small) {
-      display: none;
-    }
-  }
-
-  .table__row-uploading {
-    color: $text-02;
-    font-weight: 700;
-    @include indeterminate-bar;
-  }
-
-  .fixed-table-header{
-    position: sticky;
-    top: $header-height;
-    z-index: 1;
-  }
-
-  //sortable heading
-  .sort-heading {
-    position: relative;
-    color: $text-03;
-    &::after {
-      content: '\025be';
-      position: absolute;
-      right: -20px;
-      top: -1px;
-      font-size: 1.3em;
-    }
-    &::before {
-      content: '\025be';
-      position: absolute;
-      right: -20px;
-      top: -10px;
-      font-size: 1.3em;
-      transform: rotate(180deg);
-    }
-    &.sort-up {
-      &::before {
-        color: $primary-accent;
-      }
-    }
-    &.sort-down {
-      &::after {
-        color: $primary-accent;
-      }
-    }
-  }
-
-
-
-  .fixed-table-header .table__cell{
-    background-color: #f1f4f5;
-    cursor: pointer;
-    &.status-icon{
-      border-right: 0px solid #ffffff;
-      margin:0px;
-    }
-  }
-
-  .merge-left{
-    margin-left: -3px;
-  }
-  // Status table cells for sensor and event log
   .status-icon{
-    max-width: 32px;
-    margin-right: 0px;
-    padding:0px;
+    border-right: 0px solid #ffffff;
+    margin:0px;
   }
-  .status-row__OK{
-    color: inherit;
-  }
-  .status-row__Warning{
-    //color: $color-status-warning;
-    border-bottom:2px solid $color-status-warning;
-    background: $color-status-warning-bg;
-  }
-  .status-row__Critical{
-   // color: $color-status-error;
-    font-weight:500;
-    border-bottom:2px solid $color-status-error;
-    background: $color-status-error-bg;
-  }
-  .status__OK{
-    @include bg-icon;
-    background-image: url(../assets/icons/icon-alert-good.png);
-  }
-  .status__Critical{
-    @include bg-icon;
-    background-image: url(../assets/icons/icon-alert-error.png);
-  }
-  .status__Warning{
-    @include bg-icon;
-    background-image: url(../assets/icons/icon-alert-warning.png);
-  }
+}
 
+.table__cell-label {
+  display: inline-block;
+  font-weight: 700;
+  min-width: 50%;
+  padding-right: 15px;
+
+  @include mediaQuery(small) {
+    display: none;
+  }
+}
+
+.table__row-uploading {
+  color: $text-02;
+  font-weight: 700;
+  @include indeterminate-bar;
+}
+
+.fixed-table-header{
+  position: sticky;
+  top: $header_Height;
+  z-index: 1;
+}
+
+//sortable heading
+.sort-heading {
+  position: relative;
+  color: $text-03;
+  &::after {
+    content: '\025be';
+    position: absolute;
+    right: -20px;
+    top: -1px;
+    font-size: 1.3em;
+  }
+  &::before {
+    content: '\025be';
+    position: absolute;
+    right: -20px;
+    top: -10px;
+    font-size: 1.3em;
+    transform: rotate(180deg);
+  }
+  &.sort-up {
+    &::before {
+      color: $primary-accent;
+    }
+  }
+  &.sort-down {
+    &::after {
+      color: $primary-accent;
+    }
+  }
+}
+
+.fixed-table-header .table__cell, .table__head .table__cell{
+  background-color: #f1f4f5;
+  cursor: pointer;
+  margin-right:3px;
+  line-height: 1;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  &.status-icon{
+    border-right: 0px solid #ffffff;
+    margin:0px;
+  }
+}
+
+// Status table cells for sensor and event log
+.status-icon{
+  max-width:32px;
+  margin-right:0px;
+  padding:0px;
+}
+.status-row__OK{
+  color: inherit;
+}
+.status-row__Warning{
+  //color: $color-status-warning;
+  border-bottom:2px solid $color-status-warning;
+  background: $color-status-warning-bg;
+}
+.status-row__Critical{
+ // color: $color-status-error;
+  font-weight:500;
+  border-bottom:2px solid $color-status-error;
+  background: $color-status-error-bg;
+}
+.status__OK{
+  @include bg-icon;
+  background-image: url(../assets/icons/icon-alert-good.png);
+}
+.status__Critical{
+  @include bg-icon;
+  background-image: url(../assets/icons/icon-alert-error.png);
+}
+.status__Warning{
+  @include bg-icon;
+  background-image: url(../assets/icons/icon-alert-warning.png);
+}
+
+//Sorting
+.sort_button_wrapper .sortorder{
+  visibility: hidden;
+}
+.sort_button_wrapper:hover .sortorder{
+  transition: all .4s ease;
+  visibility: visible;
+}
+.sort_button_wrapper:hover{
+  background: $color--grey-30;
+  transition: all .4s ease;
+}
+
+.sortorder:after {
+  color:$color--grey-60;
+  content: $upTriangle;
+}
+.sortorder.reverse:after,.sortorder.reverseSeverity:after {
+  color:$color--grey-60;
+  content: $downTriangle;
+}
+
+.bmc-table {
+  width: 100%;
+  &.small {
+    font-size: 90%;
+  }
+}
+
+.bmc-table__row {
+  border-bottom: 1px solid $border-color-01;
+}
+
+.bmc-table__column-header {
+  padding: 10px 16px;
+  background-color: $background-03;
+}
+
+.bmc-table__cell {
+  padding: 4px 16px;
+  background-color: $base-02--07;
+}
+
+.bmc-table__row-actions {
+  text-align: right;
+}

@@ -15,40 +15,29 @@ window.angular && (function(angular) {
         '$routeProvider',
         function($routeProvider) {
           $routeProvider
-              .when('/server-health/event-log', {
-                'template': require('./controllers/log-controller.html'),
-                'controller': 'logController',
-                authenticated: true
-              })
-              .when('/server-health/event-log/:type', {
-                'template': require('./controllers/log-controller.html'),
-                'controller': 'logController',
-                authenticated: true
-              })
-              .when('/server-health/event-log/:type/:id', {
-                'template': require('./controllers/log-controller.html'),
-                'controller': 'logController',
-                authenticated: true
-              })
               .when('/server-health/inventory-overview', {
+                title: 'Inventory',
                 'template':
                     require('./controllers/inventory-overview-controller.html'),
                 'controller': 'inventoryOverviewController',
                 authenticated: true
               })
               .when('/server-health/sensors-overview', {
+                title: 'Sensors',
                 'template':
                     require('./controllers/sensors-overview-controller.html'),
                 'controller': 'sensorsOverviewController',
                 authenticated: true
               })
               .when('/server-health/sys-log', {
+                title: 'Event Log',
                 'template': require('./controllers/syslog-controller.html'),
                 'controller': 'sysLogController',
                 authenticated: true
               })
               .when('/server-health', {
-                'template': require('./controllers/log-controller.html'),
+                title: 'Event Log',
+                'template': require('./controllers/syslog-controller.html'),
                 'controller': 'logController',
                 authenticated: true
               });

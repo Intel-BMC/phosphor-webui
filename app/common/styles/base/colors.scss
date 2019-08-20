@@ -47,6 +47,8 @@ $color--red-30: #e36669;
 $color--red-20: #FAD3D3;
 $color--red-10: #fdf7f2;
 
+
+
 @mixin bg-gradient{
     background: rgb(20,160,210);
     background: linear-gradient(90deg, rgba(20,160,210,1) 0%, rgba(16,126,184,1) 100%);
@@ -104,7 +106,7 @@ $background-05: $base-01--02;
 $border-color-01: $base-02--05;
 $border-color-02: $base-02--03;
 
-$box-shadow-color: $base-02--05;
+$box-shadow-color: rgba(153,182,255,0.32);
 
 $status-error: $accent-04--01;
 $status-ok: $accent-02--01;

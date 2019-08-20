@@ -8,12 +8,18 @@ window.angular && (function(angular) {
         'restrict': 'E',
         'template': require('./app-header.html'),
         'scope': {'path': '='},
+        'title': 'No title',
         'controller': [
           '$rootScope', '$scope', 'dataService', 'userModel', '$location',
           '$route',
           function(
               $rootScope, $scope, dataService, userModel, $location, $route) {
             $scope.dataService = dataService;
+
+            $scope.page_title = $rootScope.page_title;
+            $scope.$on('$routeChangeSuccess', function(event, data) {
+              $scope.page_title = data.title;
+            });
 
             // Create a secure websocket with URL as /subscribe
             // TODO: Need to put in a generic APIUtils to avoid duplicate
@@ -57,6 +63,7 @@ window.angular && (function(angular) {
                 $scope.loadServerStatus();
               }
             };
+
 
             $scope.loadServerHealth = function() {
               APIUtils.getLogs().then(function(result) {
@@ -141,23 +148,6 @@ window.angular && (function(angular) {
               }, 2000);
             };
 
-            var myRefreshHover =
-                angular.element(document.querySelector('.refresh-hover'));
-            $scope.openRefreshHover = function() {
-              myRefreshHover.addClass('opened');
-            };
-            $scope.hideRefreshHover = function() {
-              myRefreshHover.removeClass('opened');
-            };
-
-            var myLoginHover =
-                angular.element(document.querySelector('.login-hover'));
-            $scope.openLoginHover = function() {
-              myLoginHover.addClass('opened');
-            };
-            $scope.hideLoginHover = function() {
-              myLoginHover.removeClass('opened');
-            };
             var loginListener =
                 $rootScope.$on('user-logged-in', function(event, arg) {
                   loadData();

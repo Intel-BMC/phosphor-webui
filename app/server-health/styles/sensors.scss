@@ -1,145 +1,54 @@
-// Threshold graphs
-$thresh-critical: $color-status-error-bg;
-$thresh-warning: $color-status-warning-bg;
-$thresh-normal: $color-status-good-bg;
+#sensors{
+  #component{
+    min-width:200px;
+  }
 
-label{
-  font-size: 14px;
-  padding: 13px 0;
-}
+  .sensors {
+    max-width: 1196px;
+  }
 
-.labeled{
-  padding-top:15px;
-}
+  .row {
+    max-width: 100%;
+  }
 
-.sensors {
-  max-width: 1196px;
-}
+  .table__head .sensor__status .column {
+    padding-right: 0;
+    padding-left: 0;
+  }
 
-.sensor-hide{
-  display:none;
-}
+  #sensor-categories {
+    font-size:13px;
+    padding:10px;
+    display: block;
+    border-collapse: collapse;
 
-.row {
-  max-width: 100%;
-}
-
-#sensor-categories {
-  font-size:13px;
-  padding:10px;
-  display: block;
-  border-collapse: collapse;
-
-    .table__cell{
-      padding:2px;
-      text-align:center;
-      vertical-align:middle;
-      margin-right:0px;
-      @include mediaQuery(medium) {
-        margin-right:3px;
-      }
-      .sensor__status-icon{
-        border-right: 0px solid #ffffff;
-        margin:0px;
-      }
-    }
-
-    .table__head .table__row {
-      background:$color--grey-10;
-      border-bottom: 1px solid $color--grey-40;
-      color: $primary-dark;
-      font-weight: 500;
-      font-size: 14px;
-      padding:0;
-      text-align:left;
-      vertical-align:middle;
-      &:hover {
-        background:$color--grey-10;
-        color: $primary-dark;
-      }
-      @include mediaQuery(x-small){
-    //    display:flex;
-      }
-    }
-    .fixed-table-header .table__cell{
-      background-color: #f1f4f5;
-      cursor: pointer;
-      &.sensor__status-icon{
-        border-right: 0px solid #ffffff;
-        margin:0px;
-      }
       .sensor__threshold{
-        cursor: default;
+        text-align:center;
+        flex-direction: row;
+        opacity: .8;
+        @include fastTransition-all;
       }
-    }
 
-    .table__row, .table__row{
-      text-align:center;
-   //   display: flex;
-      flex-direction: row;
-      &:hover {
-        background:$color--grey-40;
-        color:#FFFFFF;
+
+      .sensor__status{
+        max-width:120px;
       }
-      @include mediaQuery(x-small){
-   //     display: flex;
-   //     flex-direction: row;
+
+      .sensor__title{
+        min-width:20%;
+        text-align:left;
+        font-weight: 500;
+        @include mediaQuery(medium) {
+          font-weight: inherit;
+      //    min-width:20%;
+        }
       }
-    }
 
-    .sensor__threshold{
-      text-align:center;
-      flex-direction: row;
-      opacity: .8;
-      @include fastTransition-all;
-    }
 
-    .sensor__status-icon{
-      max-width:32px;
-      margin-right:0px;
-      padding:0px;
-    }
-
-    .sensor__title{
-      min-width:20%;
-      text-align:left;
-      font-weight: 500;
-      @include mediaQuery(medium) {
-        font-weight: inherit;
+      input{
+        width: 16px;
+        height: 16px;
       }
-    }
-
-    .sensor-row__OK{
-      color: inherit;
-    }
-    .sensor-row__Warning{
-      color: $color-status-warning;
-    }
-    .sensor-row__Critical{
-      color: $color-status-error;
-      font-weight:500;
-    }
-    .sensor__OK{
-      @include bg-icon;
-      background-image: url(../assets/icons/icon-alert-good.png);
-    }
-    .sensor__Critical{
-      @include bg-icon;
-      background-image: url(../assets/icons/icon-alert-error.png);
-    }
-    .sensor__Warning{
-      @include bg-icon;
-      background-image: url(../assets/icons/icon-alert-warning.png);
-    }
-    .sensor__status{
-      max-width:70px;
-    }
-
-    input{
-      width: 16px;
-      height: 16px;
-    }
-
-
+  }
 
 }

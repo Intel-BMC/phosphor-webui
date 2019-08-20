@@ -50,67 +50,49 @@ window.angular && (function(angular) {
                     console.log(JSON.stringify(error));
                   });
         },
-        getSystemLogsInitial: function(recordType) {
+        getSystemLogCount: function() {
+          if (DataService.systemName.length == 0) {
+            DataService.systemName = 'system';
+          }
           var uri = '/redfish/v1/Systems/' + DataService.systemName +
               '/LogServices/EventLog/Entries';
+          var initparams = {$top: 1};
+
           return $http({
                    method: 'GET',
                    url: DataService.getHost() + uri,
+                   params: initparams,
                    withCredentials: true
                  })
               .then(
                   function(response) {
-                    // Count total records then display just 25 on load
-                    var count = response.data['Members@odata.count'];
-                    var displayCount = Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
-                    return $http({
-                             method: 'GET',
-                             url: DataService.getHost() + uri,
-                             params: {
-                               $top: displayCount,
-                               $skip: count - displayCount
-                             },
-                             withCredentials: true
-                           })
-                        .then(
-                            function(response) {
-                              var logEntries = [];
-                              angular.forEach(
-                                  response.data['Members'], function(log) {
-                                    if (log.hasOwnProperty('EntryType')) {
-                                      if (log['EntryType'] == recordType) {
-                                        logEntries.push(log);
-                                      }
-                                    }
-                                  });
-                              return logEntries;
-                            },
-                            function(error) {
-                              console.log(JSON.stringify(error));
-                            });
+                    return response.data['Members@odata.count'];
                   },
                   function(error) {
                     console.log(JSON.stringify(error));
                   });
         },
-        getSystemLogs: function(recordType) {
+
+        getSystemLogs: function(outputCount, firstRecord) {
+          if (DataService.systemName.length == 0) {
+            DataService.systemName = 'system';
+          }
           var uri = '/redfish/v1/Systems/' + DataService.systemName +
               '/LogServices/EventLog/Entries';
+          var logEntries = [];
+          var initparams = {$top: outputCount, $skip: firstRecord};
+
           return $http({
                    method: 'GET',
                    url: DataService.getHost() + uri,
+                   params: initparams,
                    withCredentials: true
                  })
               .then(
                   function(response) {
-                    // BEGIN INITIAL CALL
-
-                    var logEntries = [];
                     angular.forEach(response.data['Members'], function(log) {
-                      if (log.hasOwnProperty('EntryType')) {
-                        if (log['EntryType'] == recordType) {
-                          logEntries.push(log);
-                        }
+                      if (log.hasOwnProperty('Created')) {
+                        logEntries.push(log);
                       }
                     });
                     return logEntries;
@@ -118,15 +100,6 @@ window.angular && (function(angular) {
                   function(error) {
                     console.log(JSON.stringify(error));
                   });
-        },
-        clearSystemLogs: function() {
-          var uri = '/redfish/v1/Systems/' + DataService.systemName +
-              '/LogServices/EventLog/Actions/LogService.ClearLog';
-          return $http({
-            method: 'POST',
-            url: DataService.getHost() + uri,
-            withCredentials: true
-          });
         },
         clearSystemLogs: function() {
           var uri = '/redfish/v1/Systems/' + DataService.systemName +

@@ -1,8 +1,7 @@
 <header id="header">
-  <!-- HEADER -->
-
   <div class="header">
     <div class="header__info-section">
+      <span class="page-title">{{page_title}}</span>
       <span
         class="header__title">{{ dataService.hostname | limitTo: 15 }}{{dataService.hostname.length > 15 ? '...' : ''}}</span>
     </div>
@@ -13,29 +12,29 @@
         <a class="header__status" href="#/server-control/power-operations" role="button"> P<span
             class="header__textlink">ower</span> <span
             ng-class="{'status-light__off': dataService.server_state == 'Off', 'status-light__disabled': dataService.server_state == 'Unreachable', 'status-light__good': dataService.server_state == 'Running', 'status-light__error': dataService.server_state == 'Quiesced'}"></span></a>
-        <a class="header__page-refresh" ng-click="refresh()" ng-mouseover="openRefreshHover()"
-          ng-mouseleave="hideRefreshHover()" aria-label="refresh page data">
+
+        <a href="#" class="header__page-refresh" ng-click="refresh()" ng-mouseover="loginHover=false; refreshHover=true"
+          ng-mouseleave="refreshHover=false" aria-label="refresh page data">
           <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-refresh.png"> <span
             class="header__textlink">Refresh data</span>
         </a>
-        <div class="refresh-hover header__hover-box">
+        <div class="refresh-hover header__hover-box" ng-show="refreshHover"
+          ng-class="refreshHover ? 'refresh-hover header__hover-box show' : 'refresh-hover header__hover-box'">
           <span class="small-text">Last Refreshed</span><br>
           <span class="small-text black"><span>{{dataService.last_updated | localeDate}}</span>
         </div>
-        <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="openLoginHover()"
-          ng-mouseleave="hideLoginHover()">
+
+        <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="refreshHover=false; loginHover=true"
+          ng-mouseleave="loginHover=false">
           <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.png"> <span
             class="header__textlink">Logout</span>
         </a>
-        <div class="login-hover header__hover-box">
+        <div ng-show="loginHover"
+          ng-class="loginHover ? 'login-hover header__hover-box show' : 'login-hover header__hover-box'">
           <span class="small-text">Logged in as</span><br>
           <span class="small-text black"><span>{{dataService.user_id}}</span>
         </div>
-        <a href="#" ng-hide="true" ng-mouseover="openHelpHover()" ng-mouseleave="hideHelpHover()">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-help.png"></a>
-        <div class="help-hover header__hover-box" ng-mouseleave="hideHelpHover()">
-          <div class="small-text" ng-bind-html="helpText">Help text goes here</div>
-        </div>
+
       </div>
     </div>
 </header>

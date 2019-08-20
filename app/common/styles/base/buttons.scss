@@ -19,6 +19,11 @@ $btn-tertiary__txt: $base-01--03;
 $btn-tertiary__txt--hover: $base-01--04;
 $btn-tertiary__txt--disabled: $base-02--03;
 
+@mixin resize-button($size){
+  @if ($size=="x-small") {
+    padding: .5em 1em;
+  }
+}
 /***
 Include .btn class in addition to the button type.
 These styles provide structural and base properties
@@ -73,6 +78,7 @@ button,
     max-width: 100%;
   }
 }
+
 
 /***
 Use for the primary use-case/s that is non-destructive.
