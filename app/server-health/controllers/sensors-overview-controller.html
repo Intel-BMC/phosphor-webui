@@ -2,7 +2,7 @@
 <div id="sensors" class="sensors">
 
   <div class="page-content-box toggle-filter">
-    <div class="filter-box"><label class="trim-text-small">Filter by Status</label>
+    <div class="filter-box"><label class="trim-text-medium">Filter by Severity</label>
     </div>
 
     <div class="filter-box" ng-repeat="severity in severityList">
@@ -14,22 +14,24 @@
   </div>
 
   <div class="page-content-box">
-    <div class="columns large-5 medium-5 small-12">
-      <div class="content__search search-box">
+    <div class="columns large-7 small-12">
 
-        <select id="component" ng-model="selectedChoice" name="dropdown" class="minimal"
-          ng-change="selectComponent(selectedChoice);">
-          <option value="All" name="All">All Components</option>
-          <option ng-selected="{{$index}}" ng-repeat="component in fullSensorsInfo track by $index"
-            value="{{component.Name}}">{{component.Name}}</option>
-        </select>
+      <div class="select-box">
+        <div class="inline padding-left">
+          <select id="component" ng-model="selectedChoice" name="dropdown" class="minimal"
+            ng-change="selectComponent(selectedChoice);">
+            <option value="All" name="All">All Components</option>
+            <option ng-selected="{{$index}}" ng-repeat="component in fullSensorsInfo track by $index"
+              value="{{component.Name}}">{{component.Name}}</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="columns large-7  medium-7 small-12">
+    <div class="columns large-5 small-12">
       <div class="content__search search-box">
-        <label for="content__search-input">Sensors Search</label>
-        <input id="content__search-input" type="text" ng-model="customSearch" ng-keydown="doSearchOnEnter($event)" />
+        <input id="content__search-input" placeholder="Filter by Keyword" type="text" ng-model="customSearch"
+          ng-keydown="doSearchOnEnter($event)" />
         <div class="search-submit__wrapper">
           <button class="clear-input" ng-click="clear()">&#10005;</button>
           <input id="content__search-submit" type="submit" class="btn content__search-submit" value="Search"
@@ -39,31 +41,41 @@
     </div>
   </div>
 
+
   <section id="sensor-categories" class="page-content-rnd table row column"
     ng-hide="(filteredMergedSensors).length == 0">
 
-    <div class="text-intro trim-text-small">
-      <input type='checkbox' id="toggleThresholdVisibility" class="btn-primary" ng-click="toggle = !toggle;">
-      {{toggleText}}
+    <div class="text-intro">
+      <div class="trim-text-medium">
+        <input type='checkbox' id="toggleThresholdVisibility" ng-click="toggle = !toggle;"> {{toggleText}}
+      </div>
     </div>
 
     <div class="table row column sensor__table">
       <div class="table__head fixed-table-header">
         <div class="table__row">
-          <div class="table__cell sensor__status-icon trim-text-small"></div>
-          <div class="table__cell sensor__title" ng-click='sortColumn("Name")'>Sensor Name</div>
-          <div class="table__cell sensor__status">Status</div>
+          <div class="table__cell status-icon trim-text-small"></div>
+          <div class="table__cell sensor__title sort_button_wrapper" ng-click='sortBy("Name")'>
+            <div class="column small-10">Sensor Name</div>
+            <div class="column small-2"><span class="sortorder" ng-class="{reverse: reverse}"></span></div>
+          </div>
+          <div class="table__cell sensor__status sort_button_wrapper" ng-click="sortBySeverity()">
+            <div class="column small-10">Status</div>
+            <div class="column small-2"><span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
+            </div>
+          </div>
           <div class="table__cell sensor__reading">Reading</div>
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">Low Critical</div>
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">Low Warning</div>
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">High Warning</div>
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">High Critical</div>
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">Low Critical</div>
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">Low Warning</div>
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">High Warning</div>
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">High Critical</div>
         </div>
       </div>
       <div class="table__body">
         <div class="table__row sensor-row__{{sensor.Status.Health}}"
-          ng-repeat="sensor in (filteredMergedSensors = (mergedSensors | filter:filterByComponent | filter:filterBySearchTerms | filter:filterBySeverity | orderBy:orderSensorDataDefault | orderBy:column))">
-          <div class="table__cell sensor__status-icon sensor__{{sensor.Status.Health}} trim-text-small">&nbsp;</div>
+          ng-repeat="sensor in (filteredSensors = (filteredMergedSensors = (mergedSensors | filter:filterByComponent | filter:filterBySearchTerms | filter:filterBySeverity | orderBy: orderDatabySeverity | orderBy:sortKey:reverse)))">
+          <div class="table__cell status-icon status__{{sensor.Status.Health}} trim-text-small">&nbsp;
+          </div>
           <div class="table__cell sensor__title">{{sensor.Name}}</div>
           <div class="table__cell sensor__status">{{sensor.Status.Health}}</div>
           <div class="table__cell sensor__reading">
@@ -74,7 +86,7 @@
             {{((sensor.Reading | number:2)=="0") ? " " + sensor.ReadingUnits.replace("Percent","%") : ""}}
           </div>
 
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
             {{(sensor.LowerThresholdNonCritical | number:2)}}
             {{(sensor.LowerThresholdNonCritical && sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}
@@ -82,7 +94,7 @@
             {{(sensor.LowerThresholdNonCritical && sensor.Reading) ? " " + sensor.ReadingUnits.replace("Percent","%") : ""}}
             {{(sensor.LowerThresholdNonCritical) ? "" : "-"}} </div>
 
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
             {{(sensor.LowerThresholdNonCritical | number:2)}}
             {{(sensor.LowerThresholdNonCritical && sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}
@@ -91,7 +103,7 @@
             {{(sensor.LowerThresholdNonCritical) ? "" : "-"}}
           </div>
 
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
             {{(sensor.UpperThresholdNonCritical | number:2)}}
             {{(sensor.UpperThresholdNonCritical && sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}
@@ -100,7 +112,7 @@
             {{(sensor.UpperThresholdNonCritical) ? "" : "-"}}
           </div>
 
-          <div class="table__cell sensor__threshold trim-text-small" ng-show="showThresholds">
+          <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
             {{(sensor.UpperThresholdCritical | number:2)}}
             {{(sensor.UpperThresholdCritical && sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}

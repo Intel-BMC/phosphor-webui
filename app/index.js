@@ -49,7 +49,6 @@ import app_navigation from './common/directives/app-navigation.js';
 import confirm from './common/directives/confirm.js';
 import log_event from './common/directives/log-event.js';
 import certificate from './common/directives/certificate.js';
-import log_filter from './common/directives/log-filter.js';
 import log_search_control from './common/directives/log-search-control.js';
 import ldap_user_roles from './common/directives/ldap-user-roles.js';
 import toggle_flag from './common/directives/toggle-flag.js';
@@ -91,10 +90,8 @@ import kvm_window_controller from './server-control/controllers/kvm-window-contr
 
 import server_health_index from './server-health/index.js';
 import inventory_overview_controller from './server-health/controllers/inventory-overview-controller.js';
-import log_controller from './server-health/controllers/log-controller.js';
 import sensors_overview_controller from './server-health/controllers/sensors-overview-controller.js';
 import syslog_controller from './server-health/controllers/syslog-controller.js';
-import syslog_filter from './common/directives/syslog-filter.js';
 import remote_logging_server from './server-health/directives/remote-logging-server.js';
 
 import redfish_index from './redfish/index.js';
@@ -185,7 +182,13 @@ window.angular && (function(angular) {
         function($rootScope, $location, dataService, userModel) {
           $rootScope.dataService = dataService;
           dataService.path = $location.path();
+
+
+
           $rootScope.$on('$routeChangeStart', function(event, next, current) {
+            // set page title
+            $rootScope.page_title = next.title;
+
             if (next.$$route == null || next.$$route == undefined) return;
             if (next.$$route.authenticated) {
               if (!userModel.isLoggedIn()) {

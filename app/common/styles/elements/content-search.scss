@@ -1,5 +1,21 @@
+@mixin form-inputs($input-style){
+  box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.18);
+  padding: 15px 18px 15px 18px;
+  @if ($input-style=="icon"){
+    padding-left: 30px;
+  }
+  border-radius: 4px;
+  background-repeat:no-repeat;
+  background-position:6px;
+  min-height:44px;
+  max-height:none;
+  font-size:14px;
+  box-sizing: border-box;
+}
+
+// content search
+
 .content__search {
-  width: 100%;
   float: left;
   position: relative;
   margin-right: 1em;
@@ -32,6 +48,9 @@
     transform: translateY(-50%);
     background: url("../assets/images/icon-search.svg") center center no-repeat;
     opacity: .6;
+    @include form-inputs(icon);
+    position: relative;
+    min-width:250px;
   }
 
   .clear-input {

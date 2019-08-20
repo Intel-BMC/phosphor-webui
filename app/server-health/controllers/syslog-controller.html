@@ -1,105 +1,133 @@
 <loader loading="loading"></loader>
 <div id="sys-log">
-    <section id="sys-log__logs">
-      <div class="row column">
-        <h1>System Logs</h1>
-        <div class="page-header">
-          <p class="inline h4">Select system log type: </p>
-          <div class="inline dropdown__wrapper" >
-            <button type="button" class="dropdown__button" ng-click="showLogDropdown = !showLogDropdown"><strong>{{selectedRecordType}}</strong></button>
-            <ul class="dropdown__list inline" ng-show="showLogDropdown">
-              <li ng-repeat="recordType in recordTypeList">
-                <button type="button" ng-click="selectRecordType(recordType);">{{recordType}}</button>
-              </li>
-            </ul>
+  <section id='filters-severity'>
+    <div class="page-content-box toggle-filter">
+      <div class="filter-box"><label class="trim-text-medium">Filter by Severity</label></div>
+
+      <div class="filter-box" ng-repeat="severity in severityList">
+        <button class="active filter-btn" ng-click="toggleSeverity(severity)"
+          ng-class="(selectedSeverity == (severity | lowercase)) ? 'btn-filter-primary' : 'btn-filter-secondary'">
+          <span class="alert-text-{{severity | lowercase}}">&#9679;</span>&nbsp;{{severity}}
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <section id='filters-date-type-search'>
+    <div class="page-content-box">
+
+      <div class="columns large-7 medium-6 small-12">
+        <div class="inline sys-log__date-filter">
+          <div class="inline">
+            <label for="sys-log-filter-start-date">Start Date</label>
+            <input id="sys-log-filter-start-date" type="date" max="{{end_date | date:'yyyy-MM-dd'}}"
+              placeholder="MM/DD/YYYY" ng-model="start_date.value" />
           </div>
-          <a ng-href="data:text/json;charset=utf-8,{{sysLogs}}" class="inline btn-export float-right"  download="systemLogs.json" ng-show="sysLogs.length">Export </a>
-          <button class="inline clear-input float-right btn-secondary" ng-click="confirm = !confirm" ng-show="sysLogs.length">&#10005; Clear {{selectedRecordType}} Logs</button>
-          <div class="inline__confirm sys-log__confirm" ng-show="confirm">
-            <div class="inline__confirm-message">
-              <p class="h3">Are you sure you want to <strong class="ng-binding">clear {{selectedRecordType}} logs</strong>?
-              </p>
-            </div>
-            <div class="inline__confirm-buttons">
-              <button class="btn-primary" ng-click="clearSystemLogEntries()">Yes</button>
-              <button class="btn-primary" ng-click="confirm = false">No</button>
-            </div>
+          <div class="inline padding-left">
+            <label for="sys-log-filter-end-date">End Date</label>
+            <input id="sys-log-filter-end-date" type="date" min="{{start_date | date:'yyyy-MM-dd'}}"
+              placeholder="MM/DD/YYYY" ng-model="end_date.value" />
           </div>
         </div>
       </div>
-    </section>
-    <section class="row column">
-      <p class="content-label">Filter {{selectedRecordType}} Logs</p>
-      <div class="content__search">
-        <label for="content__search-input">Search</label>
-        <input id="content__search-input" type="text" ng-model="customSearch" ng-keydown="doSearchOnEnter($event)"/>
-        <div class="search-submit__wrapper">
-          <button class="btn" type="button" aria-label="clear filter" ng-click="clear()">
-              <icon file="icon-close.svg" aria-hidden="true"></icon>
-          </button>
-          <input id="content__search-submit" type="submit" class="btn btn-primary content__search-submit" value="Filter" ng-click="doSearchOnClick()"/>
-        </div>
-      </div>
-    </section>
-    <section>
-      <syslog-filter></syslog-filter>
-    </section>
-    <section id="sys-log__logs" class="table row column" ng-show="sysLogs.length">
-      <div class="table row column">
-        <div class="table__head">
-          <div class="table__row">
-            <div class="table__cell sys-log__col-wrapper sys-log__col-id">
-              <div class="column small-2 sort_button_wrapper">
-                <button class="sort-ascending" ng-click="sortBy('Id', false)"></button>
-                <button class="sort-descending" ng-click="sortBy('Id', true)"></button>
-              </div>
-              ID
-            </div>
-            <div class="table__cell sys-log__col-wrapper">
-              <div class="column small-2 sort_button_wrapper">
-                <button class="sort-ascending" ng-click="sortBy('Created', false)"></button>
-                <button class="sort-descending" ng-click="sortBy('Created', true)"></button>
-              </div>
-              Timestamp
-            </div>
-            <div class="table__cell sys-log__col-wrapper">
-              <div class="column small-2 sort_button_wrapper">
-                <button class="sort-ascending" ng-click="sortBy('Name', false)"></button>
-                <button class="sort-descending" ng-click="sortBy('Name', true)"></button>
-              </div>
-              Name
-            </div>
-            <div class="table__cell sys-log__col-wrapper">
-              <div class="column small-2 sort_button_wrapper">
-                <button class="sort-ascending" ng-click="sortBy('SensorType', false)"></button>
-                <button class="sort-descending" ng-click="sortBy('SensorType', true)"></button>
-              </div>
-              Type
-            </div>
-            <div class="table__cell sys-log__col-wrapper sys-log__col-sev">
-              <div class="column small-2 sort_button_wrapper">
-                <button class="sort-ascending" ng-click="sortBy('Severity', false)"></button>
-                <button class="sort-descending" ng-click="sortBy('Severity', true)"></button>
-              </div>
-              Severity
-            </div>
-            <div class="table__cell sys-log__col-wrapper sys-log__col-desc">Description</div>
-          </div>
-        </div>
-        <div class="table__body">
-          <div class="table__row" dir-paginate="log in (sysLogs | filter:filterBySearchTerms | filter:filterBySeverity | filter:filterByDate | filter:filterByType | orderBy:sortKey:reverse) | itemsPerPage:itemsPerPage">
-            <div class="table__cell sys-log__col-wrapper sys-log__col-id">{{log.Id}}</div>
-            <div class="table__cell sys-log__col-wrapper">{{log.Created | localeDate}}</div>
-            <div class="table__cell sys-log__col-wrapper">{{log.Name}}</div>
-            <div class="table__cell sys-log__col-wrapper">{{log.SensorType}}</div>
-            <div class="table__cell sys-log__col-wrapper sys-log__col-sev">{{log.Severity}}</div>
-            <div class="table__cell sys-log__col-wrapper sys-log__col-desc">{{log.Message}}</div>
+
+      <div class="columns large-5 medium-6 small-12">
+        <label class="small-label" for="content__search-input">Search event log</label>
+        <div class="content__search search-box">
+          <input id="content__search-input" placeholder="Filter by Keyword" type="text" ng-model="customSearch"
+            ng-keydown="doSearchOnEnter($event)" />
+          <div class="search-submit__wrapper">
+            <button class="clear-input" ng-click="clear()">&#10005;</button>
+            <input id="content__search-submit" type="submit" class="btn content__search-submit" value="Search"
+              ng-click="doSearchOnClick()" />
           </div>
         </div>
       </div>
-      <dir-pagination-controls></dir-pagination-controls>
-    </section>
-    <section id="sys-log__logs" class="table row column" ng-show="!sysLogs.length">
-      <p>There are no {{selectedRecordType}} logs to display at this time.</p>
-    </section>
+
+    </div>
+  </section>
+  <section>
+    <syslog-filter></syslog-filter>
+  </section>
+
+  <section id="sys-log__logs" class="page-content-rnd table row column" ng-hide="filtersysLogs.length==0">
+
+    <div class="text-intro">
+      <div class="trim-text-medium inline">
+        <input type='checkbox' id="toggleDetailVisibility" class="btn-primary" ng-click="toggle = !toggle;">
+        Show Event IDs |
+      </div>
+
+      <div class="inline">
+        <a ng-click="confirm = !confirm" ng-show="sysLogs.length">Clear {{selectedRecordType}} Logs</a>
+      </div>
+
+      <div ng-class="confirm ? 'show alert-box alert-info' : 'alert-box alert-info'" class="alert-box alert-info"
+        ng-show="confirm">Are
+        you sure you
+        want to clear
+        {{selectedRecordType}}
+        logs?<br>
+        <button class="btn-primary" ng-click="clearSystemLogEntries()">Yes</button>
+        <button class="btn-primary" ng-click="confirm = false">No</button>
+      </div>
+    </div>
+
+
+
+    <div class="table row column sys-log__table">
+      <div class="table__head fixed-table-header">
+        <div class="table__row">
+
+          <div class="table__cell two-column status-icon trim-text-medium"></div>
+          <div class="table__cell two-column sys-log__col-wrapper align-left sys-log__col-date sort_button_wrapper"
+            ng-click="sortBy('Created')">
+            <div class="column small-10">Timestamp</div>
+            <div class="column small-2"><span class="sortorder" ng-class="{reverse: reverse}"></span>
+            </div>
+          </div>
+
+          <div class="table__cell sys-log__col-wrapper sys-log__col-sev sort_button_wrapper"
+            ng-click="sortBySeverity()">
+            <div class="column small-10">&nbsp;&nbsp;Status</div>
+            <div class="column small-2">
+              <span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
+            </div>
+          </div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-desc align-left">Description</div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-id align-left trim-text-medium sort_button_wrapper"
+            ng-show="showDetails" ng-click="sortBy('Id')">
+            <div class="column small-12">ID</div>
+          </div>
+        </div>
+      </div>
+      <div class="table__body">
+        <div class="table__row status-row__{{log.Severity}}"
+          dir-paginate="log in (filtersysLogs = (sysLogs | filter:filterBySearchTerms | filter:filterBySeverity | filter:filterByDate | orderBy: orderDatabySeverity | orderBy:sortKey:reverse)) | itemsPerPage:itemsPerPage">
+          <div class="table__cell status-icon status__{{log.Severity}} trim-text-medium">&nbsp;</div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-date align-left">
+            <div class="line1">{{log.Created | date : 'mediumTime' }}</div>
+            <div class="line2">{{log.Created | date : 'fullDate' }}</div>
+          </div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-sev">{{log.Severity}}</div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-desc align-left" title="{{log.Message}}"
+            ng-click="expandit = !expandit"
+            ng-class="[(expandit) ? 'expand' : '', (log.Message.length > 100) ? 'ellipsis-active' : '']">
+            {{log.Message}}
+          </div>
+          <div class="table__cell sys-log__col-wrapper sys-log__col-id trim-text-medium align-left"
+            ng-show="showDetails">
+            {{log.Id}}</div>
+        </div>
+      </div>
+    </div>
+
+    <dir-pagination-controls></dir-pagination-controls>
+  </section>
+
+  <section id="sys-log__logs" class="row column page-content-rnd" ng-show="(filtersysLogs.length)==0">
+    <span>There are no {{selectedRecordType | lowercase}} logs to display at this time.</span>
+  </section>
+
 </div> <!-- end log -->
