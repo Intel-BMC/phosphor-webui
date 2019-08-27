@@ -16,12 +16,14 @@ window.angular && (function(angular) {
         function($routeProvider) {
           $routeProvider
               .when('/users/manage-accounts', {
+                title: 'User Accounts',
                 'template':
                     require('./controllers/user-accounts-controller.html'),
                 'controller': 'userAccountsController',
                 authenticated: true
               })
               .when('/users', {
+                title: 'User Accounts',
                 'template':
                     require('./controllers/user-accounts-controller.html'),
                 'controller': 'userAccountsController',

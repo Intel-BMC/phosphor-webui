@@ -1,75 +1,89 @@
-.acnt-prop-header {
-  width: 100%;
-  border-bottom: 2px solid $border-color-01;
-  margin: 0px 0px 15px;
+//modal styling
+.modal-content{
+  .column .label__helper-text:first-child{
+    padding-top: 40px;
+  }
+  .column{
+    &.account-lockout .label__helper-text{
+      @include mediaQuery(small) {
+        padding-top:90px;
+      }
+    }
+  }
+
+  fieldset label:nth-child(3){
+    @include mediaQuery(small) {
+      padding-left:15px;
+    }
+  }
+
+  label{
+    color: $text-01;
+    padding-top:0;
+    padding-bottom: 0;
+  }
 }
-.user-manage__form {
-  width: 100%;
-  .dropdown__button {
-    margin-bottom: 1.2em;
+
+//Main page
+#user-accounts{
+  .hideInputAccess{
+    border:1px solid purple;
   }
-  label {
-    width: 100%;
-    min-width: 210px;
-    font-weight: 700;
-    margin-right: 4em;
+  .showInputAccess{
+    border:1px solid green;
   }
-  select,
-  input {
-    width: 225px;
-    width: 225px;
+  input[type='text'] {
+    &.hideInputAccess{
+    border: 0;
+    box-shadow: 0 0 0 0;
+    background: transparent;
+    }
   }
-  fieldset {
+
+
+  select {
+    &.hideInputAccess{
+      border: 0;
+      background-position: -9999px;
+      box-shadow: 0 0 0 0;
+      background: transparent;
+    }
+  }
+
+
+  //overrides standard table heading cell separators for merged cells
+  .local-users {
+    margin-bottom: 50px;
+  }
+
+  .table__row-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+    @include mediaQuery(small) {
+      .table__head .table__row .table__cell:last-child{
+        flex-grow: 1.8;
+        margin-left:-3px;
+      }
+      .table__row .table__cell:last-child{
+        flex-grow: 1.8;
+      }
+    }
+
+  .table__cell a{
+    font-weight:400;
+    color: $text-01;
+  }
+
+  //e-ng-options
+  .editable-radiolist {
+    label {
     display: block;
-    padding-left: 1.5em;
-    margin-bottom: 1em;
-    border-bottom: 1px solid $border-color-01;
-  }
-  .acnt-prop__input-wrapper,
-  .user-manage__input-wrapper {
-    margin-bottom: 5px;
-    select {
-      margin-bottom: 0;
-    }
-  }
-  .acnt-prop__span-wrapper {
-    position: relative;
-    height: 20px;
-    margin-bottom: 5px;
-  }
-  .password-toggle {
-    position: absolute;
-    right: 20px;
-    top: .6em;
-    padding: 3px;
-    font-size: .8em;
-  }
-  .acnt-prop__submit-wrapper,
-  .user-manage__submit-wrapper {
-    width: 100%;
-    margin-top: 6px;
-    padding-top: 1px;
-    border-top: 1px solid $border-color-01;
-    button {
-      float: right;
-      margin: .5em;
-    }
-  }
-  .user-manage__error {
-    background: lighten($status-error, 20%);
-    padding: 1em;
-    text-align: center;
-    font-size: 1em;
-    border: 1px solid $status-error;
+    float:left;
     color: $primary-dark;
-    font-family: "Courier New", Helvetica, Arial, sans-serif;
-    font-weight: 700;
+    }
   }
-  .user-manage__success {
-    color: $primary-accent;
-    padding: 1em;
-    font-size: 1em;
-    font-family: "Courier New", Helvetica, Arial, sans-serif;
-    font-weight: 500;
-  }
+
+
 }

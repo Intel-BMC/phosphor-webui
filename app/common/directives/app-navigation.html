@@ -4,8 +4,8 @@
       <a href="#/overview/server"><img src="../../assets/images/logo-intel.png"></a>
     </li>
     <li>
-      <button class="btn-overview">
-        <a ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server" ng-click="change('overview')">
+      <button class="btn-overview" ng-click="change('overview')">
+        <a ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server">
           <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-overview.svg">
           <div class="nav-link">Overview</div>
         </a>
@@ -38,8 +38,7 @@
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-control.svg">
         <div class="nav-link">Control</div>
       </button>
-      <ul class="nav__second-level btn-control" ng-style="navStyle"
-        ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
+      <ul class="nav__second-level btn-control" ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
         <li ng-class="{'active': (path == '/server-control' || path == '/server-control/power-operations')}">
           <a href="#/server-control/power-operations" ng-click="closeSubnav()"
             tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server power operations</a>
@@ -75,8 +74,7 @@
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-config.svg">
         <div class="nav-link">Configuration</div>
       </button>
-      <ul class="nav__second-level btn-firmware" ng-style="navStyle"
-        ng-class="{opened: (showSubMenu && firstLevel == 'configuration')}">
+      <ul class="nav__second-level btn-firmware" ng-class="{opened: (showSubMenu && firstLevel == 'configuration')}">
         <li ng-class="{'active': (path == '/configuration' || path == '/configuration/network')}">
           <a href="#/configuration/network" ng-click="closeSubnav()"
             tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Network settings</a>
@@ -96,7 +94,8 @@
       </ul>
     </li>
     <li>
-      <button class="btn-users" ng-class="{opened: firstLevel == 'users'}" ng-click="change('users')">
+      <button class="btn-users" ng-class="{opened: firstLevel == 'users'}"
+        ng-click="change('users'); RedirectToURL('/users/manage-accounts')">
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.svg">
         <div class="nav-link">Users</div>
       </button>

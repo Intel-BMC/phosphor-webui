@@ -13,7 +13,10 @@
   padding: 1em 0.1em;
 
   @include mediaQuery(x-small) {
-    padding: 1rem 2rem;
+    padding: 1rem .5rem;
+  }
+  @include mediaQuery(small) {
+    padding: 1rem 1rem;
   }
 
   section.row,

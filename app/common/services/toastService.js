@@ -1,5 +1,5 @@
 /**
- * data service
+ * toast service
  *
  * @module app/common/services/toastService
  * @exports toastService
@@ -20,7 +20,7 @@ window.angular && (function(angular) {
       };
       this.success = function(message) {
         var successMessage = $sce.trustAsHtml(
-            '<div role="alert"><b>Success!</b><br>' + message + '</div>');
+            '<div role="alert"><b>Success</b><br>' + message + '</div>');
         ngToast.create({className: 'success', content: successMessage});
       };
       this.alert = function(message) {

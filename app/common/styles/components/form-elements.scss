@@ -23,6 +23,15 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
     @include form-inputs("");
     @include input-highlight-format($color--blue-50);
   }
+  &.input-secondary{
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.18);
+    border-radius:0;
+    padding: 0 10px;
+    border: 1px solid $btn-tertiary__border;
+    font-size:13px;
+    width: fit-content;
+    min-height:12px;
+  }
 }
 
 /* DATE */

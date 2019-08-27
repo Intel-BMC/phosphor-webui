@@ -61,6 +61,10 @@ import serial_console from './common/directives/serial-console.js';
 import dir_paginate from './common/directives/dirPagination.js';
 import form_input_error from './common/directives/form-input-error.js';
 import icon_provider from './common/directives/icon-provider.js';
+import password_confirmation from './common/directives/password-confirmation.js';
+
+import components_index from './common/components/index.js';
+import table_component from './common/components/table/table.js';
 
 import login_index from './login/index.js';
 import login_controller from './login/controllers/login-controller.js';
@@ -94,6 +98,8 @@ import vm_controller from './configuration/controllers/virtual-media-controller.
 
 import users_index from './users/index.js';
 import user_accounts_controller from './users/controllers/user-accounts-controller.js';
+import username_validator from './users/directives/username-validator.js';
+import role_table from './users/directives/role-table.js';
 
 window.angular && (function(angular) {
   'use strict';
@@ -108,7 +114,7 @@ window.angular && (function(angular) {
             'ui.bootstrap',
             // Basic resources
             'app.common.services', 'app.common.directives',
-            'app.common.filters',
+            'app.common.filters', 'app.common.components',
             // Model resources
             'app.login', 'app.overview', 'app.serverControl',
             'app.serverHealth', 'app.configuration', 'app.users', 'app.redfish'
@@ -164,8 +170,6 @@ window.angular && (function(angular) {
         function($rootScope, $location, dataService, userModel) {
           $rootScope.dataService = dataService;
           dataService.path = $location.path();
-
-
 
           $rootScope.$on('$routeChangeStart', function(event, next, current) {
             // set page title
