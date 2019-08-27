@@ -933,7 +933,6 @@ window.angular && (function(angular) {
                     console.log(error);
                     deferred.reject(error);
                   });
-
           return deferred.promise;
         },
         getSensorsInfo: function(url) {

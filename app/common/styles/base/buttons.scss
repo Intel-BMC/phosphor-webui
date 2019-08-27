@@ -6,22 +6,33 @@ $btn-primary__txt--hover: $base-02--08;
 $btn-primary__bg--disabled: $base-02--04;
 $btn-primary__txt--disabled: $base-02--03;
 
-$btn-secondary__bg: $base-02--08;
+$btn-secondary__bg: $base-02--03;
 $btn-secondary__bg--hover: $base-02--04;
-$btn-secondary__border: transparent;
+$btn-secondary__border: $base-02--04;
 $btn-secondary__txt: $base-02--08;
 $btn-secondary__txt--hover: $base-02--08;
 $btn-secondary__bg--disabled: $base-02--04;
 $btn-secondary__txt--disabled: $base-02--03;
 
-$btn-tertiary__bg: transparent;
-$btn-tertiary__txt: $base-01--03;
-$btn-tertiary__txt--hover: $base-01--04;
+$btn-tertiary__bg: $color--blue-38;
+$btn-tertiary__bg--hover: $color--blue-30;
+$btn-tertiary__border: $color--blue-20;
+$btn-tertiary__txt: #ffffff;
+$btn-tertiary__txt--hover: #ffffff;
 $btn-tertiary__txt--disabled: $base-02--03;
 
 @mixin resize-button($size){
   @if ($size=="x-small") {
     padding: .5em 1em;
+  }
+  @if ($size=="small") {
+    padding: .8em 1.4em;
+    border-radius: 4px;
+    text-transform: capitalize;
+  }
+  @if ($size=="medium") {
+    padding: .8em .8em;
+    border-radius: 14px;
   }
 }
 /***
@@ -46,6 +57,7 @@ button,
   border-radius: 26px;
   box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
   padding: 15px 35px;
+  margin-left:5px;
   border: 0;
 
   &[disabled],
@@ -77,6 +89,13 @@ button,
     width: auto;
     max-width: 100%;
   }
+}
+
+.btn-xsmall{
+  @include resize-button('x-small')
+}
+.btn-small{
+  @include resize-button('small')
 }
 
 
@@ -135,8 +154,8 @@ These usually come coupled with a primary.
   &[disabled],
   &.disabled {
     background-color: $btn-secondary__bg;
-    border-color: $btn-secondary__txt--disabled;
     color: $btn-secondary__txt--disabled;
+    border: 1px solid $btn-secondary__txt--disabled;
     .icon {
       fill: $btn-secondary__txt--disabled;
     }
@@ -153,12 +172,24 @@ optional actions given on a page.
 ***/
 .btn-tertiary {
   background-color: $btn-tertiary__bg;
-  border-color: $btn-tertiary__bg;
+  border: 1px solid $btn-tertiary__border;
   color: $btn-tertiary__txt;
+  padding: 1em;
+  border-radius: 0;
+  margin-left:5px;
+  img {
+    @include whitefilter;
+  }
+
+
   &:hover {
     color: $btn-tertiary__txt--hover;
+    background-color: $btn-tertiary__bg--hover;
     .icon {
       fill: $btn-tertiary__txt--hover;
+    }
+    img {
+      @include whitefilter;
     }
   }
   &[disabled],
@@ -170,6 +201,31 @@ optional actions given on a page.
   }
   .icon {
     fill: $btn-tertiary__txt;
+  }
+}
+
+
+
+.btn-icon {
+  color:#88898a;
+  font-size: 14px;
+  text-transform: capitalize;
+  padding:1em;
+  img{
+  @include Greyfilter;
+  }
+  &:hover {
+    border-color: #ffffff;
+    color: $color--blue-40;
+    img {
+      @include LtBluefilter;
+    }
+  }
+  &:focus {
+    border:0px solid #ffffff;
+    border-color: #ffffff;
+    outline: 0;
+    box-shadow: 0;
   }
 }
 
@@ -216,18 +272,5 @@ Filter text buttons are used for toggle filters, such as on the sensors page
   padding-right: 0;
   .icon {
     margin-right: 0;
-  }
-  &.password-visible {
-    .icon {
-      fill: $btn-tertiary__txt--disabled;
-    }
-  }
-  &.password-hidden {
-    .icon {
-      // Adding tweaks to make sure the icons
-      // are in the same place when toggling show/hide
-      margin-right: 1px;
-      width: 20px;
-    }
   }
 }

@@ -1,0 +1,89 @@
+//modal styling
+.modal-content{
+  .column .label__helper-text:first-child{
+    padding-top: 40px;
+  }
+  .column{
+    &.account-lockout .label__helper-text{
+      @include mediaQuery(small) {
+        padding-top:90px;
+      }
+    }
+  }
+
+  fieldset label:nth-child(3){
+    @include mediaQuery(small) {
+      padding-left:15px;
+    }
+  }
+
+  label{
+    color: $text-01;
+    padding-top:0;
+    padding-bottom: 0;
+  }
+}
+
+//Main page
+#user-accounts{
+  .hideInputAccess{
+    border:1px solid purple;
+  }
+  .showInputAccess{
+    border:1px solid green;
+  }
+  input[type='text'] {
+    &.hideInputAccess{
+    border: 0;
+    box-shadow: 0 0 0 0;
+    background: transparent;
+    }
+  }
+
+
+  select {
+    &.hideInputAccess{
+      border: 0;
+      background-position: -9999px;
+      box-shadow: 0 0 0 0;
+      background: transparent;
+    }
+  }
+
+
+  //overrides standard table heading cell separators for merged cells
+  .local-users {
+    margin-bottom: 50px;
+  }
+
+  .table__row-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+    @include mediaQuery(small) {
+      .table__head .table__row .table__cell:last-child{
+        flex-grow: 1.8;
+        margin-left:-3px;
+      }
+      .table__row .table__cell:last-child{
+        flex-grow: 1.8;
+      }
+    }
+
+  .table__cell a{
+    font-weight:400;
+    color: $text-01;
+  }
+
+  //e-ng-options
+  .editable-radiolist {
+    label {
+    display: block;
+    float:left;
+    color: $primary-dark;
+    }
+  }
+
+
+}

@@ -1,5 +1,5 @@
 /**
- * data service
+ * toast service
  *
  * @module app/common/services/toastService
  * @exports toastService

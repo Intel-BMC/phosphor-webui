@@ -15,6 +15,7 @@ window.angular && (function(angular) {
         '$routeProvider',
         function($routeProvider) {
           $routeProvider.when('/redfish/:path*/', {
+            title: 'Redfish',
             'template': require('./controllers/redfish-controller.html'),
             'controller': 'redfishController',
             authenticated: true

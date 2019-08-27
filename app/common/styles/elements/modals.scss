@@ -49,6 +49,15 @@
   padding-bottom: 0.7em;
 }
 
+.modal-header{
+ // border-top-left-radius: 6px;
+ //   border-top-right-radius: 6px;
+
+ background: $nav__top-level-color;
+ padding:0;
+ border-bottom: 0;
+}
+
 .screen-reader-offscreen {
   position: absolute;
   left: -999px;
@@ -56,10 +65,10 @@
   height: 1px;
   top: auto;
 }
-.modal__content {
-  border-bottom: 1px solid $border-color-02;
+.modal-content {
   padding-bottom: 1em;
   margin-bottom: 2em;
+  border: 0;
 }
 .modal__link {
   display: block;
@@ -83,40 +92,20 @@
   }
 }
 
-/**
-  * Markup  for bootstrap modal
-  <div class="uib-modal__content">
-    <div class="modal-header">
-      <h2 class="modal-title" id="modal_label">
-        Title here
-      </h2>
-      <button
-        type="button"
-        class="btn  btn--close"
-        ng-click="$dismiss()"
-        aria-label="close">
-        <icon file="icon-close.svg" aria-hidden="true"></icon>
-      </button>
-    </div>
-    <div class="modal-body">
-      Body content
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        ng-click="$dismiss()">
-        Cancel
-      </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        ng-click="function()">
-        Save
-      </button>
-    </div>
-  </div>
-*/
+.modal-header h2.modal-title{
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: normal;
+  padding:20px;
+}
+
+.label__helper-text{
+  color: $text-02;
+}
+
+.padding-top{
+  padding-top:20px;
+}
 
 .uib-modal.fade.in {
   opacity: 1;
@@ -124,15 +113,22 @@
 
 .uib-modal.in .modal-dialog {
   transform: translate(0, 10vh);
-  margin-top: 50px;
+  margin-top: 20px;
   .icon__close {
     margin: 0;
     padding: 0;
   }
   .modal-content {
-    border-radius: 0;
-    border-color: $primary-dark;
+    border-radius: .3rem;
+    // border-color: $primary-dark;
+    // box-shadow: 0px 4px 35px 6px rgba(153,182,255,0.32); //shadow is #99B6FF
+    box-shadow: 0px 4px 35px 6px rgba(0,0,0,0.12);
   }
+}
+
+.uib-modal .modal-dialog {
+  // override bootstrap max-width set at 500px
+  max-width: 550px;
 }
 
 .modal-backdrop.in {
@@ -140,16 +136,7 @@
 }
 
 .uib-modal__content {
-  padding: 1em;
-  .modal-header {
-    display: block;
-  }
-  .btn--close {
-    padding: 0;
-    svg {
-      height: 1.6em;
-    }
-  }
+  padding: 0;
 }
 
 .uib-modal {

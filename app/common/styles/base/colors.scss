@@ -126,6 +126,36 @@ $box-shadow-color: rgba(153,182,255,0.32);
 $status-error: $accent-04--01;
 $status-ok: $accent-02--01;
 $status-warn: $accent-03--01;
+
+// Status messages //KP TODO: need to merge old & new formatting for status/error/alert colors
+$color-status-error: $color--red-40;
+$color-status-error-text: $color--red-30;
+$color-status-error-bg: $color--red-10;
+
+$color-status-warning: $color--yellow-60;
+$color-status-warning-text: $color--yellow-60;
+$color-status-warning-bg: $color--yellow-10;
+
+$color-status-success: $color--green-30;
+$color-status-success-text: $color--green-40;
+$color-status-success-bg:  $color--green-10;
+
+$color-status-info: $color--blue-50;
+$color-status-info-text: $color--blue-50;
+$color-status-info-bg: $color--blue-05;
+
+$notification-info--dark: $color--blue-50;
+$notification-info--light:  $color--blue-05;
+
+$notification-success--dark: $color--green-30;
+$notification-success--light: $color--green-10;
+
+$notification-warn--dark: $color--yellow-60;
+$notification-warn--light: $color--yellow-10;
+
+$notification-error--dark:  $color--red-40;
+$notification-error--light: $color--red-10;
+
 $white: $color--grey-0;
 $black: $color--grey-100;
 $darkgrey: $color--grey-80;
