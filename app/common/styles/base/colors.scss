@@ -53,9 +53,6 @@ $color--red-10: #fdf7f2;
 @mixin greentowhitefilter {
   filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(326deg) brightness(255%) contrast(103%);
 }
-@mixin greentowhitefilter {
-  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(326deg) brightness(255%) contrast(103%);
-}
 @mixin SuperLtBluefilter {
    filter: brightness(0) saturate(100%) invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
 }
