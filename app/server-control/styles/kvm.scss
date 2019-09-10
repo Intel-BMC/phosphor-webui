@@ -1,4 +1,7 @@
-
+#noVNC_container{
+  position:absolute;
+  z-index:20;
+}
 .noNVC_shown {
   display: inline;
 }

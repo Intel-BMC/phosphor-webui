@@ -48,9 +48,6 @@
 }
 
 .modal-header{
- // border-top-left-radius: 6px;
- //   border-top-right-radius: 6px;
-
  background: $nav__top-level-color;
  padding:0;
  border-bottom: 0;
@@ -91,7 +88,7 @@
 
 
 
-.modal-header h2.modal-title{
+.modal-header h2.modal-title, .modal-header h3{
   color: #ffffff;
   font-size: 1.5rem;
   font-weight: normal;
@@ -137,6 +134,15 @@
 }
 .uib-modal__content {
   padding: 0;
+  .modal-header {
+    display: block;
+  }
+  .btn--close {
+    padding: 0;
+    svg {
+      height: 1.6em;
+    }
+  }
 }
 
 .uib-modal {

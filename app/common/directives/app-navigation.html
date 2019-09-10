@@ -12,7 +12,8 @@
       </button>
     </li>
     <li>
-      <button class="btn-health" ng-class="{opened: firstLevel == 'server-health'}" ng-click="change('server-health')">
+      <button class="btn-health" ng-class="{opened: firstLevel == 'server-health'}"
+        ng-click="change('server-health'); RedirectToURL('/server-health/sys-log')">
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-health.svg">
         <div class="nav-link">Health</div>
       </button>
@@ -34,7 +35,7 @@
     </li>
     <li>
       <button class="btn-control" ng-class="{opened: firstLevel == 'server-control'}"
-        ng-click="change('server-control')">
+        ng-click="change('server-control'); RedirectToURL('/server-control/power-operations')">
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-control.svg">
         <div class="nav-link">Control</div>
       </button>
@@ -70,7 +71,8 @@
       </ul>
     </li>
     <li>
-      <button class="btn-config" ng-class="{opened: firstLevel == 'configuration'}" ng-click="change('configuration')">
+      <button class="btn-config" ng-class="{opened: firstLevel == 'configuration'}"
+        ng-click="change('configuration'); RedirectToURL('/configuration/network')">
         <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-config.svg">
         <div class="nav-link">Configuration</div>
       </button>

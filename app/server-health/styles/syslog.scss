@@ -72,7 +72,16 @@
     }
   }
 
-  .sensor__status-icon{
+  #content__search-input {
+    width:100%;
+    @include mediaQuery(small) {
+      min-width:100%;
+    }
+    @include mediaQuery(medium) {
+      min-width:250px;
+    }
+  }
+  .status-icon{
     max-width:32px;
     margin-right:0px;
     padding:0px;

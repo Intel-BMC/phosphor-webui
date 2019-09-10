@@ -34,6 +34,14 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
   }
 }
 
+select[disabled]{
+  border: 1px solid $color--grey-30;
+  border-color: $color--grey-30;
+  box-shadow: 0 0 0 0;
+  color: #88898a;
+  border-radius: 4px;
+}
+
 /* DATE */
 input[type="date"] {
   display: inline-block !important;
@@ -67,7 +75,7 @@ select {
   -moz-appearance: none;
 }
 
-select.minimal {
+select {
   background-image:
     linear-gradient(45deg, transparent 50%, gray 50%),
     linear-gradient(135deg, gray 50%, transparent 50%),
@@ -83,7 +91,7 @@ select.minimal {
   background-repeat: no-repeat;
 }
 
-select.minimal:focus {
+select:focus {
   background-image:
     linear-gradient(45deg, #0f8dc3 50%, transparent 50%),
     linear-gradient(135deg, transparent 50%, #0f8dc3 50%),
@@ -117,13 +125,24 @@ select.minimal:focus {
     color: #2c3e50;
   }
 
-label{
-  font-size: 14px;
-  padding: 13px 0;
+.helper-text{
+  color: $text-02;
+  display:block;
 }
+
 .small-label, .inline label{
   font-size:12px;
   padding:0;
+}
+
+
+label {
+  margin: 0;
+  font-size: 14px;
+  padding: 13px 0;
+  font-weight: normal;
+  line-height: 1.8;
+  color: $text-02;
 }
 
 /* DROPDOWNS */
@@ -235,8 +254,8 @@ label{
 /* Hover and focus states */
 .control-check:hover input ~ .control__indicator,
 .control-check input:focus ~ .control__indicator {
-  border: 1px solid $primary-accent;
-  background-color: $primary-accent;
+ // border: 1px solid $primary-accent;
+ // background-color: $primary-accent;
 }
 
 /* Checked state */
@@ -264,8 +283,6 @@ label{
 /* Check mark */
 .control__indicator:after,
 .control-check input:not(:checked){
-  position: absolute;
-  display: none;
   content: '';
 }
 
@@ -290,11 +307,17 @@ label{
   border-color: $primary-light;
   color: $primary-light;
 }
-
 // Radio Buttons
 .control-radio {
-  padding-left: 3em;
+  padding-left: 2.4em;
+  &:hover, &:focus{
+    outline: 0;
+    border:0;
+  }
 }
+
+
+
 .control-radio.disabled:hover {
   cursor: default;
 }
@@ -320,7 +343,7 @@ label{
 /* Hover and focus states */
 .control-radio input:focus ~ .control__indicator {
   background: $primary-accent;
-  outline: 1px solid $primary-accent;
+  outline: 0px solid $primary-accent;
   outline-offset: 3px;
 }
 
@@ -384,7 +407,6 @@ label{
   height: 20px;
 }
 
-
 /* PLACEHOLDERS */
 ::placeholder { // Chrome, Firefox, Opera, Safari 10.1+
   color: $color--grey-60;
@@ -437,7 +459,6 @@ label{
   }
 }
 
-// Old code from forms.scss
 //Foundation overwrite
 
 button,
@@ -508,7 +529,7 @@ select{
   margin-right:1%;
 }
 
-select.minimal {
+select {
   background-color: white;
   border: 1px solid #dbdbdb;
   border-radius: 4px;
@@ -555,3 +576,17 @@ select.minimal {
       outline: 0;
   }
 }
+
+input:disabled, input[readonly],
+textarea:disabled,
+textarea[readonly],input[type='number'],input[type='number']:disabled {
+  border: 1px solid $color--grey-30;
+  border-color: $color--grey-30;
+  box-shadow: 0 0 0 0;
+  color: #88898a;
+}
+
+fieldset{
+  text-align:left;
+}
+

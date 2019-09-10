@@ -32,6 +32,7 @@
   @include page-boxformatting;
 }
 
+
 .page-content-box{
   @include page-contentborder;
   @include page-dropshadow;
@@ -45,10 +46,31 @@
   @include page-roundcorners;
   @include page-spaceafter;
   @include page-boxformatting;
+
+  .box-header{
+    background: $nav__top-level-color;
+    padding:0;
+    border-bottom: 0;
+    color:#ffffff;
+    font-size:16px;
+    @include page-roundcorners;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top:-30px;
+    margin-bottom:20px;
+   }
+   .box-content{
+    padding:0;
+    text-align:center;
+    @include mediaQuery(small) {
+      padding: .2em 1.8em;
+      text-align:left;
+    }
+  }
 }
 
 .right-border{
-border-right: 1px solid $color--grey-90;
+  border-right: 1px solid $color--grey-90;
 }
 
 

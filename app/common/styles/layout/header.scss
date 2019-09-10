@@ -153,6 +153,7 @@
     right: 35px;
     margin-top:-10px;
     transition: all .2s ease;
+    z-index:0;
     &.show {
       visibility: visible;
       z-index: 200;

@@ -35,7 +35,7 @@ window.angular && (function(angular) {
                 authenticated: true
               })
               .when('/server-control/power-usage', {
-                title: 'Power Information',
+                title: 'Power Usage',
                 'template':
                     require('./controllers/power-usage-controller.html'),
                 'controller': 'powerUsageController',
