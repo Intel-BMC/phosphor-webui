@@ -21,18 +21,37 @@
     padding:10px;
     display: block;
     border-collapse: collapse;
-
-      .sensor__threshold{
-        text-align:center;
-        flex-direction: row;
-        opacity: .8;
-        @include fastTransition-all;
+    .sensor__threshold{
+      text-align:center;
+      flex-direction: row;
+      opacity: .8;
+      @include fastTransition-all;
+    }
+    .sensor__status{
+      @include mediaQuery(x-small) {
+      max-width:120px;
       }
-
-
-      .sensor__status{
-        max-width:120px;
+    }
+    .sensor__title{
+      min-width:20%;
+      text-align:left;
+      font-weight: 500;
+      background-color: $color--grey-20;
+      @include mediaQuery(x-small) {
+        background-color: inherit;
+        font-weight: inherit;
       }
+      @include mediaQuery(medium) {
+        font-weight: inherit;
+      }
+    }
+    .fixed-table-header .sensor__title{
+      background-color: $color--grey-20;
+    }
+    input{
+      width: 16px;
+      height: 16px;
+    }
 
       .sensor__title{
         min-width:20%;

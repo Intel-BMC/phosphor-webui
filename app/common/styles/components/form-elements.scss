@@ -113,7 +113,6 @@ select:focus {
   outline: 0;
 }
 
-
   /* Removes the clear button from date inputs */
   input[type="date"]::-webkit-clear-button {
     display: none;
@@ -139,7 +138,6 @@ select:focus {
   padding:0;
 }
 
-
 label {
   margin: 0;
   font-size: 14px;
@@ -151,6 +149,7 @@ label {
 
 /* DROPDOWNS */
 //TODO: Remove the dropdowns once all have been removed page-by-page (using select instead)
+
 .dropdown__button {
   position: relative;
   padding-top: .5em;
@@ -523,6 +522,7 @@ select{
 }
 
 .search-box{
+  min-width: 76%;
   float:left;
   box-sizing: border-box;
   margin-right:1%;
@@ -583,8 +583,4 @@ textarea[readonly],input[type='number'],input[type='number']:disabled {
   border-color: $color--grey-30;
   box-shadow: 0 0 0 0;
   color: #88898a;
-}
-
-fieldset{
-  text-align:left;
 }

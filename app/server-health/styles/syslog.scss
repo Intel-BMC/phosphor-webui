@@ -28,8 +28,38 @@
     padding-bottom:19px;
   }
 
-  .two-col-wrapper{
-    display:inline;
+  // Single event log card
+  .sys-log__single-event {
+    border: 1px solid $border-color-01;
+    padding: 1em 1em 1em .7em;
+    margin: .5em 0 .5em 0;
+    position: relative;
+    overflow: hidden;
+    @include fastTransition-all;
+    &.active {
+      background-color: $background-02;
+      @include slowTransition-all;
+    }
+  }
+  .sys-log__event-info {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  #content__search-input {
+    width:100%;
+    @include mediaQuery(small) {
+      min-width:100%;
+    }
+    @include mediaQuery(medium) {
+      min-width:250px;
+    }
+  }
+  .status-icon{
+    max-width:32px;
+    margin-right:0px;
+    padding:0px;
   }
 
   .alert-box{
