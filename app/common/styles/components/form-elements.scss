@@ -439,6 +439,9 @@ label {
   margin: auto;
   width: 100%;
   padding:4px 10px 2px 15px;
+  &.center{
+    text-align:center;
+  }
 }
 
 .form-intro{
