@@ -35,7 +35,7 @@
 
   button, .button, a {
     .nav-icon-img {
-      @include whitefilter;
+       @include whitefilter;
     }
     &:hover {
       .nav-icon-img {

@@ -48,19 +48,20 @@ $color--red-20: #FAD3D3;
 $color--red-10: #fdf7f2;
 
 @mixin whitefilter {
-  filter: invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
+  filter: brightness(0) saturate(100%) invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
 }
 @mixin greentowhitefilter {
   filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(326deg) brightness(255%) contrast(103%);
 }
 @mixin SuperLtBluefilter {
-   filter: invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
+   filter: brightness(0) saturate(100%) invert(92%) sepia(17%) saturate(0%) hue-rotate(326deg) brightness(112%) contrast(103%);
 }
 @mixin LtBluefilter {
-  filter: invert(87%) sepia(27%) saturate(6400%) hue-rotate(166deg) brightness(96%) contrast(88%);
+  filter: brightness(0) saturate(100%) invert(87%) sepia(27%) saturate(6400%) hue-rotate(166deg) brightness(96%) contrast(88%);
 }
+
 @mixin Greyfilter {
-  filter: invert(59%) sepia(0%) saturate(298%) hue-rotate(252deg) brightness(92%) contrast(88%);
+  filter: brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(298%) hue-rotate(252deg) brightness(92%) contrast(88%);
 }
 @mixin bg-gradient{
     background: rgb(20,160,210);
