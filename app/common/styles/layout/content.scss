@@ -9,7 +9,11 @@
 // Main element class
 .content__container {
   @include header-height(page-container);
-  border-left: $nav__toplvlWidth solid $color--blue-50;
+  @include nav-width(page-container,false);
+  &.collapsed{
+    @include nav-width(page-container,true);
+  }
+
   padding: 1em 0.1em;
 
   @include mediaQuery(x-small) {

@@ -112,6 +112,7 @@ window.angular && (function(angular) {
         if (!$scope.searchTerms.length) return true;
       };
 
+
       $scope.loadMergedSensors = function() {
         $scope.loading = true;
         // Flattened sensor data to display all sensors.
@@ -125,29 +126,11 @@ window.angular && (function(angular) {
           $scope.sensorsInfo.Voltages =
               [].concat($scope.sensorsInfo.Voltages, record.sensors.Voltages);
         });
-        // merge all sensors into one array
-        // delay due to non-asynchronous call; TODO: set promise and $q.all
-        // with one finally
-
-        $timeout(function() {
-          $scope.mergedSensors = $scope.sensorsInfo.Voltages.concat(
-              $scope.sensorsInfo.Fans, $scope.sensorsInfo.Temperatures);
-        }, 1500);
 
 
-        $scope.mergedsensorsexport =
-            ((JSON.stringify($scope.sensorsInfo.Voltages.concat(
-                  $scope.sensorsInfo.Fans, $scope.sensorsInfo.Temperatures)))
-                 .replace('[', ''))
-                .replace(']', '');
-        // encode # ins export
-        var i = 0;
-        var strLength = $scope.mergedsensorsexport.length;
-        for (i; i < strLength; i++) {
-          $scope.mergedsensorsexport =
-              $scope.mergedsensorsexport.replace('#', '%23');
-        }
+
         $scope.loading = false;
+        return true;
       };
 
       $scope.toggleSeverity = function(severity) {
@@ -346,6 +329,8 @@ window.angular && (function(angular) {
           $scope.suppressAlerts = true;
         };
       };
+
+
 
       $scope.loadSensorData = function() {
         $scope.loading = true;

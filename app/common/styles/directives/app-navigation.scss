@@ -297,3 +297,11 @@
     }
   }
 }
+
+.collapsed{
+  @include collapsed-nav;
+}
+
+@media only screen and (max-width: $breakpoint-xsmall) {
+  @include collapsed-nav;
+}

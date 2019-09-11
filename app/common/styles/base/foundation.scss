@@ -704,43 +704,43 @@ select[multiple] {
 .invisible {
   visibility: hidden; }
 
-@media screen and (max-width: 39.9375em) {
+@media screen and (max-width: calc(#{$breakpoint-medium} - #{$breakpoint-sep}) ) {
   .hide-for-small-only {
     display: none !important; } }
 
-@media screen and (max-width: 0em), screen and (min-width: 40em) {
+@media screen and (max-width: 0em), screen and (min-width: $breakpoint-medium) {
   .show-for-small-only {
     display: none !important; } }
 
-@media print, screen and (min-width: 40em) {
+@media print, screen and (min-width: $breakpoint-medium) {
   .hide-for-medium {
     display: none !important; } }
 
-@media screen and (max-width: 39.9375em) {
+@media screen and (max-width: calc(#{$breakpoint-medium} - #{$breakpoint-sep})) {
   .show-for-medium {
     display: none !important; } }
 
-@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+@media screen and (min-width: $breakpoint-medium) and (max-width: calc(#{$breakpoint-large}- #{$breakpoint-sep})) {
   .hide-for-medium-only {
     display: none !important; } }
 
-@media screen and (max-width: 39.9375em), screen and (min-width: 64em) {
+@media screen and (max-width: calc(#{$breakpoint-medium} - #{$breakpoint-sep})), screen and (min-width: $breakpoint-large) {
   .show-for-medium-only {
     display: none !important; } }
 
-@media print, screen and (min-width: 64em) {
+@media print, screen and (min-width: $breakpoint-large) {
   .hide-for-large {
     display: none !important; } }
 
-@media screen and (max-width: 63.9375em) {
+@media screen and (max-width: calc(#{$breakpoint-large}- #{$breakpoint-sep})) {
   .show-for-large {
     display: none !important; } }
 
-@media screen and (min-width: 64em) and (max-width: 74.9375em) {
+@media screen and (min-width: $breakpoint-large) and (max-width: calc(#{$breakpoint-xlarge}- #{$breakpoint-sep})) {
   .hide-for-large-only {
     display: none !important; } }
 
-@media screen and (max-width: 63.9375em), screen and (min-width: 75em) {
+@media screen and (max-width: calc(#{$breakpoint-large}- #{$breakpoint-sep})), screen and (min-width: $breakpoint-xlarge) {
   .show-for-large-only {
     display: none !important; } }
 
@@ -798,11 +798,11 @@ select[multiple] {
 .row .row {
   margin-right: -0.75rem;
   margin-left: -0.75rem; }
-@media print, screen and (min-width: 40em) {
+@media print, screen and (min-width: $breakpoint-medium) {
   .row .row {
     margin-right: -0.75rem;
     margin-left: -0.75rem; } }
-@media print, screen and (min-width: 64em) {
+@media print, screen and (min-width: $breakpoint-large) {
   .row .row {
     margin-right: -0.75rem;
     margin-left: -0.75rem; } }
@@ -1105,7 +1105,7 @@ select[multiple] {
   margin-right: 0;
   margin-left: 0; }
 
-@media print, screen and (min-width: 40em) {
+@media print, screen and (min-width: $breakpoint-medium) {
   .medium-1 {
     width: 8.33333%; }
   .medium-push-1 {
@@ -1318,7 +1318,7 @@ select[multiple] {
     margin-right: 0;
     margin-left: 0; } }
 
-@media print, screen and (min-width: 64em) {
+@media print, screen and (min-width: $breakpoint-large) {
   .large-1 {
     width: 8.33333%; }
   .large-push-1 {

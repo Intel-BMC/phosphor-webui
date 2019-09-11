@@ -31,6 +31,12 @@ window.angular && (function(angular) {
               console.log('WebSocket', error);
             }
 
+            $scope.page_title = $rootScope.page_title;
+
+            $scope.$on('$routeChangeSuccess', function(event, data) {
+              $scope.page_title = data.title;
+            });
+
             if (ws !== undefined) {
               // Specify the required event details as JSON dictionary
               var data = JSON.stringify({

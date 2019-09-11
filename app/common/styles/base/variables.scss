@@ -12,3 +12,10 @@ $entrance-easing--productive: cubic-bezier(0, 0, 0.38, 0.9);
 $entrance-easing--expressive: cubic-bezier(0, 0, 0.3, 1);
 $exit-easing--productive: cubic-bezier(0.2, 0, 1, 0.9);
 $exit-easing--expressive: cubic-bezier(0.4, 0.14, 1, 1);
+
+$breakpoint-xsmall:  25em;  //25em is 400px //0px to match Bootstrap 4.0
+$breakpoint-small:   34em;  //25em is 480px = phone landscape//576px to match Bootstrap small//Docs on Bootstrap 4.0 say 34em & 544px
+$breakpoint-medium:  48em;  //40em is 640px to match Zurb foundation.scss medium (to 1024px)//48em is 768px to match Bootstrap medium
+$breakpoint-large:   62em;  //64em 1024px to match Zurb foundation.scss large (to 1440px)//62em 992px to Bootstrap Large
+$breakpoint-xlarge:  75em;  //75em is 1440px to match Zurb foundation.scss x-large//75em 1200px to match Bootstrap x-large
+$breakpoint-sep: .0625em;  //for calculating masx breakpoint in Zurb foundation.scss

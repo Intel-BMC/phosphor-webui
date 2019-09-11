@@ -38,6 +38,9 @@
   @include page-boxformatting;
 }
 
+.page-dropshadow{
+  @include page-dropshadow;
+}
 .page-content-box{
   @include page-contentborder;
   @include page-dropshadow;

@@ -363,7 +363,9 @@ window.angular && (function(angular) {
               .replace('Hdd', 'Hard Drive')
               .replace('Diags', 'Diagnostics')
               .replace('BiosSetup', 'Bios Setup')
-        };
+        } else {
+          return 'No override';
+        }
       };
 
       /*

@@ -27,7 +27,7 @@
       </div>
 
       <div class="power-indicator-status">
-        <div class="inline float-left host-name">{{dataService.hostname}}</div>
+        <div class="inline float-left host-name">Server Power</div>
         <div class="power__state float-right inline trim-text-small">
           <span>{{dataService.server_state | quiescedToError}}</span>
         </div>
@@ -39,99 +39,99 @@
   <!-- Power Operations Section -->
   <div class="row">
     <div class="operations-wrapper">
-      <div ng-show="(!operationPending) && (dataService.server_state != 'Off')">
+      <div ng-show="(!operationPending) && (dataService.server_state == 'Running')">
 
         <!-- Reboot/shutdown sections -->
-        <div ng-show="dataService.server_state !== 'Off'">
 
-          <!-- Reboot Field Row -->
-          <div class="reboot__operations column medium-6 small-12">
-            <div class="page-content-rnd table row column">
-              <div class="box-header reboot-header">
-                <legend class="boot-operations">Reboot<span class="trim-text-small inline">
-                    server</span></legend>
-              </div>
 
-              <div class="box-content">
-                <form id="reboot-form" name="rebootForm" class="reboot-form">
-                  <div class="column medium-7 small-12">
-                    <fieldset>
-                      <label class="control-radio">Orderly
-                        <span class="helper-text trim-text-medium">OS shuts down, then server
-                          reboots</span>
-                        <input type="radio" name="radioReboot" ng-model="defaultRebootSetting" value="warm-reboot" />
-                        <span class="control__indicator control__indicator-on"></span>
-                      </label>
-                      <label class="control-radio">Immediate
-                        <span class="helper-text trim-text-medium">Server reboots without OS
-                          shutting down; may cause
-                          data
-                          corruption</span>
-                        <input type="radio" name="radioReboot" ng-model="defaultRebootSetting" value="cold-reboot" />
-                        <span class="control__indicator control__indicator-on"></span>
-                      </label>
-                    </fieldset>
-                  </div>
-                  <div class="column medium-5 small-12">
-                    <button class="btn-power" ng-click="rebootConfirmModal()" type="submit"
-                      ng-disabled="dataService.server_unreachable">
-                      <img src="../../assets/images/btn-reboot.svg">
-                    </button>
-                  </div>
-                </form>
-              </div>
-
+        <!-- Reboot Field Row -->
+        <div class="reboot__operations column medium-6 small-12">
+          <div class="page-content-rnd table row column">
+            <div class="box-header reboot-header">
+              <legend class="boot-operations">Reboot<span class="trim-text-small inline">
+                  server</span></legend>
             </div>
-          </div>
 
-          <!-- Shutdown Field Row -->
-          <div class="shutdown__operations column medium-6 small-12">
-
-            <div class="page-content-rnd table row column">
-              <div class="box-header shutdown-header">
-                <legend class="shutdown-operations">Shutdown<span class="trim-text-small  inline">
-                    server</span>
-                </legend>
-              </div>
-
-              <form id="shutdown-form" name="shutdownForm" class="shutdown-form">
-                <div class="box-content">
-                  <div class="column medium-7 small-12">
-                    <fieldset>
-
-                      <label class="control-radio">Orderly
-                        <span class="helper-text trim-text-medium">OS shuts down, then server
-                          shuts down</span>
-                        <input type="radio" name="radioShutdown" ng-model="defaultShutdownSetting"
-                          value='warm-shutdown' />
-                        <span class="control__indicator control__indicator-on"></span>
-                      </label>
-                      <label class="control-radio">Immediate
-                        <span class="helper-text trim-text-medium">Server shuts down without OS
-                          shutting down; may cause
-                          data
-                          corruption</span>
-                        <input type="radio" name="radioShutdown" ng-model="defaultShutdownSetting"
-                          value='cold-shutdown' />
-                        <span class="control__indicator control__indicator-on"></span>
-                      </label>
-                    </fieldset>
-                  </div>
-                  <div class="column medium-5 small-12">
-                    <button class="btn-power" ng-click="shutdownConfirmModal()" type="submit"
-                      ng-disabled="dataService.server_unreachable">
-                      <img src="../../assets/images/btn-poweroff.svg">
-                    </button>
-                  </div>
+            <div class="box-content">
+              <form id="reboot-form" name="rebootForm" class="reboot-form">
+                <div class="column medium-7 small-12">
+                  <fieldset>
+                    <label class="control-radio">Orderly
+                      <span class="helper-text trim-text-medium">OS shuts down, then server
+                        reboots</span>
+                      <input type="radio" name="radioReboot" ng-model="defaultRebootSetting" value="warm-reboot" />
+                      <span class="control__indicator control__indicator-on"></span>
+                    </label>
+                    <label class="control-radio">Immediate
+                      <span class="helper-text trim-text-medium">Server reboots without OS
+                        shutting down; may cause
+                        data
+                        corruption</span>
+                      <input type="radio" name="radioReboot" ng-model="defaultRebootSetting" value="cold-reboot" />
+                      <span class="control__indicator control__indicator-on"></span>
+                    </label>
+                  </fieldset>
+                </div>
+                <div class="column medium-5 small-12">
+                  <button class="btn-power" ng-click="rebootConfirmModal()" type="submit"
+                    ng-disabled="dataService.server_unreachable">
+                    <img src="../../assets/images/btn-reboot.png">
+                  </button>
                 </div>
               </form>
             </div>
 
           </div>
+        </div>
+
+
+        <!-- Shutdown Field Row -->
+        <div class="shutdown__operations column medium-6 small-12">
+
+          <div class="page-content-rnd table row column">
+            <div class="box-header shutdown-header">
+              <legend class="shutdown-operations">Shutdown<span class="trim-text-small  inline">
+                  server</span>
+              </legend>
+            </div>
+
+            <form id="shutdown-form" name="shutdownForm" class="shutdown-form">
+              <div class="box-content">
+                <div class="column medium-7 small-12">
+                  <fieldset>
+
+                    <label class="control-radio">Orderly
+                      <span class="helper-text trim-text-medium">OS shuts down, then server
+                        shuts down</span>
+                      <input type="radio" name="radioShutdown" ng-model="defaultShutdownSetting"
+                        value='warm-shutdown' />
+                      <span class="control__indicator control__indicator-on"></span>
+                    </label>
+                    <label class="control-radio">Immediate
+                      <span class="helper-text trim-text-medium">Server shuts down without OS
+                        shutting down; may cause
+                        data
+                        corruption</span>
+                      <input type="radio" name="radioShutdown" ng-model="defaultShutdownSetting"
+                        value='cold-shutdown' />
+                      <span class="control__indicator control__indicator-on"></span>
+                    </label>
+                  </fieldset>
+                </div>
+                <div class="column medium-5 small-12">
+                  <button class="btn-power" ng-click="shutdownConfirmModal()" type="submit"
+                    ng-disabled="dataService.server_unreachable">
+                    <img src="../../assets/images/btn-poweroff.png">
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
 
         </div>
 
       </div>
+
     </div>
   </div>
 
@@ -157,11 +157,13 @@
     </div>
   </div>
 
-  <!-- Pending reboot warning -->
-  <div class="page-content-rnd alert-message" ng-show="operationPending">
-    <p>
-      Power operation controls can not be displayed while power operation is in
-      progress. When complete, power operation controls will be restored.
-    </p>
-  </div>
+</div>
+
+<!-- Pending reboot warning -->
+<div class="page-content-rnd alert-message" ng-show="operationPending">
+  <p>
+    Power operation controls can not be displayed while power operation is in
+    progress. When complete, power operation controls will be restored.
+  </p>
+</div>
 </div>

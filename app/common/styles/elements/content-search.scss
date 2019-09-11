@@ -16,8 +16,7 @@
 .content__search {
   float: left;
   position: relative;
-  margin-right: 1em;
-  margin-bottom: .5em;
+  margin: .5em 1em;
 
 #content__search-input {
     margin: 0;
@@ -27,28 +26,8 @@
     height: 3em;
     max-height: none;
     position: relative;
-    color:  #5f5f5f;
-    box-sizing: border-box;
-    box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
-    padding: 12px 18px;
-    border: 1px solid #dbdbdb;
-    &:focus {
-      box-shadow: none;
-    }
-  }
-  label {
-    position: absolute;
-    text-indent: -9999px;
-    height:20px;
-    width: 20px;
-    left: 10px;
-    top: 25px;
-    transform: translateY(-50%);
-    background: url("../assets/images/icon-search.svg") center center no-repeat;
-    opacity: .6;
-    @include form-inputs(icon);
-    position: relative;
-    min-width:250px;
+    min-width:130px;
+    background-image:url(../assets/icons/icon-search.png);
   }
 
   .clear-input {

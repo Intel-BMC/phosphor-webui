@@ -21,7 +21,7 @@ $downTriangle: "\25bc";
    padding:0;
    text-align:left;
    vertical-align:middle;
-   @include mediaQuery(small) {
+   @include mediaQuery(x-small) {
      display: flex;
    }
    .table__cell {
@@ -57,9 +57,8 @@ $downTriangle: "\25bc";
   &:hover {
     background:$color--grey-30;
     transition: all .2s ease;
-   // color:#FFFFFF;
   }
-  @include mediaQuery(small) {
+  @include mediaQuery(x-small) {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -67,23 +66,25 @@ $downTriangle: "\25bc";
 }
 
 .table__cell, {
- flex: 1;
-  line-height: 2.8em;
+  flex: 1;
   padding: .5em 1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   border-bottom: 1px solid $border-color-01;
-
-  &.align-left{
-    text-align: left;
-  }
   padding:10px;
   text-align:center;
   vertical-align:middle;
   margin-right:0px;
+
+  @include mediaQuery(x-small) {
+    line-height: 2.8em;
+  }
   @include mediaQuery(medium) {
-    margin-right:3px;
+    margin-right:2px;
+  }
+  &.align-left{
+    text-align: left;
   }
   .status-icon{
     border-right: 0px solid #ffffff;
@@ -110,7 +111,7 @@ $downTriangle: "\25bc";
 
 .fixed-table-header{
   position: sticky;
-  top: $header_height;
+  top: $header_Height;
   z-index: 1;
 }
 
@@ -146,9 +147,9 @@ $downTriangle: "\25bc";
 }
 
 .fixed-table-header .table__cell, .table__head .table__cell{
-  background-color: #f1f4f5;
+  background-color: $color--grey-20;
   cursor: pointer;
-  margin-right:3px;
+  margin-right:2px;
   line-height: 1;
   padding-top: 18px;
   padding-bottom: 18px;
@@ -204,15 +205,57 @@ $downTriangle: "\25bc";
   transition: all .4s ease;
 }
 
-.sortorder:after {
-  color:$color--grey-60;
-  content: $upTriangle;
-}
-.sortorder.reverse:after,.sortorder.reverseSeverity:after {
-  color:$color--grey-60;
-  content: $downTriangle;
+//Tabs table
+.overview-config-table{
+  width:100%;
+  tr td:nth-child(2) {
+    background-color:#fafafa;
+  }
+  td {
+    padding: 8px;
+    text-align: left;
+    font-size: 13px;
+    border: 1px solid #e5e5e5;
+  }
+  td:nth-child(2) {
+      text-align: right;
+  }
 }
 
+/* Configuration Bootstrap Tab Overrides */
+.nav-tabs a {
+    color: #8b8a8a;
+}
+
+.nav-tabs li {
+    background-color: #e9eaea;
+    border-left: 0;
+    border-right: 0;
+}
+
+.nav-tabs>li>a {
+    border: 0;
+    border-radius: 0;
+    margin-right: 0;
+}
+
+.nav-tabs li.active {
+    border-top: 4px solid #02aeef;
+}
+
+.nav-tabs li.active>a,
+.nav-tabs li.active>a:hover {
+    background-color: #ffffff;
+    border-left: 0;
+    border-right: 0;
+    color: #02aeef;
+}
+
+.nav-tabs {
+    border-bottom: 0;
+}
+
+//BMC Table for modal
 .bmc-table {
   width: 100%;
   &.small {

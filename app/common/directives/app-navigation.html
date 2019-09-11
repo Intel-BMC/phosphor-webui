@@ -124,9 +124,18 @@
           </li>
           <li ng-class="{'active': (path == '/access-control' || path == '/access-control/ssl-certificates')}">
             <a href="#/access-control/ssl-certificates" ng-click="closeSubnav()"
-              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">SSL certificates</a>
+              tabindex="{{ (showSubMenu && firstLevel == 'access-control') ? 0 : -1}}">SSL certificates</a>
           </li>
         </ul>
       </li>
+
+      <div id='toggle-collapse' aria-label="Collapse navigation" aria-role="button" ng-click="toggleNav= !toggleNav"
+        tabindex="0" role="button">
+        <img class="nav-icon " src="../../assets/icons/icon-collapse.png">
+      </div>
+
     </ul>
+
   </nav>
+
+</div>

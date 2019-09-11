@@ -1,24 +1,24 @@
 // Content layout styles
 $nav__toplvlWidth: 225px;
-$header-height: 50px;
+$header_Height: 50px;
 
 @mixin header-height($location) {
 
-  $header-height: 80px;
+  $header_Height: 80px;
   @if ($location=="header"){
-    height: $header-height;
+    height: $header_Height;
   }
   @if ($location=="page-container"){
-    margin-top: $header-height;
+    margin-top: $header_Height;
   }
 
   @include mediaQuery(medium) {
-    $header-height: 50px;
+    $header_Height: 50px;
     @if ($location=="header"){
-      height: $header-height;
+      height: $header_Height;
     }
     @if ($location=="page-container"){
-      margin-top: $header-height;
+      margin-top: $header_Height;
     }
   }
 }
