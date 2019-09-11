@@ -1,23 +1,28 @@
 <loader loading="loading"></loader>
 <div id="sensors" class="sensors">
 
-  <div class="page-content-box toggle-filter">
-    <div class="filter-box"><label class="trim-text-medium">Filter by Severity</label>
+  <section class="page-content-box toggle-filter row">
+    <div class="columns col-lg-3 col-md-3 col-sm-12"><label class="trim-text-medium">Filter by Severity</label>
     </div>
 
-    <div class="filter-box" ng-repeat="severity in severityList">
-      <button class="filter-btn" ng-click="toggleSeverity(severity)"
-        ng-class="(selectedSeverity == (severity | lowercase)) ? 'btn-filter-primary' : 'btn-filter-secondary'">
-        <span class="alert-text-{{severity | lowercase}}">&#9679;</span>&nbsp;{{severity}}
-      </button>
+    <div class="columns col-lg-2 col-md-2 col-sm-6 col-6" ng-repeat="severity in severityList">
+      <div class='filter-box'>
+        <button class="filter-btn" ng-click="toggleSeverity(severity)"
+          ng-class="(selectedSeverity == (severity | lowercase)) ? 'btn-filter-primary' : 'btn-filter-secondary'">
+          <span class="alert-text-{{severity | lowercase}}">&#9679;</span>&nbsp;{{severity}}
+        </button>
+      </div>
     </div>
-  </div>
+
+    <div class="columns col-lg-1 col-md-1 col-0"></div>
+
+  </section>
 
   <div class="page-content-box">
-    <div class="columns large-6 medium-6 small-12">
+    <div class="columns col-lg-6 col-md-6 col-12">
 
       <div class="select-box">
-        <div class="inline padding-left">
+        <div class="inline">
           <select id="component" ng-model="selectedChoice" name="dropdown" class="minimal"
             ng-change="selectComponent(selectedChoice);">
             <option value="All" name="All">All Components</option>
@@ -28,9 +33,9 @@
       </div>
     </div>
 
-    <div class="columns large-6 medium-6 small-12">
+    <div class="columns col-lg-6 col-md-6 col-12">
       <div class="content__search search-box">
-        <input id="content__search-input" placeholder="Filter by Keyword" type="text" ng-model="customSearch"
+        <input id="content__search-input" placeholder="Keyword" type="text" ng-model="customSearch"
           ng-keydown="doSearchOnEnter($event)" />
         <div class="search-submit__wrapper">
           <button class="clear-input" ng-click="clear()">&#10005;</button>
@@ -54,14 +59,14 @@
     <div class="table row column sensor__table">
       <div class="table__head fixed-table-header">
         <div class="table__row">
-          <div class="table__cell status-icon trim-text-small"></div>
+          <div class="table__cell status-icon trim-text-medium"></div>
           <div class="table__cell sensor__title sort_button_wrapper" ng-click='sortBy("Name")'>
-            <div class="column small-10">Sensor Name</div>
-            <div class="column small-2"><span class="sortorder" ng-class="{reverse: reverse}"></span></div>
+            <div class="column col-10">Sensor Name</div>
+            <div class="column col-2"><span class="sortorder" ng-class="{reverse: reverse}"></span></div>
           </div>
           <div class="table__cell sensor__status sort_button_wrapper" ng-click="sortBySeverity()">
-            <div class="column small-10">Status</div>
-            <div class="column small-2"><span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
+            <div class="column col-10">Status</div>
+            <div class="column col-2"><span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
             </div>
           </div>
           <div class="table__cell sensor__reading">Reading</div>
@@ -74,25 +79,27 @@
       <div class="table__body">
         <div class="table__row sensor-row__{{sensor.Status.Health}}"
           ng-repeat="sensor in (filteredSensors = (filteredMergedSensors = (mergedSensors | filter:filterByComponent | filter:filterBySearchTerms | filter:filterBySeverity | orderBy: orderDatabySeverity | orderBy:sortKey:reverse)))">
-          <div class="table__cell status-icon status__{{sensor.Status.Health}} trim-text-small">&nbsp;
+          <div class="table__cell status-icon status__{{sensor.Status.Health}} trim-text-medium">&nbsp;
           </div>
           <div class="table__cell sensor__title">{{sensor.Name}}</div>
           <div class="table__cell sensor__status">{{sensor.Status.Health}}</div>
           <div class="table__cell sensor__reading">
+
             {{(sensor.ReadingVolts | number:2)}} {{(sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}
             {{(sensor.ReadingCelsius) ? (sensor.ReadingCelsius | number:2) + "&deg;" + (sensor.ReadingUnits) + " C" : ""}}
             {{(sensor.Reading | number:2)}} {{(sensor.Reading) ? sensor.ReadingUnits.replace("Percent","%") : ""}}
             {{((sensor.Reading | number:2)=="0") ? " " + sensor.ReadingUnits.replace("Percent","%") : ""}}
+
           </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
-            {{(sensor.LowerThresholdNonCritical | number:2)}}
-            {{(sensor.LowerThresholdNonCritical && sensor.ReadingVolts) ? " V" : ""}}
+            {{(sensor.LowerThresholdCritical | number:2)}}
+            {{(sensor.LowerThresholdCritical && sensor.ReadingVolts) ? " V" : ""}}
             {{((sensor.ReadingVolts | number:2)=="0.00") ? " V" : ""}}
-            {{(sensor.LowerThresholdNonCritical && sensor.ReadingCelsius) ? " &deg;" + (sensor.ReadingUnits) + " C" : ""}}
-            {{(sensor.LowerThresholdNonCritical && sensor.Reading) ? " " + sensor.ReadingUnits.replace("Percent","%") : ""}}
-            {{(sensor.LowerThresholdNonCritical) ? "" : "-"}} </div>
+            {{(sensor.LowerThresholdCritical && sensor.ReadingCelsius) ? " &deg;" + (sensor.ReadingUnits) + " C" : ""}}
+            {{(sensor.LowerThresholdCritical && sensor.Reading) ? " " + sensor.ReadingUnits.replace("Percent","%") : ""}}
+            {{(sensor.LowerThresholdCritical) ? "" : "-"}} </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
             {{(sensor.LowerThresholdNonCritical | number:2)}}

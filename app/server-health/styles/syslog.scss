@@ -59,6 +59,24 @@
     font-size:13px;
   }
 
+  .sys-log__col-date{
+    min-width:20%;
+    text-align:left;
+    font-weight: 500;
+    background-color: $color--grey-20;
+    @include mediaQuery(x-small) {
+      background-color: inherit;
+      font-weight: inherit;
+      max-width:200px;
+    }
+    @include mediaQuery(medium) {
+      font-weight: inherit;
+    }
+  }
+  .fixed-table-header .sys-log__col-date{
+    background-color: $color--grey-20;
+  }
+
   .sys-log__col-desc{
     cursor: pointer;
     line-height:1.4em;
@@ -71,15 +89,11 @@
       transition: all .4s ease;
     }
   }
-
+  .content__search {
+    margin: 0;
+  }
   #content__search-input {
     width:100%;
-    @include mediaQuery(small) {
-      min-width:100%;
-    }
-    @include mediaQuery(medium) {
-      min-width:250px;
-    }
   }
   .status-icon{
     max-width:32px;
@@ -87,11 +101,11 @@
     padding:0px;
   }
   .sys-log__col-sev{
-    max-width:150px;
+    @include mediaQuery(x-small) {
+      max-width:150px;
+    }
   }
-  .sys-log__col-date{
-    max-width:200px;
-  }
+
   .sys-log__col-id{
     max-width:120px;
   }
@@ -109,9 +123,6 @@
   .line2{
     display:block;
     color: $color--grey-70;
-    @include mediaQuery(x-large) {
-      display:inline;
-    }
   }
 }
 

@@ -1,113 +1,136 @@
-<nav class="nav__wrapper">
-  <ul id="nav__top-level" ng-style="navStyle">
-    <li class="above-nav">
-      <a href="#/overview/server"><img src="../../assets/images/logo-intel.png"></a>
-    </li>
-    <li>
-      <button class="btn-overview" ng-click="change('overview')">
-        <a ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-overview.svg">
-          <div class="nav-link">Overview</div>
-        </a>
-      </button>
-    </li>
-    <li>
-      <button class="btn-health" ng-class="{opened: firstLevel == 'server-health'}"
-        ng-click="change('server-health'); RedirectToURL('/server-health/sys-log')">
-        <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-health.svg">
-        <div class="nav-link">Health</div>
-      </button>
-      <ul class="nav__second-level btn-health" ng-style="navStyle"
-        ng-class="{opened: (showSubMenu && firstLevel == 'server-health')}">
-        <li ng-class="{'active': (path == '/server-health/sys-log')}">
-          <a href="#/server-health/sys-log" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Event log</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-health/inventory-overview' || path == '/server-health/inventory')}">
-          <a href="#/server-health/inventory-overview" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Hardware status</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-health/sensors-overview' || path == '/server-health/sensors')}">
-          <a href="#/server-health/sensors-overview" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Sensors</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <button class="btn-control" ng-class="{opened: firstLevel == 'server-control'}"
-        ng-click="change('server-control'); RedirectToURL('/server-control/power-operations')">
-        <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-control.svg">
-        <div class="nav-link">Control</div>
-      </button>
-      <ul class="nav__second-level btn-control" ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
-        <li ng-class="{'active': (path == '/server-control' || path == '/server-control/power-operations')}">
-          <a href="#/server-control/power-operations" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server power operations</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-control/power-usage')}">
-          <a href="#/server-control/power-usage" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Manage power usage</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-control/server-led')}">
-          <a href="#/server-control/server-led" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server LED</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-control/bmc-reboot')}">
-          <a href="#/server-control/bmc-reboot" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Reboot BMC</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-control/remote-console')}">
-          <a href="#/server-control/remote-console" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Serial over LAN console</a>
-        </li>
-        <li ng-class="{'active': (path == '/server-control/kvm')}">
-          <a href="#/server-control/kvm" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">KVM</a>
-        </li>
-        <li ng-class="{'active': (path == '/configuration' || path == '/configuration/virtual-media')}">
-          <a href="#/configuration/virtual-media" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Virtual Media</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <button class="btn-config" ng-class="{opened: firstLevel == 'configuration'}"
-        ng-click="change('configuration'); RedirectToURL('/configuration/network')">
-        <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-config.svg">
-        <div class="nav-link">Configuration</div>
-      </button>
-      <ul class="nav__second-level btn-firmware" ng-class="{opened: (showSubMenu && firstLevel == 'configuration')}">
-        <li ng-class="{'active': (path == '/configuration' || path == '/configuration/network')}">
-          <a href="#/configuration/network" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Network settings</a>
-        </li>
-        <li ng-class="{'active': (path == '/configuration' || path == '/configuration/snmp')}">
-          <a href="#/configuration/snmp" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">SNMP settings</a>
-        </li>
-        <li ng-class="{'active': (path == '/configuration' || path == '/configuration/firmware')}">
-          <a href="#/configuration/firmware" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Firmware</a>
-        </li>
-        <li ng-class="{'active': (path == '/configuration' || path == '/configuration/date-time')}">
-          <a href="#/configuration/date-time" ng-click="closeSubnav()"
-            tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Date and time settings</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <button class="btn-users" ng-class="{opened: firstLevel == 'users'}"
-        ng-click="change('users'); RedirectToURL('/users/manage-accounts')">
-        <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.svg">
-        <div class="nav-link">Users</div>
-      </button>
-      <ul class="nav__second-level btn-users" ng-style="navStyle"
-        ng-class="{opened: (showSubMenu && firstLevel == 'users')}">
-        <li ng-class="{'active': (path == '/users' || path == '/users/manage-accounts')}">
-          <a href="#/users/manage-accounts" ng-click="closeSubnav()"
-            tabindex="{{ (showSubMenu && firstLevel == 'users') ? 0 : -1}}">Manage user account</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+<div ng-class="{'collapsed': toggleNav}">
+
+  <nav class="nav__wrapper">
+
+    <ul id="nav__top-level" ng-class="toggleNav ? 'collapsed':''" ng-style="navStyle">
+      <li class="above-nav">
+        <a href="#/overview/server"><img src="../../assets/images/logo-intel.png"></a>
+      </li>
+      <li>
+        <button class="btn-overview" ng-click="change('overview'); RedirectToURL('/overview/server')">
+          <a ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server">
+            <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-overview.svg">
+            <div class="nav-link" ng-class="toggleNav ? 'collapsed':'trim-text-xsmall'">Overview</div>
+          </a>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn-health" ng-class="{opened: firstLevel == 'server-health'}"
+          ng-click="change('server-health'); RedirectToURL('/server-health/sys-log')">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-health.svg">
+          <div class="nav-link trim-text-xsmall">Health</div>
+        </button>
+        <ul class="nav__second-level btn-health" ng-style="navStyle"
+          ng-class="{opened: (showSubMenu && firstLevel == 'server-health')}">
+          <li ng-class="{'active': (path == '/server-health/sys-log')}">
+            <a href="#/server-health/sys-log" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Event log</a>
+          </li>
+          <li
+            ng-class="{'active': (path == '/server-health/inventory-overview' || path == '/server-health/inventory')}">
+            <a href="#/server-health/inventory-overview" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Hardware status</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-health/sensors-overview' || path == '/server-health/sensors')}">
+            <a href="#/server-health/sensors-overview" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-health') ? 0 : -1}}">Sensors</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <button class="btn-control" ng-class="{opened: firstLevel == 'server-control'}"
+          ng-click="change('server-control'); RedirectToURL('/server-control/power-operations')">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-control.svg">
+          <div class="nav-link trim-text-xsmall">Control</div>
+        </button>
+        <ul class="nav__second-level btn-control" ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
+          <li ng-class="{'active': (path == '/server-control' || path == '/server-control/power-operations')}">
+            <a href="#/server-control/power-operations" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server power
+              operations</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-control/power-usage')}">
+            <a href="#/server-control/power-usage" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Manage power usage</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-control/server-led')}">
+            <a href="#/server-control/server-led" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server LED</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-control/bmc-reboot')}">
+            <a href="#/server-control/bmc-reboot" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Reboot BMC</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-control/remote-console')}">
+            <a href="#/server-control/remote-console" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Serial over LAN
+              console</a>
+          </li>
+          <li ng-class="{'active': (path == '/server-control/kvm')}">
+            <a href="#/server-control/kvm" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">KVM</a>
+          </li>
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/virtual-media')}">
+            <a href="#/configuration/virtual-media" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Virtual Media</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <button class="btn-config" ng-class="{opened: firstLevel == 'configuration'}"
+          ng-click="change('configuration'); RedirectToURL('/configuration/network')">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-config.svg">
+          <div class="nav-link trim-text-xsmall">Config<span class='trim-text-small inline'>uration</span></div>
+        </button>
+        <ul class="nav__second-level btn-firmware" ng-class="{opened: (showSubMenu && firstLevel == 'configuration')}">
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/network')}">
+            <a href="#/configuration/network" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Network settings</a>
+          </li>
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/certificate')}">
+            <a href="#/configuration/certificate" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Certificate management</a>
+          </li>
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/snmp')}">
+            <a href="#/configuration/snmp" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">SNMP settings</a>
+          </li>
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/firmware')}">
+            <a href="#/configuration/firmware" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Firmware</a>
+          </li>
+          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/date-time')}">
+            <a href="#/configuration/date-time" ng-click="closeSubnav()"
+              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Date and time
+              settings</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <button class="btn-users" ng-class="{opened: firstLevel == 'users'}"
+          ng-click="change('users'); RedirectToURL('/users/manage-accounts')">
+          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.svg">
+          <div class="nav-link trim-text-xsmall">Users</div>
+        </button>
+        <ul class="nav__second-level btn-users" ng-style="navStyle"
+          ng-class="{opened: (showSubMenu && firstLevel == 'users')}">
+          <li ng-class="{'active': (path == '/users' || path == '/users/manage-accounts')}">
+            <a href="#/users/manage-accounts" ng-click="closeSubnav()"
+              tabindex="{{ (showSubMenu && firstLevel == 'users') ? 0 : -1}}">Manage user account</a>
+          </li>
+        </ul>
+      </li>
+
+
+      <div id='toggle-collapse' aria-label="Collapse navigation" aria-role="button" ng-click="toggleNav= !toggleNav"
+        tabindex="0" role="button">
+        <img class="nav-icon " src="../../assets/icons/icon-collapse.png">
+      </div>
+
+    </ul>
+
+
+
+  </nav>
+
+</div>

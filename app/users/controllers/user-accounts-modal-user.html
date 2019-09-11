@@ -11,14 +11,14 @@
     <div class="modal-body">
       <!-- Manual unlock -->
       <div class="row" ng-if="modalCtrl.user.locked && !modalCtrl.automaticLockout">
-        <div class="column medium-6">
+        <div class="column col-md-6">
           <div class="notification-banner" aria-live="polite" ng-class="{'notification-banner--warning': !form.lock.$dirty,
                           'notification-banner--information': form.lock.$dirty}">
             <p class="notification-banner__text" ng-if="!form.lock.$dirty">Account locked</p>
             <p class="notification-banner__text" ng-if="form.lock.$dirty">Click "Save" to unlock account</p>
           </div>
         </div>
-        <div class="column medium-6">
+        <div class="column col-md-6">
           <input type="hidden" name="lock" ng-model="modalCtrl.manualUnlockProperty" value="false">
           <button class="btn btn-primary" type="button" ng-click="form.lock.$setDirty()"
             ng-disabled="form.lock.$dirty">Unlock</button>
@@ -30,7 +30,7 @@
 
       <!-- Username-->
       <div class="row">
-        <div class="column medium-6">
+        <div class="column col-md-6">
           <div class="field-group-container">
             <legend>Username</legend>
 
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div class="column medium-6">
+        <div class="column col-md-6">
           <p class="label__helper-text">Cannot start with a number</p>
           <p class="label__helper-text">No special characters except underscore</p>
         </div>
@@ -62,7 +62,7 @@
 
       <!-- Password-->
       <div class="row">
-        <div class="column medium-6">
+        <div class="column col-md-6">
           <div class="field-group-container">
             <legend>Password</legend>
 
@@ -108,7 +108,7 @@
 
         </div>
 
-        <div class="column medium-6">
+        <div class="column  col-md-6">
           <p class="label__helper-text">Password must between <span class="nowrap">{{modalCtrl.minPasswordLength}} –
               {{modalCtrl.maxPasswordLength}}</span> characters</p>
         </div>
@@ -119,7 +119,7 @@
 
       <div class="row padding-top">
 
-        <div class="column medium-6">
+        <div class="column  col-md-6">
           <!-- Privilege -->
           <div class="field-group-container">
             <legend>Role</legend>
@@ -134,7 +134,7 @@
             </select>
           </div>
         </div>
-        <div class="column medium-6">
+        <div class="column  col-md-6">
           <!-- Account Status -->
           <fieldset class="field-group-container">
             <legend>Account Status</legend>

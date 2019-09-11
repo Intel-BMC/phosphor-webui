@@ -34,6 +34,10 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
   }
 }
 
+.select-box{
+  margin: .5em 1em;
+}
+
 select[disabled]{
   border: 1px solid $color--grey-30;
   border-color: $color--grey-30;
@@ -232,12 +236,6 @@ label {
   padding-top: 7px;
   cursor: pointer;
   line-height: initial;
-}
-
-.control-check input {
-  position: absolute;
-  z-index: -1;
-  opacity: 0;
 }
 
 .control__indicator {
@@ -494,6 +492,7 @@ select{
   height: auto;
   padding-right: 0.5rem; //override inherited Foundation style
   border-color: $input-border;
+  margin: .5em 1em;
   @include fastTransition-all;
   @include bgImage__arrowDown-primary;
   &:focus {
@@ -514,9 +513,6 @@ select{
 }
 
 .filter-box{
-  @include mediaQuery(small) {
-    width:18%;
-  }
   float:left;
   box-sizing: border-box;
   margin-right:1%;

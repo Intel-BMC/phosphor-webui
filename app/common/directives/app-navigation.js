@@ -8,12 +8,27 @@ window.angular && (function(angular) {
           'template': require('./app-navigation.html'),
           'scope': {'path': '=', 'showNavigation': '='},
           'controller': [
-            '$scope', '$location', 'dataService',
-            function($scope, $location, dataService) {
+            '$scope', '$rootScope', '$location', 'dataService',
+            function($scope, $rootScope, $location, dataService) {
               $scope.dataService = dataService;
               $scope.showSubMenu = false;
               $scope.configuration = false;
               $scope.serverControl = false;
+
+              //  $scope.toggleNav = function() {
+              //    $scope.toggleNav = !$scope.toggleNav;
+              //  };
+
+              $scope.$watch('toggleNav', function() {
+                $scope.toggleText = $scope.toggleNav ? 'Enlarge Navigation >' :
+                                                       '< Collapse Navigation';
+
+                $rootScope.toggleNavState = $scope.toggleNav;
+
+                //$scope.toggle ? $scope.showThresholds = true :
+                //$scope.showThresholds = false;
+              })
+
               $scope.change = function(firstLevel) {
                 if (firstLevel != $scope.firstLevel) {
                   $scope.firstLevel = firstLevel;
@@ -23,7 +38,7 @@ window.angular && (function(angular) {
                 }
               };
               $scope.closeSubnav = function() {
-                //   $scope.showSubMenu = false;
+                //$scope.showSubMenu = false;
               };
               $scope.RedirectToURL = function(destinationURL) {
                 $location.url(destinationURL);

@@ -9,7 +9,11 @@
 // Main element class
 .content__container {
   @include header-height(page-container);
-  border-left: $nav__toplvlWidth solid $color--blue-50;
+  @include nav-width(page-container,false);
+  &.collapsed{
+    @include nav-width(page-container,true);
+  }
+
   padding: 1em 0.1em;
 
   @include mediaQuery(x-small) {
@@ -64,30 +68,4 @@
   width: 100%;
   border-bottom: 1px solid $border-color-01;
   padding-bottom: 0.5em;
-}
-
-.trim-text{
-  @include mediaQuery(x-small) {
-    display:none;
-  }
-  @include mediaQuery(small) {
-    display:inherit;
-  }
-}
-
-.trim-text-medium{
-  @include mediaQuery(x-small) {
-    display:none;
-  }
-  @include mediaQuery(medium) {
-    display:block;
-  }
-}
-.trim-text-small{
-  @include mediaQuery(x-small) {
-    display:none;
-  }
-  @include mediaQuery(small) {
-    display:block;
-  }
 }

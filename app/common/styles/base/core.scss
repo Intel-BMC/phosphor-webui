@@ -1,7 +1,83 @@
-// Content layout styles (Moved from content.scss b/c need for header)
-$nav__toplvlWidth: 240px;
-$nav__seclvlWidth: 240px;
+// Content layout styles
+$nav__toplvlWidth: 225px;
 $header_Height: 50px;
+
+@mixin header-height($location) {
+
+  $header_Height: 80px;
+  @if ($location=="header"){
+    height: $header_Height;
+  }
+  @if ($location=="page-container"){
+    margin-top: $header_Height;
+  }
+
+  @include mediaQuery(medium) {
+    $header_Height: 50px;
+    @if ($location=="header"){
+      height: $header_Height;
+    }
+    @if ($location=="page-container"){
+      margin-top: $header_Height;
+    }
+  }
+}
+
+
+@mixin nav-width($location,$collapsed){
+
+    $nav__toplvlWidth: 80px;
+    @if ($location=="page-container") {
+      border-left: $nav__toplvlWidth solid $color--blue-50;
+    }
+    @if ($location=="navigation") {
+      width: $nav__toplvlWidth;
+    }
+    @if ($location=="header") {
+      padding-left: $nav__toplvlWidth;
+    }
+    @if ($location=="second-level-navigation") {
+      left: $nav__toplvlWidth;
+    }
+
+    @if not ($collapsed) {
+      @include mediaQuery(x-small) {
+        $nav__toplvlWidth: 140px;
+        @if ($location=="page-container") {
+          border-left: $nav__toplvlWidth solid $color--blue-50;
+        }
+        @if ($location=="navigation") {
+          width: $nav__toplvlWidth;
+        }
+        @if ($location=="header") {
+          padding-left: $nav__toplvlWidth;
+        }
+        @if ($location=="second-level-navigation") {
+          left: $nav__toplvlWidth;
+        }
+      }
+
+      @include mediaQuery(small) {
+        $nav__toplvlWidth: 225px;
+        @if ($location=="page-container") {
+          border-left: $nav__toplvlWidth solid $color--blue-50;
+        }
+        @if ($location=="navigation") {
+          width: $nav__toplvlWidth;
+        }
+        @if ($location=="header") {
+          padding-left: $nav__toplvlWidth;
+        }
+        @if ($location=="second-level-navigation") {
+          left: $nav__toplvlWidth;
+        }
+      }
+    }
+
+  transition: all .3s linear;
+
+
+}
 
 html, body {
   height: 100%;

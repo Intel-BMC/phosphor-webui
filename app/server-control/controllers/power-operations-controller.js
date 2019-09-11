@@ -366,11 +366,15 @@ window.angular && (function(angular) {
        *   Prettify boot Target
        */
       $scope.prettifyBootTarget = function(bootTarget) {
-        return bootTarget.replace('Cd', 'CD')
-            .replace('Pxe', 'PXE')
-            .replace('Hdd', 'Hard Drive')
-            .replace('Diags', 'Diagnostics')
-            .replace('BiosSetup', 'Bios Setup')
+        if (bootTarget != 'None' && bootTarget != null) {
+          return bootTarget.replace('Cd', 'CD')
+              .replace('Pxe', 'PXE')
+              .replace('Hdd', 'Hard Drive')
+              .replace('Diags', 'Diagnostics')
+              .replace('BiosSetup', 'Bios Setup')
+        } else {
+          return 'No override';
+        }
       };
 
       /*

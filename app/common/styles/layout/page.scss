@@ -4,11 +4,17 @@
 }
 @mixin page-roundcorners{
   border-radius: 8px;
-  padding:.5em 1.8em;
+  padding:5px;
+  @include mediaQuery(small) {
+    padding:.5em 1.8em;
+  }
 }
 @mixin page-boxcorners{
   border-radius:0px;
-  padding:.5em 1.8em;
+  padding:5px;
+  @include mediaQuery(small) {
+    padding:.5em 1.8em;
+  }
 }
 @mixin page-dropshadow{
   box-shadow: 0px 4px 35px 6px rgba(153,182,255,0.32); //shadow is #99B6FF
@@ -32,7 +38,9 @@
   @include page-boxformatting;
 }
 
-
+.page-dropshadow{
+  @include page-dropshadow;
+}
 .page-content-box{
   @include page-contentborder;
   @include page-dropshadow;
@@ -112,6 +120,37 @@
   display:none;
   @include mediaQuery(large) {
     display:inherit;
+  }
+}
+
+
+
+
+.trim-text{
+  @include mediaQuery(x-small) {
+    display:none;
+  }
+  @include mediaQuery(small) {
+    display:inherit;
+  }
+}
+
+.trim-text-xsmall{
+  display:none;
+  @include mediaQuery(x-small) {
+    display:block;
+  }
+}
+
+.text-intro .trim-text-large,.trim-text-large, .trim-text-large>div{
+  display:none;
+  @include mediaQuery(large) {
+    display:block;
+  }
+  &.inline{
+    @include mediaQuery(large) {
+      display:inline;
+    }
   }
 }
 

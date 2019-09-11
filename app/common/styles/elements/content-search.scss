@@ -3,13 +3,12 @@
 .content__search {
   float: left;
   position: relative;
-  margin-right: 1em;
-  margin-bottom: .5em;
+  margin: .5em 1em;
 
   #content__search-input {
     @include form-inputs(icon);
     position: relative;
-    min-width:250px;
+    min-width:130px;
     background-image:url(../assets/icons/icon-search.png);
   }
 

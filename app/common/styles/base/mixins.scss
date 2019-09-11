@@ -1,30 +1,24 @@
 //Breakpoints mixin
-
 @mixin mediaQuery($breakpoint) {
   @if $breakpoint == "x-small" {
-    @media (min-width: 25em) {
-      //400px
+    @media (min-width: $breakpoint-xsmall) {
       @content;
     }
   }
   @if $breakpoint == "small" {
-    @media (min-width: 47.938em) {
-      //767px
+    @media (min-width: $breakpoint-small) {
       @content;
     }
   } @else if $breakpoint == "medium" {
-    @media (min-width: 64em) {
-      //1024px
+    @media (min-width: $breakpoint-medium) {
       @content;
     }
   } @else if $breakpoint == "large" {
-    @media (min-width: 85.375em) {
-      //1366px
+    @media (min-width: $breakpoint-large) {
       @content;
     }
   } @else if $breakpoint == "x-large" {
-    @media (min-width: 100em) {
-      //1600px
+    @media (min-width: $breakpoint-xlarge) {
       @content;
     }
   }

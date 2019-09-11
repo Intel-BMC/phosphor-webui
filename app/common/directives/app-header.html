@@ -1,5 +1,5 @@
 <header id="header">
-  <div class="header">
+  <div class="header" ng-class="$root.toggleNavState ? 'collapsed':''">
     <div class="header__info-section">
       <span class="page-title">{{page_title}}</span>
       <div class="header__title">
@@ -19,7 +19,7 @@
         <a href="#" class="header__page-refresh" ng-click="refresh()" ng-mouseover="loginHover=false; refreshHover=true"
           ng-mouseleave="refreshHover=false" aria-label="refresh page data">
           <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-refresh.png"> <span
-            class="trim-text-medium inline">Refresh
+            class="trim-text-large inline">Refresh
             data</span>
         </a>
         <div class="refresh-hover header__hover-box" ng-show="refreshHover"
@@ -31,7 +31,7 @@
         <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="refreshHover=false; loginHover=true"
           ng-mouseleave="loginHover=false">
           <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.png"> <span
-            class="trim-text-medium inline">Logout</span>
+            class="trim-text-large inline">Logout</span>
         </a>
         <div ng-show="loginHover"
           ng-class="loginHover ? 'login-hover header__hover-box show' : 'login-hover header__hover-box'">
@@ -41,4 +41,5 @@
 
       </div>
     </div>
+  </div>
 </header>

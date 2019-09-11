@@ -21,7 +21,7 @@ $downTriangle: "\25bc";
    padding:0;
    text-align:left;
    vertical-align:middle;
-   @include mediaQuery(small) {
+   @include mediaQuery(x-small) {
      display: flex;
    }
    .table__cell {
@@ -57,9 +57,8 @@ $downTriangle: "\25bc";
   &:hover {
     background:$color--grey-30;
     transition: all .2s ease;
-   // color:#FFFFFF;
   }
-  @include mediaQuery(small) {
+  @include mediaQuery(x-small) {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -67,23 +66,25 @@ $downTriangle: "\25bc";
 }
 
 .table__cell, {
- flex: 1;
-  line-height: 2.8em;
+  flex: 1;
   padding: .5em 1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   border-bottom: 1px solid $border-color-01;
-
-  &.align-left{
-    text-align: left;
-  }
   padding:10px;
   text-align:center;
   vertical-align:middle;
   margin-right:0px;
+
+  @include mediaQuery(x-small) {
+    line-height: 2.8em;
+  }
   @include mediaQuery(medium) {
     margin-right:3px;
+  }
+  &.align-left{
+    text-align: left;
   }
   .status-icon{
     border-right: 0px solid #ffffff;
@@ -146,7 +147,7 @@ $downTriangle: "\25bc";
 }
 
 .fixed-table-header .table__cell, .table__head .table__cell{
-  background-color: #f1f4f5;
+  background-color: $color--grey-20;
   cursor: pointer;
   margin-right:3px;
   line-height: 1;

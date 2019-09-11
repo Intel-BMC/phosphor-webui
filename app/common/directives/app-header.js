@@ -17,6 +17,8 @@ window.angular && (function(angular) {
             $scope.dataService = dataService;
 
             $scope.page_title = $rootScope.page_title;
+
+
             $scope.$on('$routeChangeSuccess', function(event, data) {
               $scope.page_title = data.title;
             });
