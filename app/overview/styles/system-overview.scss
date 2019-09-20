@@ -1,12 +1,6 @@
 $overviewCritical: #bc3a2d;
 $overviewWarning: #fecf1a;
 $overviewNormal: #00aeef;
-//$overviewNormal: #69b6f7;
-/*
-$overviewCritical: #4285f4;
-$overviewWarning: #45a5f5;
-$overviewNormal: #8ad0eb;
-*/
 $status-5: #0083d7;
 $status-5: $overviewCritical;
 $status-4: #0894c8;
@@ -17,56 +11,6 @@ $status-1: #aee5fa;
 .status-row__OK{
   border-bottom: 1px solid #dcdee0;
 }
-/*
-@mixin overviewCriticalFilter {
-  filter: invert(53%) sepia(93%) saturate(1248%) hue-rotate(182deg) brightness(99%) contrast(95%);
-}
-@mixin overviewWarningFilter {
-  filter: invert(53%) sepia(93%) saturate(1248%) hue-rotate(182deg) brightness(99%) contrast(95%);
-}
-@mixin overviewNormalFilter {
-  filter: invert(78%) sepia(46%) saturate(389%) hue-rotate(163deg) brightness(98%) contrast(90%);
-}
-
-.status-row__OK{
-  border-bottom: 1px solid grey;
-  border-left: 2px solid $overviewCritical;
-  background-color:#ffffff;
-}
-.status-row__Critical{
-  border-bottom: 0px solid $overviewCritical;
-  border-left: 2px solid $overviewCritical;
-  background-color:#ffffff;
-}
-.status-row__Warning{
-  border-bottom: 0px solid $overviewWarning;
-  border-left: 2px solid $overviewWarning;
-  background-color:#ffffff;
-}
-
-
-.status__Critical{
-  padding-left:0;
-
-  background-image: url(/app/assets/icons/icon-alert-error-blue.png);
-}
-.status__Warning{
-  padding-left:0;
-  background-size: 2em;
-  background-image: url(/app/assets/icons/icon-alert-warning-blue.png);
-}
-.status__OK{
-  padding-left:0;
-  background-size: 2em;
-  background-image: url(/app/assets/icons/icon-alert-good-blue.png);
-}
-*/
-
-
-
-
-
-
 
 * {
   -webkit-box-sizing: border-box;
@@ -129,11 +73,6 @@ dd {
    margin-bottom: 0;
 }
 
-/*TODO: check if these already exist under dif. name/consolidate if so*/
-.float-left{float:left;}
-.padding-right{padding-right:5px;}
-.padding-none{padding:0;}
-
 
 /* Layout */
 .row-1 .overview-box-body{
@@ -161,6 +100,7 @@ dd {
   }
 }
 
+/* Sensors Overview */
 #sensors-overview{
   .row{
     margin-top:-20px;
@@ -198,18 +138,12 @@ $sensor-bar-base: 20%;
   height: 100%;
 }
 
-
-
-
-
-
   .bg-above{
     position:absolute;
     margin-top:-57px;
     background-color:#ffffff;
     height:34px;
     z-index:10;
-  //  transition: all .2s ease-in-out;
   }
 
   .box-3 .bg-above{
@@ -231,8 +165,6 @@ $sensor-bar-base: 20%;
     z-index:20;
     color:darkgrey;
     margin-top:-59px;
-  //  white-space: nowrap;
-  //  transition: all .2s ease-in-out;
     width: 20%;
     height: 39px;
     line-height:1.2;
@@ -318,8 +250,6 @@ $sensor-bar-base: 20%;
     margin-left:-$sensor-bar-xsm;
   }
 
-
-
   .status-wrapper{
     position: absolute;
     margin-top: 22px;
@@ -327,9 +257,7 @@ $sensor-bar-base: 20%;
   }
 
   .sensor tr td:nth-child(3){
-  //  @include mediaQuery(small){
-      width: $sensor-bar-lg;
-  //  }
+    width: $sensor-bar-lg;
     white-space: nowrap;
     overflow: hidden;
     display: block;
@@ -339,28 +267,13 @@ $sensor-bar-base: 20%;
   }
 
   .sensor tr td:nth-child(1), .sensor tr td:nth-child(5){
-  //  min-width: 2em;
-  //  @include mediaQuery(small){
       width: $sensor-bar-sm;
-  //  }
     .status-wrapper{
-  //    min-width: 2em;
-  //     @include mediaQuery(small){
         width: $sensor-bar-sm;
-  //   }
     }
   }
   .sensor tr td:nth-child(2), .sensor tr td:nth-child(4){
-  //  min-width: 2em;
-  //  @include mediaQuery(small){
       width: $sensor-bar-md;
-  //  }
-    .status-wrapper{
-  //    min-width: 2em;
-  //    @include mediaQuery(small){
-  //      width: $sensor-bar-md;
-  //    }
-    }
   }
 
   .sensor-hover-maxright{
@@ -485,8 +398,6 @@ $sensor-bar-base: 20%;
   .warning-5{
     background-color: #e6b407;
   }
-
-
 }
 
  /* Configuration */
@@ -552,34 +463,34 @@ $sensor-bar-base: 20%;
     font-size: 12px;
     line-height: 1;
   }
-}
-.sys-log__col-desc{
-  cursor: pointer;
-  line-height:1em;
-  &.expand{
-    white-space: inherit;
-    overflow: visible;
-    text-overflow: unset;
-    padding-bottom:19px;
-    transition: all .4s ease;
+
+  .sys-log__col-desc{
+    cursor: pointer;
+    line-height:1em;
+    &.expand{
+      white-space: inherit;
+      overflow: visible;
+      text-overflow: unset;
+      padding-bottom:19px;
+      transition: all .4s ease;
+    }
   }
-}
-.ellipsis-active{
-  cursor: pointer;
-}
-.expand-detail{
-  line-height:1.4em;
+  .ellipsis-active{
+    cursor: pointer;
+  }
+  .expand-detail{
+    line-height:1.4em;
+  }
 }
 
 /* Event Overview Bar Chart */
+#events-overview{
   .contain {
     overflow: hidden;
     max-width: 1080px;
     margin: 0 auto;
   }
   .bar-chart {
-  /*margin: 0 auto;*/
-  //  width: 280px;
     width: 88%;
     position: relative;
     margin: 0 40px;
@@ -632,9 +543,6 @@ $sensor-bar-base: 20%;
     height: 100%;
     flex-flow: column-reverse;
     margin: 0;
-
-
-
     background-color: #eef1f3;
     width: 80%;
     margin-right:2px;
@@ -643,28 +551,24 @@ $sensor-bar-base: 20%;
     opacity: .8;
   }
   .bar-chart .x-axis .year .col .bar {
-    /* flex: 1; */
     background-color: $overviewNormal;
-    /* align-self: flex-end; */
     position: relative;
-    /* margin: 0 25%; */
-    /* height: 0px; */
     -webkit-transition: height, 1s ease;
     -moz-transition: height, 1s ease;
     -ms-transition: height, 1s ease;
     transition: height, 1s ease;
   }
   .bar-chart .x-axis .year .col .bar + .bar {
-    background-color: $overviewWarning;// $overviewNormal;
+    background-color: $overviewWarning;
     opacity: 1;
   }
   .bar-chart .x-axis .year .col .bar + .bar + .bar {
-    background-color: $overviewCritical; //#6acff6;
+    background-color: $overviewCritical;
     opacity: 1;
   }
 
   .bar-chart .x-axis .year .col .bar + .bar + .bar  + .bar{
-    background-color: #eef1f3; //#6acff6;
+    background-color: #eef1f3;
   }
   .bar-chart .x-axis .label {
     align-self: flex-end;
@@ -673,7 +577,6 @@ $sensor-bar-base: 20%;
     text-align: center;
   }
   .bar-chart .x-axis .label:not(.number) {
-  //  text-transform: uppercase;
     padding-top: 1em;
     font-size: .875em;
   }
@@ -711,8 +614,9 @@ $sensor-bar-base: 20%;
     padding-left: 1em;
   }
   @media screen and (min-width: 768px){
-  .bar-chart {
-    float: left;
+    .bar-chart {
+      float: left;
+    }
   }
 
   /* Legend */
@@ -741,7 +645,6 @@ $sensor-bar-base: 20%;
   .bar-chart .legend li:nth-child(3):before {
     background-color: $overviewCritical;
   }
-
 }
 
  /* Pie Chart */
@@ -787,44 +690,27 @@ $sensor-bar-base: 20%;
   .col{
     padding-right:0;
   }
-  /*  rotate degree is degree/360 = percentage  */
-  /*  percentage*360=degree                     */
   #portion1 {
     transform: rotate(0deg);
   }
   #portion1 .aspect {
     background-color: $overviewNormal;
- //   transform: rotate(calc(.25*360deg));  /*set as x where portion amount/360 = deg */
   }
-  /* ----------------------------*/
-  #portion2 {
-  //  transform: rotate(calc(.25*360deg)); /*set same as portion 1 aspect */
-  }
+
   #portion2 .aspect {
     background-color: #0f8dc3;
     background-color:$overviewWarning;
-  //  transform: rotate(calc(.5*360deg)); /*set as x where portion amount/360 = deg */
   }
-  /* ----------------------------*/
-  #portion3 {
- //   transform: rotate(calc((.25 + .5)*360deg)); /*set portion 1 + portion 2 aspect */
-  }
+
   #portion3 .aspect {
     background-color: $overviewNormal;
     background-color:$overviewCritical;
-  //  transform: rotate(calc(.2*360deg)); /*set as x where portion amount/360 = deg */
   }
-  /* ----------------------------*/
-  /*Portion last must be used for whichever (if any) amount is over 50%;*/
-  #portion-last {
-  //  transform:rotate(calc((-.05*360deg) - 1deg));  /* set as (negative 360-other portion aspects) + 1*/
-  }
+
   #portion-last .aspect {
     background-color: $overviewNormal;
     background-color: grey;
-  //  transform: rotate(calc((.05*360deg) + 1deg)); /*set as x where portion (amount/360 = deg) + 1*/
   }
-  /* ----------------------------*/
 }
 
 .red{
