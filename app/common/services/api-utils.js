@@ -72,7 +72,6 @@ window.angular && (function(angular) {
                     console.log(JSON.stringify(error));
                   });
         },
-
         getSystemLogs: function(outputCount, firstRecord) {
           if (DataService.systemName.length == 0) {
             DataService.systemName = 'system';
@@ -1199,7 +1198,7 @@ window.angular && (function(angular) {
         getBMCTime: function() {
           return $http({
                    method: 'GET',
-                   url: DataService.getHost() + '/xyz/openbmc_project/time/bmc',
+                   url: DataService.getHost() + '/redfish/v1/Managers/bmc',
                    withCredentials: true
                  })
               .then(function(response) {
