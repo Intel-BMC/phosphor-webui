@@ -1,6 +1,3 @@
-$upTriangle: "\25b2";
-$downTriangle: "\25bc";
-
 .table {
   width: 100%;
 }
@@ -28,6 +25,11 @@ $downTriangle: "\25bc";
      @include fastTransition-all();
      position: relative;
      border: 0;
+    @include mediaQuery(medium) {
+      &.status-icon_wrapper {
+        margin-right:0;
+      }
+    }
      &:last-child {
        border: 0;
      }
@@ -48,6 +50,7 @@ $downTriangle: "\25bc";
   width: 100%;
   max-width: calc(100vw - 10px);
   font-weight: 400;
+  font-size: 13px;
   position: relative;
   text-align:center;
   &.disabled {
@@ -76,7 +79,6 @@ $downTriangle: "\25bc";
   text-align:center;
   vertical-align:middle;
   margin-right:0px;
-
   @include mediaQuery(x-small) {
     line-height: 2.8em;
   }
@@ -86,9 +88,8 @@ $downTriangle: "\25bc";
   &.align-left{
     text-align: left;
   }
-  .status-icon{
-    border-right: 0px solid #ffffff;
-    margin:0px;
+  .status-icon_wrapper + .status-icon{
+    border-right: 2px solid #ffffff;
   }
 }
 
@@ -155,7 +156,10 @@ $downTriangle: "\25bc";
   padding-bottom: 18px;
   &.status-icon{
     border-right: 0px solid #ffffff;
-    margin:0px;
+    margin-left:0px;
+  }
+  .status-icon_wrapper + .status-icon{
+    margin-right:2px;
   }
 }
 
@@ -169,12 +173,10 @@ $downTriangle: "\25bc";
   color: inherit;
 }
 .status-row__Warning{
-  //color: $color-status-warning;
   border-bottom:2px solid $color-status-warning;
   background: $color-status-warning-bg;
 }
 .status-row__Critical{
- // color: $color-status-error;
   font-weight:500;
   border-bottom:2px solid $color-status-error;
   background: $color-status-error-bg;
@@ -191,17 +193,57 @@ $downTriangle: "\25bc";
   @include bg-icon;
   background-image: url(../assets/icons/icon-alert-warning.png);
 }
+.status-icon_wrapper{
+  text-align:left;
+  font-weight: 500;
+  background-color: $color--grey-20;
+  @include mediaQuery(x-small) {
+    background-color: inherit;
+    font-weight: inherit;
+  }
+  @include mediaQuery(medium) {
+    font-weight: inherit;
+  }
+  .sortorder{
+    padding-right: 0px;
+  }
+  &:hover + .status-icon {
+    background: $color--grey-30;
+  }
+}
 
 //Sorting
+.sort_button_wrapper{
+  background-repeat: no-repeat;
+  background-position: right 20px bottom 50%;
+}
+
+.sort_button_wrapper:hover{
+  background-image: url(../assets/icons/chevron--up.svg);
+  background-color: $color--grey-30;
+}
+
+.sort_button_wrapper.reverse:hover{
+  background-image: url(../assets/icons/chevron--down.svg);
+}
+
+@include mediaQuery(medium) {
+  .sort_button_wrapper.status-icon_wrapper {
+    background-position: right 0px bottom 50%;
+  }
+  .status-icon_wrapper div{
+    padding-left: 32px;
+  }
+}
+
 .sort_button_wrapper .sortorder{
   visibility: hidden;
+  float: right;
+  padding: 0 15px 0 15px;
 }
-.sort_button_wrapper:hover .sortorder{
-  transition: all .4s ease;
-  visibility: visible;
-}
+
 .sort_button_wrapper:hover{
-  background: $color--grey-30;
+  background-color: $color--grey-30;
   transition: all .4s ease;
 }
 
@@ -232,7 +274,6 @@ $downTriangle: "\25bc";
     border-left: 0;
     border-right: 0;
 }
-
 .nav-tabs>li>a {
     border: 0;
     border-radius: 0;

@@ -2,6 +2,17 @@
   #component{
     min-width:200px;
   }
+  .sensor__title.table__cell{
+    text-align:left
+  }
+}
+
+
+
+#Rsensors{
+  #component{
+    min-width:200px;
+  }
 
   .sensors {
     max-width: 1196px;
@@ -16,7 +27,7 @@
     padding-left: 0;
   }
 
-  #sensor-categories {
+  .sensor__table {
     font-size:13px;
     padding:10px;
     display: block;
@@ -32,11 +43,20 @@
       max-width:120px;
       }
     }
+    .fixed-table-header .sensor__title{
+      background-color: $color--grey-20;
+    }
+    input{
+      width: 16px;
+      height: 16px;
+    }
     .sensor__title{
       min-width:20%;
       text-align:left;
       font-weight: 500;
       background-color: $color--grey-20;
+      min-width:20%;
+      font-weight: 500;
       @include mediaQuery(x-small) {
         background-color: inherit;
         font-weight: inherit;
@@ -45,29 +65,6 @@
         font-weight: inherit;
       }
     }
-    .fixed-table-header .sensor__title{
-      background-color: $color--grey-20;
-    }
-    input{
-      width: 16px;
-      height: 16px;
-    }
-
-      .sensor__title{
-        min-width:20%;
-        text-align:left;
-        font-weight: 500;
-        @include mediaQuery(medium) {
-          font-weight: inherit;
-      //    min-width:20%;
-        }
-      }
-
-
-      input{
-        width: 16px;
-        height: 16px;
-      }
   }
 
 }
