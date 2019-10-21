@@ -10,20 +10,126 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverHealth').controller('inventoryOverviewController', [
-    '$scope', '$window', 'APIUtils', 'dataService',
-    function($scope, $window, APIUtils, dataService) {
+    '$scope', '$window', 'APIUtils', 'dataService', '$q',
+    function($scope, $window, APIUtils, dataService, $q) {
       $scope.dataService = dataService;
       $scope.hardwares = [];
       $scope.originalData = {};
       $scope.customSearch = '';
       $scope.searchTerms = [];
       $scope.loading = true;
+      $scope.hardwareList = ['All', 'CPUs', 'DIMMs', 'Drives', 'PCIe Devices'];
+      $scope.selectedHardwareType = 'All';
+      $scope.showDetails = true;
+      $scope.toggleDrive = false;
+      $scope.showasGroups = true;
 
-      APIUtils.getHardwares(function(data, originalData) {
-        $scope.hardwares = data;
-        $scope.originalData = JSON.stringify(originalData);
+      $scope.toggleDrivedisabled = function() {
+        $scope.toggleDrive = !$scope.toggleDrive;
+      };
+
+      $scope.filterByState = function(drive) {
+        return ((drive.Status.State == 'Enabled') && (!$scope.toggleDrive)) ||
+            ($scope.toggleDrive);
+      };
+
+      $scope.filterBySeverity = function(sensor) {
+        if ($scope.selectedSeverity == 'all') return true;
+        return (
+            ((sensor.Status.Health == 'OK') &&
+             ($scope.selectedSeverity == 'ok')) ||
+            ((sensor.Status.Health == 'Warning') &&
+             $scope.selectedSeverity == 'warning') ||
+            ((sensor.Status.Health == 'Critical') &&
+             $scope.selectedSeverity == 'critical'));
+      };
+
+      var getDimmsPromise = APIUtils.getDIMMs().then(
+          function(result) {
+            $scope.DimmTable = result;
+          },
+          function(error) {
+            console.log(JSON.stringify(error));
+          });
+
+      var getCPUsPromise = APIUtils.getCPUs().then(
+          function(result) {
+            $scope.CPUData = result;
+          },
+          function(error) {
+            console.log(JSON.stringify(error));
+          });
+
+      var getDrivesPromise = APIUtils.getDrives().then(
+          function(result) {
+            $scope.DriveData = result;
+          },
+          function(error) {
+            console.log(JSON.stringify(error));
+          });
+
+      var getDevicesPromise = APIUtils.getDevices().then(
+          function(result) {
+            $scope.PCIData = result;
+          },
+          function(error) {
+            console.log(JSON.stringify(error));
+          });
+
+      var promises = [
+        getDimmsPromise, getCPUsPromise, getDevicesPromise, getDrivesPromise
+      ];
+
+      $q.all(promises).finally(function(data) {
         $scope.loading = false;
       });
+
+      $scope.sortPCIBy = function(keyname, checkedGroup) {
+        $scope.reverse = (keyname !== null && $scope.keyPCIname === keyname) ?
+            !$scope.reverse :
+            false;
+        $scope.keyPCIname = keyname;
+        // Once table is sorted, remove color styling & grouping so functions
+        // can be sorted independently
+        if (checkedGroup) {
+          $scope.showasGroups = !$scope.showasGroups;
+          $scope.sortPCIKey = ['ParentId', 'GroupedBy', keyname];
+        } else {
+          $scope.showasGroups = false;
+          $scope.sortPCIKey = [keyname];
+        };
+      };
+
+      $scope.sortBy = function(keyname) {
+        $scope.reverse = (keyname !== null && $scope.keyname === keyname) ?
+            !$scope.reverse :
+            false;
+        $scope.keyname = keyname;
+        $scope.sortKey = keyname;
+      };
+
+      $scope.sortBySeverity = function() {
+        $scope.reverseSeverity = !$scope.reverseSeverity;
+        $scope.sortKey = true;
+        $scope.orderDatabySeverity();
+      };
+
+      $scope.toggleSeverity = function(severity) {
+        severity = $filter('lowercase')(severity);
+        $scope.selectedSeverity = severity;
+      };
+
+      $scope.toggleHardware = function(hardwaretype) {
+        $scope.selectedHardwareType = hardwaretype;
+      };
+
+      $scope.orderDatabySeverity = function(val) {
+        if ($scope.reverseSeverity) {
+          return ['Critical', 'Warning', 'OK'].indexOf(val.Status.Health);
+        } else {
+          return ['Ok', 'Warning', 'Critical'].indexOf(val.Status.Health);
+        }
+      };
 
       $scope.clear = function() {
         $scope.customSearch = '';
@@ -54,15 +160,71 @@ window.angular && (function(angular) {
         }
       };
 
-      $scope.filterBySearchTerms = function(hardware) {
+      $scope.parseNonSpacedWords = function(str) {
+        if (str) {
+          str = str.slice((str.lastIndexOf('.') + 1), str.length);
+          str = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+        };
+        return str;
+      };
+
+      $scope.filterBySearchTerms = function(Dimm) {
         if (!$scope.searchTerms.length) return true;
 
         for (var i = 0, length = $scope.searchTerms.length; i < length; i++) {
-          if (hardware.search_text.indexOf(
-                  $scope.searchTerms[i].toLowerCase()) == -1)
+          var search_text =
+              Dimm.Id + ' ' + Dimm.DataWidthBits + ' ' + Dimm.MemoryType;
+          if (search_text.indexOf($scope.searchTerms[i].toLowerCase()) == -1)
             return false;
-        }
+        };
         return true;
+      };
+
+      $scope.filterBySearchTermsDrive = function(device) {
+        if (!$scope.searchTerms.length) return true;
+
+        for (var i = 0, length = $scope.searchTerms.length; i < length; i++) {
+          var search_text = drive.PartNumber.toLowerCase() + ' ' +
+              drive.SerialNumber.toLowerCase() + ' ' +
+              drive.Manufacturer.toLowerCase() + ' ' +
+              drive.Model.toLowerCase();
+          if (search_text.indexOf($scope.searchTerms[i].toLowerCase()) == -1)
+            return false;
+        };
+        return true;
+      };
+
+
+      $scope.filterBySearchTermsPCI = function(device) {
+        if (!$scope.searchTerms.length) return true;
+
+        for (var i = 0, length = $scope.searchTerms.length; i < length; i++) {
+          var search_text = device.VendorId + ' ' + device.DeviceId + ' ' +
+              device.Manufacturer.toLowerCase() + ' ' +
+              device.DeviceClass.toLowerCase();
+          if (search_text.indexOf($scope.searchTerms[i].toLowerCase()) == -1)
+            return false;
+        };
+        return true;
+      };
+
+      $scope.filterBySearchTermsCPU = function(CPU) {
+        if (!$scope.searchTerms.length) return true;
+
+        for (var i = 0, length = $scope.searchTerms.length; i < length; i++) {
+          var search_text = CPU.Id + CPU.PartNumber.toLowerCase() + ' ' +
+              CPU.Manufacturer.toLowerCase() + ' ' + CPU.Model.toLowerCase();
+
+          if (search_text.indexOf($scope.searchTerms[i].toLowerCase()) == -1)
+            return false;
+        };
+        return true;
+      };
+
+      $scope.filterDimms = function(dimm) {
+        if (dimm.Status.State == 'Enabled') {
+          return true;
+        };
       };
     }
   ]);

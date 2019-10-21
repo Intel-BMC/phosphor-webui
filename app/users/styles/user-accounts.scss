@@ -27,10 +27,10 @@
 //Main page
 #user-accounts{
   .hideInputAccess{
-    border:1px solid purple;
+   // border:1px solid purple;
   }
   .showInputAccess{
-    border:1px solid green;
+    //border:1px solid green;
   }
   input[type='text'] {
     &.hideInputAccess{
