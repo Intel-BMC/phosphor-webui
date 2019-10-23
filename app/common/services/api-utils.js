@@ -1620,6 +1620,16 @@ window.angular && (function(angular) {
             return deferred.promise;
           });
         },
+        deleteRedfishObject: function(objectPath) {
+          return $http({
+                   method: 'DELETE',
+                   url: DataService.getHost() + objectPath,
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
         deleteLogs: function(logs) {
           var defer = $q.defer();
           var promises = [];
