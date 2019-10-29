@@ -60,9 +60,19 @@ $color--red-10: #fdf7f2;
   filter: brightness(0) saturate(100%) invert(87%) sepia(27%) saturate(6400%) hue-rotate(166deg) brightness(96%) contrast(88%);
 }
 
-@mixin Greyfilter {
+@mixin greyFilter {
   filter: brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(298%) hue-rotate(252deg) brightness(92%) contrast(88%);
 }
+@mixin redFilter {
+  filter: brightness(0) saturate(100%) invert(28%) sepia(37%) saturate(2935%) hue-rotate(339deg) brightness(94%) contrast(92%);
+}
+@mixin yellowFilter {
+    filter: brightness(0) saturate(100%) invert(73%) sepia(72%) saturate(465%) hue-rotate(351deg) brightness(102%) contrast(103%);
+}
+@mixin greenFilter {
+    filter: brightness(0) saturate(100%) invert(55%) sepia(16%) saturate(1608%) hue-rotate(92deg) brightness(96%) contrast(101%);
+}
+
 @mixin bg-gradient{
     background: rgb(20,160,210);
     background: linear-gradient(90deg, rgba(20,160,210,1) 0%, rgba(16,126,184,1) 100%);
@@ -122,7 +132,6 @@ $border-color-02: $base-02--03;
 
 $box-shadow-color: rgba(153,182,255,0.32);
 
-
 $status-error: $accent-04--01;
 $status-ok: $accent-02--01;
 $status-warn: $accent-03--01;
@@ -178,7 +187,7 @@ $disabled-row: #dddee0;
 $disabled-row-txt: $color--grey-60;
 
 //Forms]
-$input-border: #a7a7a7;
+$input-border: #dbdbdb;
 
 // Light Background
 $lightbg__grey: #b8c1c1;
@@ -197,9 +206,9 @@ $color-status-warning: $color--yellow-60;
 $color-status-warning-text: $color--yellow-60;
 $color-status-warning-bg: $color--yellow-10;
 
-$color-status-success: $color--blue-30;
-$color-status-success-text: $color--blue-40;
-$color-status-success-bg:  $color--blue-10;
+$color-status-success: $color--green-30;
+$color-status-success-text: $color--green-40;
+$color-status-success-bg:  $color--green-10;
 
 $color-status-info: $color--blue-50;
 $color-status-info-text: $color--blue-50;

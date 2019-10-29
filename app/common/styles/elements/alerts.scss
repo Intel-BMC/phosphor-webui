@@ -1,29 +1,18 @@
 @mixin alert-format($alert-type){
-  border-right:0;
-  border-bottom:0;
-  border-top:0;
-  width: fit-content;
-  transition: all .2s ease;
-  box-shadow: 0px 4px 35px 6px rgba(153,182,255,0.32); //shadow is #99B6FF
-
   @if ($alert-type=="warning") {
     background-color: $color-status-warning-bg;
-    background-image: url(../assets/icons/icon-alert-warning.png);
     border-left: solid 4px $color-status-warning;
   }
   @if ($alert-type=="error") {
     background-color: $color-status-error-bg;
-    background-image: url(../assets/icons/icon-alert-error.png);
     border-left: solid 4px $color-status-error;
   }
-  @if ($alert-type=="success") {
+  @if ($alert-type=="good") {
     background-color: $color-status-success-bg;
-    background-image: url(../assets/icons/icon-alert-good.png);
     border-left: solid 4px $color-status-success;
   }
   @if ($alert-type=="info") {
     background-color: $color-status-info-bg;
-    background-image: url(../assets/icons/icon-alert-info.png);
     border-left: solid 4px $color-status-info;
   }
   background-position: 9px 0px;
@@ -31,85 +20,109 @@
   line-height: 18px;
   overflow: hidden;
   padding: 15px 40px 15px 60px;
-  border-radius: 0px;
+  border-radius: 6px;
   text-align: left;
   font-size: 14px;
-  transition: all .2s ease-in-out; /*make it smooth*/
+  width: 100%;
   margin: 15px auto;
   color: #333;
 }
 
-.alert-box{
-  @include alert-format('')
+//TODO: merge color definitions and naming
+@mixin alert-pseudo-element($alert-type){
+  content: "";
+  position: absolute;
+  top: 20px; left: 10px;
+  width: 100%; height: 100%;
+  background-position: top 20px 0px;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+
+  @if ($alert-type=="warning") {
+    background-image: url(../assets/icons/icon-alert-warning.svg);
+    @include yellowFilter;
+  }
+  @if ($alert-type=="error") {
+    background-image: url(../assets/icons/icon-alert-error.svg);
+    @include redFilter;
+  }
+  @if ($alert-type=="good") {
+    background-image: url(../assets/icons/icon-check.svg);
+    @include greenFilter;
+  }
+  @if ($alert-type=="info") {
+    background-image: url(../assets/icons/icon-information.svg);
+    @include LtBluefilter;
+  }
+}
+
+
+.status-icon{
+  &.status-normal, &.status-ok{
+    @include LtBluefilter;
+  }
+  &.status-on, &.status-good{
+    @include greenFilter;
+  }
+  &.status-off, &.status-neutral{
+    @include greyFilter;
+  }
+  &.status-warn, &.status-warning{
+    @include yellowFilter;
+  }
+  &.status-error, &.status-critical{
+    @include redFilter;
+  }
+}
+
+.alert-danger::before{
+  @include alert-pseudo-element(error)
+}
+.alert-warning::before{
+  @include alert-pseudo-element(warning)
+}
+.alert-good::before, .alert-success::before{
+  @include alert-pseudo-element(good)
+}
+.alert-info::before{
+  @include alert-pseudo-element(info)
 }
 
 .alert-danger{
   @include alert-format(error)
 }
-
 .alert-warning{
     @include alert-format(warning)
 }
-
-.alert-success{
-  @include alert-format(success)
+.alert-good, .alert-success{
+  @include alert-format(good)
 }
-
 .alert-info{
   @include alert-format(info)
 }
 
 .alert-text-critical{
-  color: $color-status-error-text;
+  color: $color-status-error-text !important;
 }
-.alert-text-warning{
-  color: $color-status-warning-text;
+.alert-text-warning, .header-icon-wrapper.warn{
+  color: $color-status-warning-text !important;
 }
-.alert-text-success,.alert-text-ok{
-  color: $color-status-success-text;
+.alert-text-good,.alert-text-ok, .header-icon-wrapper.on{
+  color: $color-status-success-text !important;
 }
 .alert-text-info{
   color: $color-status-info-text;
 }
-.alert-text-neutral,.alert-text-all{
+.alert-text-neutral, .header-link-wrapper.off{
   color: $color--grey-50;
 }
 
-//For switching icons to svg
-.filter-yellow{
-  filter: invert(73%) sepia(72%) saturate(465%) hue-rotate(351deg) brightness(102%) contrast(103%);
-}
-.filter-red{
-  filter: invert(17%) sepia(69%) saturate(5244%) hue-rotate(355deg) brightness(97%) contrast(86%);
-}
-
-.filter-white{
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(304deg) brightness(104%) contrast(103%);
-}
-
 .notification-banner {
   padding: 8px 10px;
   margin-bottom: 24px;
   border-style: solid;
   border-width: 1px;
-}
-
-.notification-banner__text {
-  font-size: 0.9em;
-  margin-bottom: 0;
-  line-height: 1.2;
-}
-
-.notification-banner--information {
-  background-color: $background-02;
-  border-color: $border-color-01;
-}
-
-.notification-banner {
-  padding: 8px 10px;
-  margin-bottom: 24px;
-  border-style: solid;
-  border-width: 1px;
+  position: relative;
 }
 
 .notification-banner__text {
@@ -126,15 +139,16 @@
 .notification-banner--warning {
   background-color: $accent-03--03;
   border-color: $accent-03--02;
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    bottom: 8px;
+    width: 18px;
+    height: 30px;
+    margin: auto;
+  }
   .notification-banner__text {
-    &::before {
-      content: '';
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      vertical-align: bottom;
-      margin-right: 0.5em;
-      background-image: url(../assets/icons/icon-warning.svg);
-    }
+    padding-left: 24px;
   }
 }

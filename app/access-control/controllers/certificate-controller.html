@@ -5,7 +5,7 @@
     <div class="section-content">
       <div ng-repeat="certificate in certificates | filter:{isExpiring:true}">
         <div class="alert alert-warning" role="alert">
-          <icon file="icon-warning.svg" aria-hidden="true"></icon>
+          <icon file="warning--filled.svg" aria-hidden="true"></icon>
           The uploaded {{ certificate.name }} is expiring in
           {{ getDays(certificate.ValidNotAfter) === 0
               ? "less than one day!"
@@ -24,10 +24,7 @@
   </section>
   <section class="section">
     <div class="section-content">
-      <button
-        type="button"
-        class="btn  btn-tertiary"
-        ng-disabled="availableCertificateTypes.length === 0"
+      <button type="button" class="btn  btn-tertiary" ng-disabled="availableCertificateTypes.length === 0"
         ng-click="addCertModal()">
         <icon class="icon-add" file="icon-plus.svg" aria-hidden="true"></icon>
         Add new certificate
@@ -37,7 +34,7 @@
         Generate CSR
       </button>
     </div>
-  <!-- TODO: Replace table with resusable table component -->
+    <!-- TODO: Replace table with resusable table component -->
     <div class="section-content certificate__table">
       <div class="table__row-header">
         <div class="row column">

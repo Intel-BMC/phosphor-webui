@@ -22,8 +22,15 @@ $loginfield-max-width: 310px;
   form{
     background-color:#ffffff;
     text-align:center;
-   // padding:20px;
   }
+}
+
+.logo-container img{
+  width: 114px;
+}
+
+.built-on img{
+  width: 160px;
 }
 
 .login-content-box .alert-danger, #login__submit{
@@ -31,21 +38,42 @@ $loginfield-max-width: 310px;
   max-width: $loginfield-max-width;
 }
 
-.login-content-box input[type='text'].input-ip{
-  background-image:url(../assets/icons/icon-ipfield.png);
+.input-wrapper{
+  min-width: $loginfield-min-width;
+  max-width: $loginfield-max-width;
+  position: relative;
+  margin:auto;
 }
-.login-content-box input[type='text'].input-login {
-  background-image: url(../assets/icons/icon-loginfield.png);
+
+.input-wrapper::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat:no-repeat;
+    background-position: top 8px left 5px;
+    background-size: 24px;
+    min-height:44px;
+    max-height:none;
+    @include greyFilter;
 }
-.login-content-box input[type='password'].input-pwd{
-  background-image:url(../assets/icons/icon-passwordfield.png);
+
+.input-ip.input-wrapper::before{
+  background-image: url(../assets/icons/icon-ipfield.svg);
+}
+.input-login.input-wrapper::before{
+  background-image: url(../assets/icons/icon-user.svg);
+}
+.input-pwd.input-wrapper::before{
+  background-image:url(../assets/icons/icon-passwordfield.svg);
 }
 
 .login-content-box input[type='text'],.login-content-box input[type='password']{
-  min-width: $loginfield-min-width;
-  max-width: $loginfield-max-width;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
   width:100%;
-  margin:auto;
   @include form-inputs(icon);
   &:focus{
     @include form-inputs(icon);

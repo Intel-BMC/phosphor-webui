@@ -6,8 +6,8 @@
 
         <form id="login__form" name="login__form" action="" ng-class="{'submitted' : submitted}">
 
-          <div class="center padding-top">
-            <img src="../../assets/images/logo-intel-blue.png">
+          <div class="logo-container padding-top">
+            <img src="../../assets/images/logo-intel-blue.svg">
           </div>
 
           <div class="form-row">
@@ -23,9 +23,11 @@
             </div>
 
             <div class="form-row">
-              <input type="text" id="username" name="username" class="input-login" placeholder="Username"
-                has-error="invalidCredentials && login__form.$pristine" required ng-model="username"
-                ng-keydown="tryLogin(host, username, password, $event)" autocomplete="off" autofocus>
+              <div class="input-wrapper input-login">
+                <input type="text" id="username" name="username" placeholder="Username"
+                  has-error="invalidCredentials && login__form.$pristine" required ng-model="username"
+                  ng-keydown="tryLogin(host, username, password, $event)" autocomplete="off" autofocus>
+              </div>
               <div ng-messages="login__form.username.$error" class="form-error"
                 ng-class="{'visible' : login__form.username.$touched || submitted}">
                 <p ng-message="required">Field is required</p>
@@ -33,9 +35,11 @@
             </div>
 
             <div class="form-row">
-              <input type="password" id="password" name="password" class="input-pwd" placeholder="Password"
-                has-error="invalidCredentials && login__form.$pristine" required ng-model="password"
-                ng-keydown="tryLogin(host, username, password, $event)" autocomplete="off">
+              <div class="input-wrapper input-pwd">
+                <input type="password" id="password" name="password" placeholder="Password"
+                  has-error="invalidCredentials && login__form.$pristine" required ng-model="password"
+                  ng-keydown="tryLogin(host, username, password, $event)" autocomplete="off">
+              </div>
               <div ng-messages="login__form.password.$error" class="form-error"
                 ng-class="{'visible': login__form.password.$touched || submitted}">
                 <p ng-message="required">Field is required</p>
@@ -49,7 +53,7 @@
             </div>
 
             <div class="form-row built-on center">
-              <img class="padding" src="../../assets/images/logo-OpenBmc-builton.png">
+              <img class="padding" src="../../assets/images/logo-OpenBmc-builton.svg">
             </div>
 
           </fieldset>

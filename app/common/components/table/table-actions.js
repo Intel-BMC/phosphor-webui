@@ -70,13 +70,13 @@ window.angular && (function(angular) {
    */
   const template = `
     <button
-      class="btn  btn-tertiary"
+      class="btn btn-primary btn-small"
       type="button"
       aria-label="{{action.type}}"
       ng-repeat="action in $ctrl.actions track by $index"
       ng-disabled="!action.enabled"
       ng-click="$ctrl.onClick(action.type)">
-      <icon ng-if="action.file !== null" ng-file="{{action.file}}"></icon>
+      <img ng-if="action.file !== null" ng-src="/app/assets/icons/{{action.file}}">
       <span ng-if="action.file === null">{{action.type}}</span>
     </button>`
 

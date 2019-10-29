@@ -8,6 +8,9 @@
 .above-nav{
   text-align: center;
   padding: 10px 0 4px 0;
+  img{
+    width: 115px;
+  }
 }
 
 // Top level navigation
@@ -124,10 +127,11 @@
   line-height: 0;
 
   @include mediaQuery(small) {
-    background-image: url('../assets/images/img-dots-tall.png');
-    background-position: left 31px bottom 0;
+    background-image: url('../assets/images/img-dots-tall.svg');
+    background-size: 2px;
+    background-position: left 31px bottom -1px;
     background-repeat: no-repeat;
-  }
+    }
   a{
     background: transparent;
     border: 0;
@@ -166,9 +170,11 @@
       display:block;
       &:hover{
         @include mediaQuery(small) {
-        background-image: url('../assets/images/img-dots-tall.png');
+        background-image: url('../assets/images/img-dots-tall.svg');
+        background-size: 2px;
         background-repeat:no-repeat;
-        background-position: left 27px bottom -10px;
+        background-position: left 27px bottom -20px;
+
         }
       }
     }
@@ -176,9 +182,10 @@
 
   li:last-child a:hover{
     @include mediaQuery(small) {
-      background-image: url('../assets/images/img-dots-tall.png');
+      background-image: url('../assets/images/img-dots-tall.svg');
+      background-size: 2px;
       background-repeat:no-repeat;
-      background-position: left 27px bottom -1px;
+      background-position: left 27px bottom -2px;
     }
   }
 
@@ -232,6 +239,9 @@
   }
   &:hover{
     opacity: 1;
+  }
+  img{
+    width: 32px;
   }
 }
 

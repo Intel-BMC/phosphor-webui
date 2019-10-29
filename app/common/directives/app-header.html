@@ -9,17 +9,27 @@
     </div>
     <div class="header__functions-section">
       <div class="header__functions">
-        <a class="header__status" href="#/server-health/event-log"> H<span class="trim-text-small inline">ealth</span>
-          <span
-            ng-class="{'status-light__error': dataService.server_health == 'Critical', 'status-light__warn': dataService.server_health == 'Warning', 'status-light__good': dataService.server_health == 'Good'}"></span></a>
-        <a class="header__status" href="#/server-control/power-operations" role="button"> P<span
-            class="trim-text-small inline">ower</span> <span
-            ng-class="{'status-light__off': dataService.server_state == 'Off', 'status-light__disabled': dataService.server_state == 'Unreachable', 'status-light__good': dataService.server_state == 'Running', 'status-light__error': dataService.server_state == 'Quiesced'}"></span></a>
+        <a class="header-icon-wrapper" href="#/server-health/event-log"
+          ng-class="dataService.server_health == 'Critical' ? 'alert-text-critical' : ''">
+          <status-icon status="{{ dataService.server_health == 'Critical' ? 'error' :
+                                      dataService.server_health == 'Warning' ? 'warn' :
+                                      dataService.server_health == 'Good' ? 'on' : null }}">
+          </status-icon> H<span class="header__textlink">ealth</span>
+        </a>
 
-        <a href="#" class="header__page-refresh" ng-click="refresh()" ng-mouseover="loginHover=false; refreshHover=true"
-          ng-mouseleave="refreshHover=false" aria-label="refresh page data">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-refresh.png"> <span
-            class="trim-text-large inline">Refresh
+        <a class="header-icon-wrapper" href="#/server-control/power-operations"
+          ng-class="dataService.server_state == 'Quiesced' ? 'alert-text-critical' : ''">
+          <status-icon status="{{ dataService.server_state == 'Quiesced' ? 'error' :
+                                        dataService.server_state == 'Running' ? 'on' :
+                                        dataService.server_state == 'Off' ? 'off' :
+                                        dataService.server_state == 'Unreachable' ? 'off' : null }}">
+          </status-icon> P<span class="header__textlink">ower</span>
+        </a>
+
+        <a href="#" class="header-icon-wrapper header__page-refresh" ng-click="refresh()"
+          ng-mouseover="loginHover=false; refreshHover=true" ng-mouseleave="refreshHover=false"
+          aria-label="refresh page data">
+          <img class="header-icon" src="../../assets/icons/icon-restart.svg"> <span class="header__textlink">Refresh
             data</span>
         </a>
         <div class="refresh-hover header__hover-box" ng-show="refreshHover"
@@ -28,10 +38,10 @@
           <span class="small-text black"><span>{{dataService.last_updated | localeDate}}</span>
         </div>
 
-        <a href="#" class="header__page-login" ng-click="logout()" ng-mouseover="refreshHover=false; loginHover=true"
-          ng-mouseleave="loginHover=false">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.png"> <span
-            class="trim-text-large inline">Logout</span>
+        <a href="#" class="header-icon-wrapper header__page-login" ng-click="logout()"
+          ng-mouseover="refreshHover=false; loginHover=true" ng-mouseleave="loginHover=false">
+          <img class="header-icon" src="../../assets/icons/icon-user-avatar.svg"> <span
+            class="header__textlink">Logout</span>
         </a>
         <div ng-show="loginHover"
           ng-class="loginHover ? 'login-hover header__hover-box show' : 'login-hover header__hover-box'">
@@ -42,4 +52,12 @@
       </div>
     </div>
   </div>
+
+  <div class="preload">
+    <img src="../../assets/icons/checkmark--filled.svg">
+    <img src="../../assets/icons/icon-off.svg">
+    <img src="../../assets/icons/warning--filled.svg">
+    <img src="../../assets/icons/warning--filled-sm.svg">
+  </div>
+
 </header>

@@ -16,7 +16,7 @@ window.angular && (function(angular) {
         function($routeProvider) {
           $routeProvider
               .when('/server-health/inventory-overview', {
-                title: 'Inventory',
+                title: 'Hardware',
                 'template':
                     require('./controllers/inventory-overview-controller.html'),
                 'controller': 'inventoryOverviewController',

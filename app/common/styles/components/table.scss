@@ -116,6 +116,13 @@
   z-index: 1;
 }
 
+.table__cell {
+  border-bottom: 0px;
+}
+.table__row{
+  border-bottom: 1px solid $color--grey-30;
+}
+
 //sortable heading
 .sort-heading {
   position: relative;
@@ -183,15 +190,19 @@
 }
 .status__OK{
   @include bg-icon;
-  background-image: url(../assets/icons/icon-alert-good.png);
+  background-image: url(../assets/icons/checkmark--filled.svg);
+  @include LtBluefilter;
+  border-bottom: 0px;
 }
 .status__Critical{
   @include bg-icon;
-  background-image: url(../assets/icons/icon-alert-error.png);
+  background-image: url(../assets/icons/warning--filled.svg);
+  @include redFilter;
 }
 .status__Warning{
   @include bg-icon;
-  background-image: url(../assets/icons/icon-alert-warning.png);
+  background-image: url(../assets/icons/warning--alt--filled.svg);
+  @include yellowFilter;
 }
 .status-icon_wrapper{
   text-align:left;
@@ -264,6 +275,10 @@
   }
 }
 
+.bmc-table__row-actions button img{
+  @include whitefilter;
+}
+
 /* Configuration Bootstrap Tab Overrides */
 .nav-tabs a {
     color: #8b8a8a;
@@ -296,6 +311,7 @@
     border-bottom: 0;
 }
 
+
 //BMC Table for modal
 .bmc-table {
   width: 100%;
@@ -315,7 +331,6 @@
 
 .bmc-table__cell {
   padding: 4px 16px;
-  background-color: $base-02--07;
 }
 
 .bmc-table__row-actions {

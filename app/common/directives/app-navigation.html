@@ -4,7 +4,7 @@
 
     <ul id="nav__top-level" ng-class="toggleNav ? 'collapsed':''" ng-style="navStyle">
       <li class="above-nav">
-        <a href="#/overview/server"><img src="../../assets/images/logo-intel.png"></a>
+        <a href="#/overview/server"><img src="../../assets/images/logo-intel.svg"></a>
       </li>
       <li>
         <button class="btn-overview" ng-click="change('overview'); RedirectToURL('/overview/server')">
@@ -87,10 +87,6 @@
             <a href="#/configuration/network" ng-click="closeSubnav()"
               tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Network settings</a>
           </li>
-          <li ng-class="{'active': (path == '/configuration' || path == '/configuration/certificate')}">
-            <a href="#/configuration/certificate" ng-click="closeSubnav()"
-              tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">Certificate management</a>
-          </li>
           <li ng-class="{'active': (path == '/configuration' || path == '/configuration/snmp')}">
             <a href="#/configuration/snmp" ng-click="closeSubnav()"
               tabindex="{{(showSubMenu && firstLevel == 'configuration') ? 0 : -1}}">SNMP settings</a>
@@ -131,7 +127,7 @@
 
       <div id='toggle-collapse' aria-label="Collapse navigation" aria-role="button" ng-click="toggleNav= !toggleNav"
         tabindex="0" role="button">
-        <img class="nav-icon " src="../../assets/icons/icon-collapse.png">
+        <img class="nav-icon whiteFilter" src="../../assets/icons/icon-collapse.svg">
       </div>
 
     </ul>

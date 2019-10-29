@@ -1,3 +1,4 @@
+
 /**
  * Application header styles
  * Should only be used for the application header
@@ -97,6 +98,24 @@
   padding-top:7px;
 }
 
+.header__page-login, .header__page-refresh{
+  .header-icon{
+    @include greyFilter;
+    margin-top:-2px;
+  }
+}
+
+.header__page-refresh .header-icon{
+  transform: rotate(90deg);
+  margin-top:-3px;
+}
+
+.header-icon-wrapper:hover{
+  .header-icon, .status-icon{
+    @include LtBluefilter;
+  }
+}
+
 .header__functions {
   a{
     font-weight:normal;
@@ -119,6 +138,10 @@
       display:inline;
     }
   }
+  .status-icon{
+    width: 16px;
+    margin-top:1px;
+  }
 }
 
 .header__functions-section button{
@@ -127,11 +150,7 @@
   display: inline;
 }
 
-.help-hover{
-  opacity: 0;
-}
-
-.refresh-hover, .login-hover, .help-hover{
+.refresh-hover, .login-hover{
     box-shadow: 0px 7px 6px 0px rgba(0,0,0,0.18);
     padding: 8px 14px 4px 14px;
     border-radius: 4px;

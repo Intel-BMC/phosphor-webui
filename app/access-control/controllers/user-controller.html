@@ -14,10 +14,10 @@
   <section id="user-edit" class="page-content-rnd">
     <div class="local-users">
 
-      <div class="local-users__actions align-left">
+      <div class="local-users__actions float-left">
         <button ng-disabled="userRoles === null || localUsers.length >= 15" ng-click="onClickAddUser()"
           class="btn-icon">
-          <img src="../../assets/icons/icon-plus.png">
+          <img src="../../assets/icons/add--alt.svg">
           Add user
         </button>
       </div>
@@ -32,5 +32,10 @@
   <section id="user-role-table" class="page-content-rnd">
     <role-table></role-table>
   </section>
+
+  <div class="preload">
+    <img src="../../assets/icons/icon-edit.svg">
+    <img src="../../assets/icons/icon-trashcan.svg">
+  </div>
 
 </div>

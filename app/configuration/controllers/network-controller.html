@@ -55,7 +55,8 @@
           </label>
         </div>
         <div class="row column network-config__ipv4-wrap">
-          <fieldset class="net-config__fieldset net-config__static-ip-wrap" ng-repeat="ipv4 in interface.ipv4.values track by $index">
+          <fieldset class="net-config__fieldset net-config__static-ip-wrap"
+            ng-repeat="ipv4 in interface.ipv4.values track by $index">
             <div class="column small-12 large-3">
               <label for="ipv4-address-{{$index+1}}">IPV4 address</label>
               <input id="ipv4-address-{{$index+1}}" ng-change="ipv4.updateAddress = true" type="text"
@@ -72,7 +73,8 @@
               <input id="ipv4-prefix-{{$index+1}}" class="column small-6" ng-change="ipv4.updatePrefix = true"
                 type="number" min="1" max="32" step="1" ng-disabled="interface.DHCPEnabled"
                 ng-model="ipv4.PrefixLength" />
-              <button type="button" class="btn  btn-tertiary network-config_remove-button" ng-click="removeIpv4Address($index)">Remove</button>
+              <button type="button" class="btn  btn-tertiary network-config_remove-button"
+                ng-click="removeIpv4Address($index)">Remove</button>
             </div>
           </fieldset>
           <div class="row column">
@@ -94,7 +96,8 @@
             <label for="net-config__prime-dns{{$index+1}}">DNS Server {{$index+1}}</label>
             <input id="net-config__prime-dns{{$index+1}}" class="network-input column small-6 large-4 inline"
               type="text" ng-model="dns" ng-blur="interface.Nameservers[$index] = dns" set-focus-on-new-input />
-            <button type="button" class="btn  btn-tertiary  network-config_remove-button" ng-click="removeDNSField($index)">Remove</button>
+            <button type="button" class="btn  btn-tertiary  network-config_remove-button"
+              ng-click="removeDNSField($index)">Remove</button>
           </div>
         </div>
         <div class="row column">
@@ -121,7 +124,8 @@
     <div class="screen-reader-offscreen modal-description">Change network settings</div>
     <!-- accessibility only; used for screen readers -->
     <div class="page-header">
-      <icon file="icon-warning.svg" aria-hidden="true"></icon><span class="accessible-text" role="alert">Warning</span>
+      <icon file="warning--filled.svg" aria-hidden="true"></icon><span class="accessible-text"
+        role="alert">Warning</span>
       <h3 class="modal-title inline">Change network settings</h3>
     </div>
     <div class="modal__content">

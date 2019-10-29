@@ -166,7 +166,15 @@ These usually come coupled with a primary.
   }
 }
 
-
+.whiteFilter{
+  @include whitefilter;
+}
+.greyFilter{
+  @include greyFilter;
+}
+.icon-medium, .icon-sm img{
+  width: 16px;
+}
 /***
 Tertiary text buttons are used to identify less pressing or
 optional actions given on a page.
@@ -213,7 +221,7 @@ optional actions given on a page.
   text-transform: capitalize;
   padding:1em;
   img{
-  @include Greyfilter;
+  @include greyFilter;
   }
   &:hover {
     border-color: #ffffff;

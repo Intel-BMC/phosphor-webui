@@ -210,21 +210,21 @@
               <div class="row">
 
                 <div class="col col-md-4 col-sm-12">
-                  <div class="icon-wrapper"><img src="../../assets/icons/icon-alert-good-blue.png" width="45"
-                      class="normalFilter">
+                  <div class="icon-wrapper status-icon status-normal"><img
+                      src="../../assets/icons/checkmark--filled.svg">
                   </div>
                   <div class="grey-small">Normal</div>
                   <div class="normal-text">{{(countOK/totalSensors*100) | number : 0}}% ({{countOK}})</div>
                 </div>
                 <div class="col col-md-4 col-sm-12">
-                  <div class="icon-wrapper"><img src="../../assets/icons/icon-alert-warning.png" width="45"
+                  <div class="icon-wrapper status-icon status-warning"><img src="../../assets/icons/warning--filled.svg"
                       class="warningFilter"></div>
                   <div class="grey-small">Warning</div>
                   <div class="normal-text">{{(countWarning/totalSensors*100) | number : 0}}% ({{countWarning}})</div>
                 </div>
                 <div class="col col-md-4 col-sm-12">
-                  <div class="icon-wrapper"><img src="../../assets/icons/icon-alert-error.png" width="45"
-                      class="criticalFilter"></div>
+                  <div class="icon-wrapper status-icon status-critical"><img
+                      src="../../assets/icons/warning--alt--filled.svg" class="criticalFilter"></div>
                   <div class="grey-small">Critical</div>
                   <div class="normal-text">{{(countCritical/totalSensors*100) | number : 0}}% ({{countCritical}})
                   </div>
@@ -284,7 +284,7 @@
                       <TR>
                         <TD ng-repeat="sensorBarItem in sensors">
                           <div ng-show="sensorBarItem.curReading">
-                            <div class="grey-small"><img src="../../assets/images/GreyArrowUp.gif">
+                            <div class="grey-small"><img src="../../assets/icons/caret--up.svg">
                               <span ng-show="sensorBarItem.curReading" class="curReading">
                                 <BR>{{sensorBarItem.curReading}}</span>
                             </div>
@@ -354,9 +354,6 @@
   </div>
 
   <div class="row row-3">
-
-
-
     <div class="col col-md-6 col-sm-6 col-12">
       <div class="page-content-box">
         <div class="float-left padding-right">
@@ -377,30 +374,15 @@
         <div class="float-left">
           <div class="normal-text">Server ID LED</div>
           <div class="grey-small">
-
             {{ dataService.LED_state == 'on' ? "On" : "Off" }}
           </div>
         </div>
       </div>
     </div>
 
-
-    <div class="col col-md-6 col-sm-6 col-12" ng-show="false">
-      <div class="page-content-box">
-        <div class="float-left padding-right"><img src="../../assets/icons/icon-power.png" width="35"></div>
-        <div class="float-left">
-          <div class="normal-text">Server Power</div>
-          <div class="grey-small">Running</div>
-        </div>
-        <div class="column small-2 large-1">
-          <span class="accord-trigger" aria-hidden="true"></span>
-        </div>
-      </div>
-    </div>
-
     <div class="col col-md-6 col-sm-6 col-12 active-link" ng-click="RedirectToURL('/server-control/power-usage')">
       <div class="page-content-box">
-        <div class="float-left padding-right"><img src="../../assets/icons/icon-powerconsumption.png" width="43"></div>
+        <div class="float-left padding-right theme-icon"><img src="../../assets/icons/icon-powerconsumption.svg"></div>
         <div class="float-left">
           <div class="normal-text">Power Consumption</div>
           <div class="grey-small">{{power_consumption}}</div>

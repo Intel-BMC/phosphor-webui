@@ -1,7 +1,7 @@
 #sys-log {
-  // Dropwdowns filter
-  .dropdown__date.row {
-    padding: .5em;
+  input[type='date']{
+    width:110px;
+    padding: 15px 5px 15px 5px;
   }
 
   .row {
@@ -26,6 +26,37 @@
     line-height: 1;
     padding-top:19px;
     padding-bottom:19px;
+  }
+
+  .two-col-wrapper{
+    display:inline;
+  }
+
+  .alert-box{
+    position: absolute;
+    z-index: 100;
+    right: 8px;
+    margin-top: -30px;
+    border-radius: 0px;
+    text-align: left;
+    font-size: 14px;
+    width: fit-content;
+    transition: all .2s ease;
+    box-shadow: 0px 4px 35px 6px $box-shadow-color;
+    transform: scale(0); /*scale it to a smaller size*/
+    button{
+      @include resize-button('x-small')
+    }
+    &.show {
+      visibility: visible;
+      z-index: 200;
+      opacity: 1;
+      transform: scale(1); /*scale it to a default size*/
+    }
+  }
+
+  .sys-log__table {
+    font-size:13px;
   }
 
   .sys-log__col-date{
@@ -79,32 +110,15 @@
     max-width:120px;
   }
 
-  .sys-log__col-desc{
-    cursor: pointer;
-    line-height:1.4em;
-    padding-top:19px;
-    &.expand{
-      white-space: inherit;
-      overflow: visible;
-      text-overflow: unset;
-      padding-bottom:19px;
-      transition: all .4s ease;
-    }
+  .details-hide{
+    display:none;
   }
 
-  .sensor__status-icon{
-    max-width:32px;
-    margin-right:0px;
-    padding:0px;
-  }
-  .sys-log__col-sev{
-    max-width:150px;
-  }
-  .sys-log__col-date{
-    max-width:200px;
-  }
-  .sys-log__col-id{
-    max-width:120px;
+  .line1{
+    display:inline;
+    @include mediaQuery(x-large) {
+      display:inline;
+    }
   }
   .line2{
     display:block;

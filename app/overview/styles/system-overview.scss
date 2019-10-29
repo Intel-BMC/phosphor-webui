@@ -8,14 +8,14 @@ $status-3: #00aeef;
 $status-2: #8ad0eb;
 $status-1: #aee5fa;
 
-.status-row__OK{
-  border-bottom: 1px solid #dcdee0;
-}
-
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.theme-icon{
+  @include LtBluefilter;
 }
 
 .row{
@@ -100,44 +100,39 @@ dd {
   }
 }
 
-/* Sensors Overview */
-#sensors-overview{
-  .row{
-    margin-top:-20px;
-    text-align:center;
-  }
-}
-
 /* Sensors Detail */
 #sensors-detail{
-$sensor-bar-lg: inherit; //120px at full width
-$sensor-bar-md: 14%; //40px at full width
-$sensor-bar-sm: 11%; //30px at full width
-$sensor-bar-xsm: 9%; //30px at full width
-$sensor-bar-obase: 29%; //100px at full width
-$sensor-bar-base: 20%;
+  $sensor-bar-lg: inherit; //120px at full width
+  $sensor-bar-md: 14%; //40px at full width
+  $sensor-bar-sm: 11%; //30px at full width
+  $sensor-bar-xsm: 9%; //30px at full width
+  $sensor-bar-obase: 29%; //100px at full width
+  $sensor-bar-base: 20%;
 
-.overview-box-heading{
-  margin-bottom: 0;
-}
+  .overview-box-heading{
+    margin-bottom: 0;
+  }
 
-.sensor-container {
-  position: relative;
-  overflow: visible;
-}
-.inner {
-  position: relative;
-  height: auto;
-}
+  .sensor-container {
+    position: relative;
+    overflow: visible;
+  }
+  .inner {
+    position: relative;
+    height: auto;
+  }
 
-.full-height {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-}
+  .full-height {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+  }
 
+  .grey-small img{
+    @include greyFilter;
+  }
   .bg-above{
     position:absolute;
     margin-top:-57px;
@@ -309,7 +304,6 @@ $sensor-bar-base: 20%;
   }
 
   .sensor-bars table:nth-child(2){
-  //  margin:0;
     text-align:center;
     td{
       height: inherit;
@@ -452,7 +446,6 @@ $sensor-bar-base: 20%;
   }
 }
 
-
 /* Event Log */
 #event-detail{
   .status-icon {
@@ -462,6 +455,11 @@ $sensor-bar-base: 20%;
   .table__cell {
     font-size: 12px;
     line-height: 1;
+    border-bottom: 0px;
+  }
+
+  .table__row{
+    border-bottom: 1px solid $color--grey-30;
   }
 
   .sys-log__col-desc{
@@ -648,7 +646,12 @@ $sensor-bar-base: 20%;
 }
 
  /* Pie Chart */
+/* Sensors Overview */
 #sensors-overview{
+  .row{
+    margin-top:-20px;
+    text-align:center;
+  }
   .donut-chart {
     position: relative;
     width: 200px;
@@ -684,7 +687,13 @@ $sensor-bar-base: 20%;
     font-size: 1.5rem;
   }
   .icon-wrapper{
-    height:40px;
+    width: 45px;
+    height: 45px;
+    img{
+      width: 45px;
+      height: 45px;
+    }
+    margin: auto;
     overflow:hidden;
   }
   .col{
@@ -696,7 +705,6 @@ $sensor-bar-base: 20%;
   #portion1 .aspect {
     background-color: $overviewNormal;
   }
-
   #portion2 .aspect {
     background-color: #0f8dc3;
     background-color:$overviewWarning;
@@ -713,6 +721,9 @@ $sensor-bar-base: 20%;
   }
 }
 
-.red{
-  border:1px solid $overviewCritical;
+.row-3{
+  .theme-icon img{
+    width: 34px;
+    padding-top: 4px;
+  }
 }

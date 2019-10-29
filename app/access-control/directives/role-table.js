@@ -18,7 +18,7 @@ window.angular && (function(angular) {
           // compile custom directives as table items
           const svg = require('../../assets/icons/icon-check.svg');
           const check =
-              $sce.trustAsHtml(`<span class="icon__check-mark">${svg}<span>`);
+              $sce.trustAsHtml(`<span class="icon__check-mark"><span>`);
 
           this.tableHeader = [
             {label: ''}, {label: 'Admin'}, {label: 'Operator'},
