@@ -221,9 +221,10 @@ optional actions given on a page.
     vertical-align: text-bottom;
     margin: auto;
   }
+  &.highlighted{
+    background-color: $color--blue-50;
+  }
 }
-
-
 
 .btn-icon {
   color:#88898a;

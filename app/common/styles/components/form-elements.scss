@@ -164,6 +164,10 @@ label {
   color: $text-02;
 }
 
+label.dropdown-label {
+  line-height: 3.2;
+}
+
 /* DROPDOWNS */
 //TODO: Remove the dropdowns once all have been removed page-by-page (using select instead)
 
@@ -595,7 +599,7 @@ select {
 
 input:disabled, input[readonly],
 textarea:disabled,
-textarea[readonly],input[type='number'],input[type='number']:disabled {
+textarea[readonly],input[type='number']:disabled {
   border: 1px solid $color--grey-30;
   border-color: $color--grey-30;
   box-shadow: 0 0 0 0;

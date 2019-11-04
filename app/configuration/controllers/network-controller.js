@@ -26,8 +26,10 @@ window.angular && (function(angular) {
       $scope.confirmSettings = false;
       $scope.loading = false;
       $scope.ipv4sToDelete = [];
+      $scope.rowUpdate = false;
 
       loadNetworkInfo();
+
 
       $scope.selectInterface = function(interfaceId) {
         $scope.interface = $scope.network.interfaces[interfaceId];
@@ -45,9 +47,11 @@ window.angular && (function(angular) {
         $scope.interface.Nameservers.splice(index, 1);
       };
 
-      $scope.addIpv4Field = function() {
-        $scope.interface.ipv4.values.push(
-            {Address: '', PrefixLength: '', Gateway: ''});
+      $scope.addIpv4Field = function(newRow) {
+        if ((newRow && $scope.interface.ipv4.values.length == 0) || !newRow) {
+          $scope.interface.ipv4.values.push(
+              {Address: '', PrefixLength: '', Gateway: ''});
+        }
       };
 
       $scope.removeIpv4Address = function(index) {
@@ -301,14 +305,14 @@ window.angular && (function(angular) {
             // Copy the interface so we know later if changes were made to the
             // page
             $scope.oldInterface = JSON.parse(JSON.stringify($scope.interface));
-          }
+          };
           // Add id values and update flags to corresponding IPV4 objects
           for (var i = 0; i < $scope.interface.ipv4.values.length; i++) {
             $scope.interface.ipv4.values[i].id = $scope.interface.ipv4.ids[i];
             $scope.interface.ipv4.values[i].updateAddress = false;
             $scope.interface.ipv4.values[i].updateGateway = false;
             $scope.interface.ipv4.values[i].updatePrefix = false;
-          }
+          };
         });
       }
     }

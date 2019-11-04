@@ -170,6 +170,10 @@
   }
 }
 
+.status__Critical-icon{
+  @include redFilter;
+}
+
 // Status table cells for sensor and event log
 .status-icon{
   max-width:32px;
