@@ -8,6 +8,8 @@
 
 import RFB from '@novnc/novnc/core/rfb.js';
 
+const DISCONNECT_TIMEOUT = 10;
+
 window.angular && (function(angular) {
   'use strict';
 
