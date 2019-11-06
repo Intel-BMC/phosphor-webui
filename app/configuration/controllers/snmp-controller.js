@@ -15,6 +15,7 @@ window.angular && (function(angular) {
       $scope.managers = [];
       $scope.loading = true;
       $scope.managersToDelete = [];
+      $scope.editSNMPSettings = true;
 
       var getSNMPManagers = APIUtils.getSNMPManagers().then(
           function(data) {
@@ -50,6 +51,10 @@ window.angular && (function(angular) {
           $scope.managersToDelete.push($scope.managers[index].path);
         }
         $scope.managers.splice(index, 1);
+      };
+
+      $scope.updatedRow = function() {
+        $scope.rowUpdate = true;
       };
 
       $scope.refresh = function() {
@@ -103,6 +108,7 @@ window.angular && (function(angular) {
             .then(
                 function() {
                   $scope.refresh();
+                  $scope.editSNMPSettings = false;
                   toastService.success('SNMP settings have been saved.');
                 },
                 function(errors) {

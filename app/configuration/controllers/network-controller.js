@@ -58,6 +58,9 @@ window.angular && (function(angular) {
         }
         $scope.interface.ipv4.values.splice(index, 1);
       };
+      $scope.updatedRow = function() {
+        $scope.rowUpdate = true;
+      };
 
       $scope.setNetworkSettings = function() {
         // Hides the confirm network settings modal
