@@ -1,66 +1,145 @@
 <loader loading="loading"></loader>
 <div id="configuration-date-time">
-  <h1>Date and time settings</h1>
-  <div class="column small-12 page-header">
-    <h2>Set date and time manually or configure a Network Time Protocol (NTP) Server</h2>
-  </div>
   <form class="time__form" role="form" action="">
-    <fieldset>
-      <div class="column large-8">
-        <div class="row column">
-          <label class="control-radio" for="ntp-time">Obtain Automatically from a Network Time Protocol (NTP) Server
-            <input type="radio" id="ntp-time" ng-model="time.mode" value="NTP">
-            <span class="control__indicator control__indicator-on"></span>
-          </label>
-        </div>
-        <div class="row column date-time__ntp-servers-wrap">
-          <fieldset class="date-time__ntp-servers" ng-repeat="server in ntp.servers track by $index">
-            <label for="ntp-server{{$index+1}}">NTP Server Address {{$index+1}} <span ng-if="$first">(Primary)</span></label>
-            <div class="inline">
-              <input id="ntp-server{{$index+1}}" type="text" ng-readonly="time.mode != 'NTP'" ng-model="server" ng-blur="ntp.servers[$index] = server" set-focus-on-new-input/>
-            </div>
-            <button class="btn  date-time__dns-remove btn-tertiary" ng-click="removeNTPField($index)">Remove</button>
-          </fieldset>
-        </div>
-        <div class="row column date-time__ntp-servers-wrap">
-          <button type="button" class="btn btn-primary" ng-click="addNTPField()">Add new NTP server</button>
-        </div>
-        <div class="row column">
-          <label class="control-radio" for="manual-time">Manually set date and time
-            <input type="radio" id="manual-time" ng-model="time.mode" value="Manual"/>
-            <span class="control__indicator control__indicator-on"></span>
-          </label>
-        </div>
-        <ul class="date-time__metadata-wrapper">
-          <li class="date-time__metadata-block">
-            <p class="content-label">BMC <span ng-if="time.owner != 'Split'">and Host</span> Time</p>
-            <div class="inline">
-              <input type="date" ng-model="bmc.date" ng-readonly="time.mode == 'NTP'" min="2018-01-01" max="2099-12-31"/>
-              <input type="time" ng-model="bmc.date" ng-readonly="time.mode == 'NTP'" />
-              <p class="courier-bold">{{bmc.timezone}}</p>
-            </div>
-          </li>
-          <li class="date-time__metadata-block" ng-if="time.owner == 'Split'">
-            <p class="content-label">Host Time</p>
-            <div class="inline">
-              <!--- Ideally, would just use one input, datetime-local, but datetime-local is not supported on Firefox.--->
-              <input type="date" ng-model="host.date" min="2018-01-01" max="2099-12-31"/>
-              <input type="time" ng-model="host.date"/>
-              <p class="courier-bold">{{host.timezone}}</p>
-            </div>
-          </li>
-          <li class="date-time__metadata-block">
-            <label for="date-time-owner" class="content-label">Time Owner</label>
-            <select id="date-time-owner" ng-model="time.owner" class="date-time__owner-dropdown">
-              <option class="courier-bold" ng-repeat="owner in timeOwners">{{owner}}</option>
-            </select>
-          </li>
-        </ul>
-      </div>
-    </fieldset>
-    <div class="time__submit-wrapper">
-      <button type="button" class="btn  btn-primary" ng-click="saveDateTimeSettings()">Save settings</button>
-      <button type="button" class="btn  btn-secondary" ng-click="refresh()">Cancel</button>
+
+    <div class="float-right padding">
+      <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;refresh()">Reset</button>
+      <button type="button" class="btn btn-tertiary" ng-click="saveDateTimeSettings()"
+        ng-class="rowUpdate ? 'highlighted' : ''">Save Page Settings</button>
     </div>
+
+    <br clear="all">
+    <div class="row">
+
+      <div class="columns col-md-12 col-sm-12">
+
+        <div class="page-content-box">
+          <legend>Date and time configuration:</legend>
+          <div class="row">
+            <label class="control-radio indent" for="ntp-time">Obtain Automatically from a Network Time Protocol (NTP)
+              Server
+              <input type="radio" id="ntp-time" ng-model="time.mode" value="NTP">
+              <span class="control__indicator control__indicator-on"></span>
+            </label>
+
+            <div class="page-content-rnd slide-in" ng-class="time.mode == 'NTP' ? 'opened' : ''"
+              ng-show="time.mode == 'NTP'">
+              <h5>NTP Servers</h5>
+              <div class="table row column dns-settings" ng-show="ntp.servers.length > 0">
+                <div class="table__head fixed-table-header">
+                  <div class="table__row">
+                    <div class="table__cell">Entry</div>
+                    <div class="table__cell">NTP Server</div>
+                    <div class="table__cell action-wrapper"></div>
+                  </div>
+                </div>
+                <div class="table__body">
+                  <div class="table__row date-time__ntp-servers" ng-repeat="server in ntp.servers track by $index">
+                    <div class="table__cell">{{$index+1}} <span ng-if="$first">(Primary)</span>
+                    </div>
+
+                    <div class="table__cell">
+                      <input id="ntp-server{{$index+1}}" type="text" ng-readonly="time.mode != 'NTP'" ng-model="server"
+                        ng-blur="ntp.servers[$index] = server" set-focus-on-new-input />
+                    </div>
+
+                    <div class="table__cell action-wrapper">
+
+                      <div class="bmc-table__row-actions ng-scope">
+                        <button ng-class="!server ? 'disabled' : ''" ng-show="!editNTPSettings"
+                          class="btn btn-primary btn-small" ng-click="editNTPSettings=true;updatedRow()">
+                          <img alt="Complete" title="Complete" src="/app/assets/icons/icon-check.svg">
+                        </button>
+                        <button ng-show="editNTPSettings" class="btn btn-primary btn-small"
+                          ng-click="editNTPSettings=false">
+                          <img alt="Edit" title="Edit" src="/app/assets/icons/icon-edit.svg">
+                        </button>
+                        <button class="btn btn-primary btn-small" ng-click="removeNTPField($index)">
+                          <img alt="Remove" title="Remove" src="/app/assets/icons/icon-trashcan.svg">
+                        </button>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="message-box" ng-show="ntp.servers.length == 0">
+                No NTP Servers currently specified.
+              </div>
+
+              <div>
+                <button ng-click="addNTPField()" class="btn-icon">
+                  <img src="../../assets/icons/add--alt.svg">
+                  Add NTP server</button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-radio indent" for="manual-time">Manually set date and time
+              <input type="radio" id="manual-time" ng-model="time.mode" value="Manual" />
+              <span class="control__indicator control__indicator-on"></span>
+            </label>
+
+            <div class="page-content-rnd slide-in" ng-class="time.mode != 'NTP' ? 'opened' : ''"
+              ng-show="time.mode != 'NTP'">
+
+              <h5>Time Owner</h5>
+              <select id="date-time-owner" ng-model="time.owner" class="minimal">
+                <option ng-repeat="owner in timeOwners">{{owner}}</option>
+              </select>
+
+              <div class="bmc-time">
+                <h5>
+                  BMC <span ng-if="time.owner != 'Split'">and Host</span> Time
+                </h5>
+                <table class="overview-config-table">
+                  <tr>
+                    <td>Date</td>
+                    <td><input type="date" ng-change="updatedRow()" ng-model="bmc.date" ng-readonly="time.mode == 'NTP'"
+                        min="2018-01-01" max="2099-12-31" /></td>
+                  </tr>
+                  <tr>
+                    <td>Time</td>
+                    <td><input type="time" ng-change="updatedRow()" ng-model="bmc.date"
+                        ng-readonly="time.mode == 'NTP'" /></td>
+                  </tr>
+                  <tr>
+                    <td>Time Zone</td>
+                    <td class="align-left">{{bmc.timezone}}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="host-time" ng-show="time.owner == 'Split'">
+                <h5>Host Time</h5>
+                <table class="overview-config-table">
+                  <tr>
+                    <td>Date</td>
+                    <td><input type="date" ng-change="updatedRow()" ng-model="host.date" min="2018-01-01"
+                        max="2099-12-31" /></td>
+                  </tr>
+                  <tr>
+                    <td>Time</td>
+                    <td><input type="time" ng-change="updatedRow()" ng-model="host.date" /></td>
+                  </tr>
+                  <tr>
+                    <td>Time Zone</td>
+                    <td class="align-left">{{host.timezone}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
   </form>
+  <br clear="all">
 </div>

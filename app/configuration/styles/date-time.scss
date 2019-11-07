@@ -1,51 +1,25 @@
-// Date Time SCSS
-.time__form {
-
-  fieldset {
-    padding-left: 1.8em;
+#configuration-date-time{
+  .padding{
+    padding-top:0;
   }
 
-  .date-time__metadata-wrapper {
-    margin: 0;
-    padding: 0;
+  .dns-settings .table__cell:nth-child(2){
+    flex-grow: 1.2;
   }
-  .date-time__owner-dropdown {
-    width: 200px;
-    &:hover {
-      background-color: $background-02;
+
+  .slide-in{
+    transform: scaleY(0);
+    transform-origin: 0 0;
+    transition: all .3s ease-in-out;
+    &.opened{
+      transform: scaleY(1);
     }
   }
-  .date-time__ntp-servers{
-    padding-top: .6em;
-    padding-left: 0em;
+  .table__row, td{
+    font-size: 14px;
   }
-  .date-time__ntp-servers-wrap{
-    padding-bottom: 1em;
-    padding-top: 1em;
-    padding-left: 3em;
-  }
-  .date-time__metadata-block {
-    list-style-type: none;
-    margin-right: .7em;
-    margin-left: 3em;
-    display: inline;
-    white-space: normal;
-    word-break: break-all;
-    @include mediaQuery(small) {
-      float: left;
-    }
-  }
-  .time__submit-wrapper {
-    width: 100%;
-    margin-top: 3em;
-    padding-top: 1em;
-    border-top: 1px solid $border-color-01;
-    button {
-      float: right;
-      margin: .5em;
-    }
-  }
-  /*button*/.date-time__dns-remove {
-    margin-right: 1em;
+
+  .control-radio.indent{
+    margin-left: 15px;
   }
 }

@@ -19,6 +19,7 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
   @include form-inputs("");
   border-color:transparent;
   margin:0;
+  color: $color--grey-100;
   &:focus{
     @include form-inputs("");
     @include input-highlight-format($color--blue-50);
@@ -50,12 +51,28 @@ select[disabled]{
 input[type="date"] {
   display: inline-block !important;
   visibility: visible !important;
-  color: $color--grey-70;
+  color: $color--grey-100;
   &:focus {
-    color: $color--grey-70;
+    color: $color--grey-100;
   }
 }
 
+//Inline Editing effect
+input[type='text'],input[type='number']{
+  &.hideborders{
+    border: 0;
+    background: none;
+    outline: 0;
+    box-shadow: none;
+    text-overflow: ellipsis;
+    text-align: center;
+    overflow: auto;
+    padding-top: 9px 18px 15px 21px;
+  }
+  &.showborders{
+    text-align: center;
+  }
+}
 
 /* SELECT DROPDOWN */
 select {
@@ -232,7 +249,7 @@ label {
   position: relative;
   display: inline-block;
   margin-bottom: 15px;
-  padding-top: 7px;
+  padding-top: 10px;
   cursor: pointer;
   line-height: initial;
 }

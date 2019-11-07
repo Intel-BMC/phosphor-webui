@@ -155,6 +155,10 @@ window.angular && (function(angular) {
         $route.reload();
       };
 
+      $scope.updatedRow = function() {
+        $scope.rowUpdate = true;
+      };
+
       $scope.addNTPField = function() {
         $scope.ntp.servers.push('');
       };

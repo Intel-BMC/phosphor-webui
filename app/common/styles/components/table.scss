@@ -311,6 +311,9 @@
     border-bottom: 0;
 }
 
+.row::before{
+  display:inline;
+}
 
 //BMC Table for modal
 .bmc-table {
