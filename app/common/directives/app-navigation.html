@@ -9,7 +9,7 @@
       <li>
         <button class="btn-overview" ng-click="change('overview'); RedirectToURL('/overview/server')">
           <a ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server">
-            <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-overview.svg">
+            <icon class="nav-icon" file="icon-overview.svg" aria-hidden="true"></icon>
             <div class="nav-link" ng-class="toggleNav ? 'collapsed':'trim-text-xsmall'">Overview</div>
           </a>
         </button>
@@ -17,7 +17,7 @@
       <li class="nav-item">
         <button class="btn-health" ng-class="{opened: firstLevel == 'server-health'}"
           ng-click="change('server-health'); RedirectToURL('/server-health/sys-log')">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-health.svg">
+          <icon class="nav-icon" file="icon-health.svg" aria-hidden="true"></icon>
           <div class="nav-link trim-text-xsmall">Health</div>
         </button>
         <ul class="nav__second-level btn-health" ng-style="navStyle"
@@ -40,7 +40,7 @@
       <li class="nav-item">
         <button class="btn-control" ng-class="{opened: firstLevel == 'server-control'}"
           ng-click="change('server-control'); RedirectToURL('/server-control/power-operations')">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-control.svg">
+          <icon class="nav-icon" file="icon-control.svg" aria-hidden="true"></icon>
           <div class="nav-link trim-text-xsmall">Control</div>
         </button>
         <ul class="nav__second-level btn-control" ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
@@ -79,7 +79,7 @@
       <li class="nav-item">
         <button class="btn-config" ng-class="{opened: firstLevel == 'configuration'}"
           ng-click="change('configuration'); RedirectToURL('/configuration/network')">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-config.svg">
+          <icon class="nav-icon" file="icon-config.svg" aria-hidden="true"></icon>
           <div class="nav-link trim-text-xsmall">Config<span class='trim-text-small inline'>uration</span></div>
         </button>
         <ul class="nav__second-level btn-firmware" ng-class="{opened: (showSubMenu && firstLevel == 'configuration')}">
@@ -102,10 +102,10 @@
           </li>
         </ul>
       </li>
-      <li>
+      <li class="nav-item">
         <button class="btn-access-control" ng-class="{opened: firstLevel == 'access-control'}"
           ng-click="change('access-control'); RedirectToURL('/access-control/ldap')">
-          <img class="nav-icon nav-icon-img" src="../../assets/icons/icon-user.svg">
+          <icon class="nav-icon" file="icon-user.svg" aria-hidden="true"></icon>
           <div class="nav-link trim-text-xsmall">Access</div>
         </button>
         <ul class="nav__second-level btn-access-control"
@@ -127,7 +127,7 @@
 
       <div id='toggle-collapse' aria-label="Collapse navigation" aria-role="button" ng-click="toggleNav= !toggleNav"
         tabindex="0" role="button">
-        <img class="nav-icon whiteFilter" src="../../assets/icons/icon-collapse.svg">
+        <icon class="nav-icon" file="icon-collapse.svg"></icon>
       </div>
 
     </ul>

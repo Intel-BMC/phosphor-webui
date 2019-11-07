@@ -58,11 +58,17 @@ $status-1: #aee5fa;
 .grey-small {
   font-size: 11px;
   color: $color--grey-70;
+  svg{
+    fill: $color--grey-70;
+  }
 }
 
 .grey-medium {
   font-size: 13px;
   color: $color--grey-70;
+  svg{
+    fill: $color--grey-70;
+  }
 }
 
 .active-link{
@@ -688,13 +694,13 @@ dd {
   }
   .icon-wrapper{
     width: 45px;
-    height: 45px;
-    img{
-      width: 45px;
-      height: 45px;
-    }
-    margin: auto;
+    height: 35px;
+    margin: 10px auto 0 auto;
     overflow:hidden;
+    .icon,svg,img{
+      width: 25px;
+      height: 25px;
+    }
   }
   .col{
     padding-right:0;

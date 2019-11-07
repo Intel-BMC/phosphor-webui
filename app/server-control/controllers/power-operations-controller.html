@@ -13,7 +13,7 @@
     </div>
     <div class="column small-4 align-right">
       <button ng-click="onClickBootSettings()" class="btn btn-tertiary">
-        <img src="../../assets/icons/icon-config.svg">
+        <icon file="icon-config.svg" aria-hidden="true"></icon>
         Boot Settings
       </button>
     </div>
@@ -35,6 +35,8 @@
 
     </div>
   </div>
+
+  <BR clear="all">
 
   <!-- Power Operations Section -->
   <div class="row">
@@ -148,7 +150,7 @@
           <div ng-class="{disabled: dataService.server_unreachable}">
             <button id="power__power-on" class="btn-power" ng-click="powerOn()" role="button"
               ng-disabled="dataService.server_unreachable">
-              <img src="../../assets/images/btn-poweroff.svg">
+              <img src="/app/assets/images/btn-poweroff.svg">
             </button>
           </div>
         </div>

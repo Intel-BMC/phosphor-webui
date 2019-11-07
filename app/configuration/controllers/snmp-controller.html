@@ -45,14 +45,14 @@
                 <div class="bmc-table__row-actions ng-scope">
                   <button ng-disabled="!manager.port || !manager.address" ng-show="!editSNMPSettings"
                     class="btn btn-primary btn-small" ng-click="editSNMPSettings=true;updatedRow()">
-                    <img alt="Complete" title="Complete" src="/app/assets/icons/icon-check.svg">
+                    <icon alt="Complete" title="Complete" file="icon-check.svg" aria-hidden="true"></icon>
                   </button>
                   <button ng-show="editSNMPSettings" class="btn btn-primary btn-small"
                     ng-click="editSNMPSettings=false">
-                    <img alt="Edit" title="Edit" src="/app/assets/icons/icon-edit.svg">
+                    <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
                   </button>
                   <button class="btn btn-primary btn-small" ng-click="removeSNMPManager($index);updatedRow()">
-                    <img alt="Remove" title="Remove" src="/app/assets/icons/icon-trashcan.svg">
+                    <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
                   </button>
                 </div>
 
@@ -68,8 +68,9 @@
 
         <div>
           <button ng-click="editSNMPSettings=false;submitted=false; addNewSNMPManager();" class="btn-icon">
-            <img src="../../assets/icons/add--alt.svg">
-            Add Manager</button>
+            <icon file="add--alt.svg" aria-hidden="true"></icon>
+            Add Manager
+          </button>
         </div>
 
       </div>

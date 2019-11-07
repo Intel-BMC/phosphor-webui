@@ -79,9 +79,10 @@ window.angular && (function(angular) {
           aria-label="{{action.label}}"
           ng-repeat="action in $ctrl.actions"
           ng-click="$ctrl.onClick(action.type)">
-          <img ng-if="action.file !== null"
-                src="/app/assets/icons/{{action.file}}"
+          <icon ng-if="action.file !== null"
+                ng-file="{{action.file}}"
                 aria-hidden="true">
+          </icon>
           {{action.label || action.type}}
         </button>
         <button

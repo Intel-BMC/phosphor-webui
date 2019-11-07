@@ -76,7 +76,7 @@ window.angular && (function(angular) {
       ng-repeat="action in $ctrl.actions track by $index"
       ng-disabled="!action.enabled"
       ng-click="$ctrl.onClick(action.type)">
-      <img ng-if="action.file !== null" ng-src="/app/assets/icons/{{action.file}}">
+      <icon ng-if="action.file !== null" ng-file="{{action.file}}"></icon>
       <span ng-if="action.file === null">{{action.type}}</span>
     </button>`
 

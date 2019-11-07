@@ -5,7 +5,7 @@
   <section class="page-content-simple">
     <div class="columns large-12 small-12 align-right">
       <button ng-disabled="accountSettings === null" ng-click="onClickAccountSettingsPolicy()" class="btn btn-tertiary">
-        <img src="../../assets/icons/icon-config.svg">
+        <icon file="icon-config.svg"></icon>
         Account settings
       </button>
     </div>
@@ -17,7 +17,7 @@
       <div class="local-users__actions float-left">
         <button ng-disabled="userRoles === null || localUsers.length >= 15" ng-click="onClickAddUser()"
           class="btn-icon">
-          <img src="../../assets/icons/add--alt.svg">
+          <icon file="add--alt.svg" aria-hidden="true"></icon>
           Add user
         </button>
       </div>
@@ -32,10 +32,5 @@
   <section id="user-role-table" class="page-content-rnd">
     <role-table></role-table>
   </section>
-
-  <div class="preload">
-    <img src="../../assets/icons/icon-edit.svg">
-    <img src="../../assets/icons/icon-trashcan.svg">
-  </div>
 
 </div>
