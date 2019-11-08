@@ -98,7 +98,9 @@ button,
 .btn-small{
   @include resize-button('small')
 }
-
+.btn-close svg{
+  fill: #ffffff;
+}
 
 /***
 Use for the primary use-case/s that is non-destructive.
@@ -189,8 +191,6 @@ optional actions given on a page.
   img {
     @include whitefilter;
   }
-
-
   &:hover {
     color: $btn-tertiary__txt--hover;
     background-color: $btn-tertiary__bg--hover;
@@ -210,6 +210,9 @@ optional actions given on a page.
   }
   .icon {
     fill: $btn-tertiary__txt;
+    display: inline-grid;
+    vertical-align: text-bottom;
+    margin: auto;
   }
 }
 
@@ -221,7 +224,9 @@ optional actions given on a page.
   text-transform: capitalize;
   padding:1em;
   img{
-  @include greyFilter;
+    @include greyFilter;
+    margin-top:-4px;
+    margin-right:3px;
   }
   &:hover {
     border-color: #ffffff;

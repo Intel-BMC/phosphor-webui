@@ -20,34 +20,6 @@
     }
   }
 
-  .status-wrapper {
-    margin: 8px 0 0 5px;
-    span{
-      color: $color--grey-70;
-    }
-    transition-delay: 1s;
-    .hide{
-      display:none;
-    }
-    .status-label{
-      background: $color--red-50;
-      color: white;
-      text-transform: uppercase;
-      font-size:12px;
-      border-radius: 2px;
-      margin:0;
-      padding:1px 5px 1px 5px;
-      box-sizing: content-box;
-      display:inline;
-      span{
-        color: white;
-      }
-      &.disabled{
-        background: $color--grey-60;
-      }
-    }
-  }
-
   button:focus{
     outline:0;
     border:0;

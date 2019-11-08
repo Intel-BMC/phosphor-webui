@@ -1,0 +1,59 @@
+<form name="form" id="firmware__download-form" role="form" class="firmware__download-form">
+
+  <div class="uib-modal__content">
+    <button aria-label="Close" type="button" class="btn btn--close float-right" ng-click="$dismiss()">
+      <img src="../../assets/icons/icon-close.svg">
+    </button>
+    <div class="modal-header" id="modal-operation">
+      <h3>
+        Add Image File
+      </h3>
+    </div>
+    <div class="modal-body">
+
+      <section class="row column">
+        <div class="row">
+          <div class="columns col-12">
+            <legend for="boot-selected align-left">
+              Add image file from TFTP server</legend>
+          </div>
+          <div class="columns col-12">
+            <p>Specify both the TFTP server IP address and the image file name stored on it to download to the server
+              BMC.
+            </p>
+
+            <div class="columns col-md-6 col-sm-12 padding">
+              <label for="download_host">TFTP Server IP address</label>
+            </div>
+            <div class="columns col-md-6 col-sm-12 padding">
+              <input name="download_host" id="download_host" type="text" ng-model="modalCtrl.download_host" />
+            </div>
+
+            <div class="columns col-md-6 col-sm-12 padding">
+              <label for="download_filename">File name</label>
+            </div>
+            <div class="columns col-md-6 col-sm-12 padding">
+              <input name="download_filename" id="download_filename" type="text"
+                ng-model="modalCtrl.download_filename" />
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <!-- form actions -->
+    <div class="boot-form-actions">
+      <button type="reset" class="btn btn-secondary" ng-click="$dismiss();">
+        Cancel
+      </button>
+
+      <input type="button" value="Download firmware" class="btn btn-primary float-right" ng-click="$close(form)" />
+    </div>
+  </div>
+
+</form>

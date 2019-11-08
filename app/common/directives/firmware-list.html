@@ -1,9 +1,12 @@
-<div class="row column firmware__table">
-  <div class="table-header column small-12">
-    <p class="inline">{{title}}</p>
-    <p class="inline firmware__active-version">Functional firmware version: {{version}}</p>
+<div class="row firmware__table">
+  <div class=" columns col-4">
+    <h5>{{title}}</h5>
   </div>
-  <div class="table row column">
+
+  <div class="columns col-8" ng-show="(firmwares | filter:filterBy).length > 0">
+    <p class="float-right small-text padding-top">Functional firmware version: {{version}}</p>
+  </div>
+  <div class="table row column" ng-show="(firmwares | filter:filterBy).length > 0">
     <div class="table__head">
       <div class="table__row">
         <div class="table__cell">
@@ -21,16 +24,19 @@
       </div>
     </div>
     <div class="table__body">
-      <div class="table__row" ng-class="firmware.activationStatus == 'Functional' ? 'firmware__primary' : ''" ng-repeat="firmware in firmwares|filter:filterBy|orderBy:'+Priority' as imageList">
+      <div class="table__row" ng-class="firmware.activationStatus == 'Functional' ? 'firmware__primary' : ''"
+        ng-repeat="firmware in firmwares|filter:filterBy|orderBy:'+Priority' as imageList">
         <div class="table__cell">
           <span class="table__cell-label">Boot priority:</span>
-          <div class="icon icon__up-arrow" aria-hidden="true" ng-class="{'icon-as-spacer':$first}"
-               ng-click="!$first && changePriority(firmware.imageId, firmware.Version, firmware.Priority, imageList[$index-1].Priority)"
-               ng-show="firmware.activationStatus == 'Functional' || firmware.activationStatus == 'Active'">
+          <div class="icon icon__up-arrow" title="Move firmware up in priority" aria-hidden="true"
+            ng-class="{'icon-as-spacer':$first}"
+            ng-click="!$first && changePriority(firmware.imageId, firmware.Version, firmware.Priority, imageList[$index-1].Priority)"
+            ng-show="firmware.activationStatus == 'Functional' || firmware.activationStatus == 'Active'">
             <span class="accessible-text">firmware up in priority</span></div>
-          <div class="icon icon__down-arrow" aria-hidden="true" ng-class="{'icon-as-spacer':$last || !['Active', 'Functional'].includes(imageList[$index+1].activationStatus)}"
-              ng-click="(!$last && ['Active', 'Functional'].includes(imageList[$index + 1].activationStatus)) && changePriority(firmware.imageId, firmware.Version, firmware.Priority, imageList[$index+1].Priority + 1)"
-              ng-show="firmware.activationStatus == 'Functional' || firmware.activationStatus == 'Active'">
+          <div class="icon icon__down-arrow" title="Move firmware down in priority" aria-hidden="true"
+            ng-class="{'icon-as-spacer':$last || !['Active', 'Functional'].includes(imageList[$index+1].activationStatus)}"
+            ng-click="(!$last && ['Active', 'Functional'].includes(imageList[$index + 1].activationStatus)) && changePriority(firmware.imageId, firmware.Version, firmware.Priority, imageList[$index+1].Priority + 1)"
+            ng-show="firmware.activationStatus == 'Functional' || firmware.activationStatus == 'Active'">
             <span class="accessible-text">firmware down in priority</span></div>
         </div>
         <div class="table__cell firmware__active">
@@ -39,20 +45,23 @@
         </div>
         <div class="table__cell firmware__version" ng-class="{'active':firmware.isExtended}">
           <span class="table__cell-label">Version:</span>{{firmware.Version}}
-          <button
-              ng-click="toggleMoreDropdown($event, firmware)"
-              ng-class="{'active':firmware.isExtended}" ng-show="firmware.isExtended">
-              <icon file="icon-more.svg"></icon>
+          <button ng-click="toggleMoreDropdown($event, firmware)" ng-class="{'active':firmware.isExtended}"
+            ng-show="firmware.isExtended">
+            <icon file="icon-more.svg"></icon>
           </button>
         </div>
         <div class="icon__more-dropdown" ng-show="firmware.extended.show" click-outside="firmware.extended.show=false;">
           <h5 class="bold">Extended version information</h5>
-          <p class="no-margin" ng-repeat="version in firmware.extended.versions">{{version.title}}: {{version.version}}</p>
+          <p class="no-margin" ng-repeat="version in firmware.extended.versions">{{version.title}}: {{version.version}}
+          </p>
         </div>
         <div class="table__cell firmware__action">
-            <span class="table__cell-label">Action:</span>
-            <button class="firmware__action-link" ng-show="firmware.activationStatus == 'Ready' || firmware.activationStatus == 'Failed'" ng-click="activate(firmware.imageId, firmware.Version, firmware.imageType)">Activate</button>
-            <button class="firmware__action-link" ng-show="firmware.activationStatus != 'Functional'" ng-click="delete(firmware.imageId, firmware.Version)">Delete</button>
+          <span class="table__cell-label">Action:</span>
+          <button class="firmware__action-link"
+            ng-show="firmware.activationStatus == 'Ready' || firmware.activationStatus == 'Failed'"
+            ng-click="activate(firmware.imageId, firmware.Version, firmware.imageType)">Activate</button>
+          <button class="firmware__action-link" ng-show="firmware.activationStatus != 'Functional'"
+            ng-click="delete(firmware.imageId, firmware.Version)">Delete</button>
         </div>
       </div>
     </div>

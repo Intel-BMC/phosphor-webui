@@ -12,9 +12,10 @@ window.angular && (function(angular) {
   angular.module('app.configuration').controller('firmwareController', [
     '$scope', '$window', 'APIUtils', 'dataService', '$location',
     '$anchorScroll', 'Constants', '$interval', '$q', '$timeout', 'toastService',
+    '$uibModal',
     function(
         $scope, $window, APIUtils, dataService, $location, $anchorScroll,
-        Constants, $interval, $q, $timeout, toastService) {
+        Constants, $interval, $q, $timeout, toastService, $uibModal) {
       $scope.dataService = dataService;
 
       // Scroll to target anchor
@@ -90,6 +91,47 @@ window.angular && (function(angular) {
           }
         }, Constants.POLL_INTERVALS.ACTIVATION);
         return deferred.promise;
+      }
+
+      /**
+       * Callback when 'Add image file' button clicked
+       */
+      $scope.onClickAddImageFile = (filetype) => {
+        initAddImageFileModal(filetype);
+      };
+
+      /**
+       * Upload file modal
+       */
+      function initAddImageFileModal(filetype) {
+        // TODO: pass value into modal and just use one template
+        var template = require('./firmware-modal-addimage.html');
+        if (filetype == 'download') {
+          template = require('./firmware-modal-downloadimage.html');
+        };
+        $uibModal
+            .open({
+              template,
+              windowTopClass: 'uib-modal',
+              scope: $scope,
+              ariaLabelledBy: 'modal-operation',
+              controllerAs: 'modalCtrl',
+            })
+            .result
+            .then((form) => {
+              if (filetype == 'upload') {
+                $scope.file = form.uploadedfile;
+                $scope.upload();
+              } else if (filetype == 'download') {
+                $scope.download_host = form.download_host.$modelValue;
+                $scope.download_filename = form.download_filename.$modelValue;
+                $scope.download();
+              };
+            })
+            .catch(
+                () => {
+                    // do nothing
+                })
       }
 
       $scope.activateConfirmed = function() {
@@ -195,8 +237,9 @@ window.angular && (function(angular) {
                     $scope.uploading = false;
                     toastService.success(
                         'Image file "' + $scope.file.name +
-                        '" has been uploaded');
+                        '" has been uploaded. Activate it to make it available for use.');
                     $scope.file = '';
+                    $scope.$dismiss();
                     $scope.loadFirmwares();
                   },
                   function(error) {

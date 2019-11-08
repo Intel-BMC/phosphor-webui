@@ -17,7 +17,7 @@
 /* FORM STYLE */
 input[type='email'], input[type='number'], input[type='password'], input[type='search'], input[type='tel'], input[type='url'], input[type='text'], input[type='date'], input[type='time'], textarea {
   @include form-inputs("");
-  border-color:transparent;
+ // border-color: transparent;
   margin:0;
   color: $color--grey-100;
   &:focus{
@@ -568,7 +568,7 @@ select {
   margin: 0;
   padding-right: 5px;
   padding-top: 4px;
-  height: 3em;
+  height: 3.2em;
   max-height: none;
   position: relative;
   color:  #5b5b5b;

@@ -261,21 +261,21 @@
 //Tabs table
 .overview-config-table{
   width:100%;
-  tr td:nth-child(2) {
+  tr td:nth-child(2), .table__row .table__cell:nth-child(2) {
     background-color:#fafafa;
   }
-  td {
+  td,.table__cell {
     padding: 8px;
     text-align: left;
     font-size: 13px;
     border: 1px solid #e5e5e5;
   }
-  td:nth-child(2) {
+  td:nth-child(2), .table__cell:nth-child(2) {
       text-align: right;
   }
 }
 
-.bmc-table__row-actions button img{
+.bmc-table__row-actions button img, .action-wrapper button img{
   @include whitefilter;
 }
 
@@ -336,6 +336,6 @@
   padding: 4px 16px;
 }
 
-.bmc-table__row-actions {
+.bmc-table__row-actions, .action-wrapper {
   text-align: right;
 }

@@ -38,6 +38,10 @@
   }
 }
 
+.small-text{
+  font-size:12px;
+}
+
 .content__container{
   background-image: url('../assets/images/logo-OpenBmc-builton.svg');
   background-position: bottom 8px right 50px;
@@ -90,5 +94,33 @@
   }
   @include mediaQuery(small) {
     display:block;
+  }
+}
+
+.status-wrapper {
+  margin: 8px 0 0 5px;
+  span{
+    color: $color--grey-70;
+  }
+  transition-delay: 1s;
+  .hide{
+    display:none;
+  }
+  .status-label{
+    background: $color--red-50;
+    color: white;
+    text-transform: uppercase;
+    font-size:12px;
+    border-radius: 2px;
+    margin:0;
+    padding:1px 5px 1px 5px;
+    box-sizing: content-box;
+    display:inline;
+    span{
+      color: white;
+    }
+    &.disabled{
+      background: $color--grey-60;
+    }
   }
 }
