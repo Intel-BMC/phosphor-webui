@@ -1,5 +1,94 @@
 <loader loading="loading"></loader>
-<div id="power-usage" class="page">
+<div id="power-usage">
+  <form class="power-usage__form" role="form" action="">
+    <section>
+      <div class="columns col-md-12 col-sm-12">
+        <div class="page-content-box">
+          <h5>Power Information</h5>
+
+          <div class="table row overview-config-table">
+
+            <div class="table__body">
+              <div class="table__row">
+                <div class="table__cell">Power Consumption</div>
+                <div class="table__cell" class="padding-right">{{ power_consumption }}
+                </div>
+              </div>
+              <div class="table__row">
+                <div class="table__cell">Enable Power Cap</div>
+                <div class="table__cell" class="padding-right">
+
+
+                  <div class="toggle-container">
+                    <div class="toggle">
+                      <input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat" type="checkbox"
+                        tabindex="0" ng-model="power_cap.PowerCapEnable" ng-checked="power_cap.PowerCapEnable" />
+                      <label for="toggle__switch-round" tabindex="0">
+                        <span class="uid-switch__status">{{
+                            power_cap.PowerCapEnable ? "on" : "off"
+                          }}</span></label>
+                    </div>
+                    <span>
+                      {{ power_cap.PowerCapEnable ? "On" : "Off" }}
+                    </span>
+                  </div>
+
+
+                </div>
+              </div>
+              <div class="table__row">
+                <div class="table__cell"><span ng-show="editPowerCap">Set </span>Power Cap</div>
+                <div class="table__cell edit-box">
+
+                  <!--start config table-->
+                  <div class="table row column">
+                    <div class="table__body">
+                      <div class="table__row">
+                        <div class="table__cell">
+                          <span ng-show="!power_cap.PowerCapEnable">Not Set</span>
+
+                          <input ng-show="power_cap.PowerCapEnable"
+                            ng-class="editPowerCap ? 'hideborders' : 'showborders'" id="power-cap" type="number"
+                            min="100" max="10000" step="1" ng-disabled="!power_cap.PowerCapEnable"
+                            ng-model="power_cap.PowerCap" />
+
+                        </div>
+                        <div class="table__cell action-wrapper" ng-show="power_cap.PowerCapEnable">
+
+                          <div class="bmc-table__row-actions ng-scope">
+                            <button ng-show="!editPowerCap" class="btn btn-primary btn-small" ng-click="setPowerCap()">
+                              <icon alt="Save" title="Save" file="icon-check.svg" aria-hidden="true"></icon>
+                            </button>
+                            <button ng-show="editPowerCap" class="btn btn-primary btn-small"
+                              ng-click="editPowerCap=false">
+                              <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
+                            </button>
+                            <button class="btn btn-primary btn-small" ng-click="power_cap.PowerCapEnable=false">
+                              <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
+                            </button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end config table-->
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+  </form>
+  </section>
+</div>
+
+<br clear="all">
+
+<div ng-show="0">
   <h1 class="page-title">Manage Power Usage</h1>
   <form class="power-usage__form" role="form" action="">
     <section class="section">
@@ -24,20 +113,12 @@
         </p>
         <div class="toggle-container">
           <div class="toggle">
-            <input
-              id="toggle__switch-round"
-              class="toggle-switch toggle-switch__round-flat"
-              type="checkbox"
-              tabindex="0"
-              ng-model="power_cap.PowerCapEnable"
-              ng-checked="power_cap.PowerCapEnable"
-            />
-            <label for="toggle__switch-round" tabindex="0"
-              >Server power cap setting is
+            <input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat" type="checkbox"
+              tabindex="0" ng-model="power_cap.PowerCapEnable" ng-checked="power_cap.PowerCapEnable" />
+            <label for="toggle__switch-round" tabindex="0">Server power cap setting is
               <span class="uid-switch__status">{{
                 power_cap.PowerCapEnable ? "on" : "off"
-              }}</span></label
-            >
+              }}</span></label>
           </div>
           <span>
             {{ power_cap.PowerCapEnable ? "On" : "Off" }}
@@ -45,18 +126,9 @@
         </div>
       </div>
       <div class="section-content form__field">
-        <label for="power-cap" class="content-label"
-          >POWER CAP VALUE IN WATTS</label
-        >
-        <input
-          id="power-cap"
-          type="number"
-          min="100"
-          max="10000"
-          step="1"
-          ng-disabled="!power_cap.PowerCapEnable"
-          ng-model="power_cap.PowerCap"
-        />
+        <label for="power-cap" class="content-label">POWER CAP VALUE IN WATTS</label>
+        <input id="power-cap" type="number" min="100" max="10000" step="1" ng-disabled="!power_cap.PowerCapEnable"
+          ng-model="power_cap.PowerCap" />
       </div>
     </section>
     <div class="form__actions">

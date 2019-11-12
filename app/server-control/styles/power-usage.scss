@@ -1,0 +1,60 @@
+#power-usage{
+    .overview-config-table {
+        .table__cell:first-child {
+            flex-grow:.5;
+            text-align: left;
+        }
+        .table__row{
+            font-size: 14px;
+            border-bottom: 0;
+            flex-direction: column;
+            @include mediaQuery(medium){
+                flex-direction: row;
+            }
+            &:hover{
+                background: transparent;
+            }
+        }
+        .table__cell{
+            margin-right:0px;
+            font-size: 14px;
+            text-align: left;
+            padding: 20px;
+            @include mediaQuery(medium){
+                text-align: right;
+                padding: 10px 20px 10px 20px;
+            }
+        }
+    }
+    .toggle-container{
+        float: right;
+        .toggle{
+            margin-top: 7px;
+        }
+    }
+    .edit-box{
+        .table__row{
+            height: inherit;
+        }
+        .table__cell:first-child {
+            text-align: right;
+            flex-grow: 1;
+        }
+        .table__cell{
+            padding: 0;
+            border: 0;
+            text-align: right;
+            flex-grow: 1;
+        }
+        .table{
+            margin-bottom:0;
+        }
+        &.table{
+            margin-bottom:0;
+        }
+    }
+
+    .padding-right{
+        padding-right: 20px;
+    }
+}
