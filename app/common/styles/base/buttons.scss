@@ -31,8 +31,8 @@ $btn-tertiary__txt--disabled: $base-02--03;
     text-transform: capitalize;
   }
   @if ($size=="medium") {
-    padding: .8em .8em;
-    border-radius: 14px;
+    padding: 15px 35px;
+    border-radius: 26px;
   }
 }
 /***
@@ -98,6 +98,10 @@ button,
 .btn-small{
   @include resize-button('small')
 }
+.btn-medium{
+  @include resize-button('medium')
+}
+
 .btn-close svg{
   fill: #ffffff;
 }

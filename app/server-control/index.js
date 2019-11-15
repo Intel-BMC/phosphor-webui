@@ -65,6 +65,7 @@ window.angular && (function(angular) {
                 authenticated: true
               })
               .when('/server-control/virtual-media', {
+                title: 'Virtual Media',
                 'template':
                     require('./controllers/virtual-media-controller.html'),
                 'controller': 'virtualMediaController',
