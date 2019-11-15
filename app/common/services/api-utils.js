@@ -848,87 +848,6 @@ window.angular && (function(angular) {
                   });
           return deferred.promise;
         },
-        getLogs: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'GET',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/logging/enumerate',
-            withCredentials: true
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    var dataClone = JSON.parse(JSON.stringify(content.data));
-                    var data = [];
-                    var severityCode = '';
-                    var priority = '';
-                    var health = '';
-                    var relatedItems = [];
-                    var eventID = 'None';
-                    var description = 'None';
-
-                    for (var key in content.data) {
-                      if (content.data.hasOwnProperty(key) &&
-                          content.data[key].hasOwnProperty('Id')) {
-                        var severityFlags = {
-                          low: false,
-                          medium: false,
-                          high: false
-                        };
-                        severityCode =
-                            content.data[key].Severity.split('.').pop();
-                        priority =
-                            Constants.SEVERITY_TO_PRIORITY_MAP[severityCode];
-                        severityFlags[priority.toLowerCase()] = true;
-                        relatedItems = [];
-                        if (content.data[key].hasOwnProperty(
-                                ['Associations'])) {
-                          content.data[key].Associations.forEach(function(
-                              item) {
-                            relatedItems.push(item[2]);
-                          });
-                        }
-                        if (content.data[key].hasOwnProperty(['EventID'])) {
-                          eventID = content.data[key].EventID;
-                        }
-
-                        if (content.data[key].hasOwnProperty(['Description'])) {
-                          description = content.data[key].Description;
-                        }
-
-                        data.push(Object.assign(
-                            {
-                              path: key,
-                              copied: false,
-                              priority: priority,
-                              severity_code: severityCode,
-                              severity_flags: severityFlags,
-                              additional_data:
-                                  content.data[key].AdditionalData.join('\n'),
-                              type: content.data[key].Message,
-                              selected: false,
-                              meta: false,
-                              confirm: false,
-                              related_items: relatedItems,
-                              eventID: eventID,
-                              description: description,
-                              logId: '#' + content.data[key].Id,
-                              data: {key: key, value: content.data[key]}
-                            },
-                            content.data[key]));
-                      }
-                    }
-                    deferred.resolve({data: data, original: dataClone});
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-
-          return deferred.promise;
-        },
         getLastPowerTime: function() {
           return $http({
                    method: 'GET',
@@ -940,85 +859,6 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
-        getLogs: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'GET',
-            url: DataService.getHost() + '/xyz/openbmc_project/logging/enumerate',
-            withCredentials: true
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    var dataClone = JSON.parse(JSON.stringify(content.data));
-                    var data = [];
-                    var severityCode = '';
-                    var priority = '';
-                    var health = '';
-                    var relatedItems = [];
-                    var eventID = 'None';
-                    var description = 'None';
-
-                    for (var key in content.data) {
-                      if (content.data.hasOwnProperty(key) &&
-                          content.data[key].hasOwnProperty('Id')) {
-                        var severityFlags = {
-                          low: false,
-                          medium: false,
-                          high: false
-                        };
-                        severityCode = content.data[key].Severity.split('.').pop();
-                        priority = Constants.SEVERITY_TO_PRIORITY_MAP[severityCode];
-                        severityFlags[priority.toLowerCase()] = true;
-                        relatedItems = [];
-                        content.data[key].associations.forEach(function(item) {
-                          relatedItems.push(item[2]);
-                        });
-
-                        if (content.data[key].hasOwnProperty(['EventID'])) {
-                          eventID = content.data[key].EventID;
-                        }
-
-                        if (content.data[key].hasOwnProperty(['Description'])) {
-                          description = content.data[key].Description;
-                        }
-
-                        data.push(Object.assign(
-                            {
-                              path: key,
-                              copied: false,
-                              priority: priority,
-                              severity_code: severityCode,
-                              severity_flags: severityFlags,
-                              additional_data:
-                                  content.data[key].AdditionalData.join('\n'),
-                              type: content.data[key].Message,
-                              selected: false,
-                              search_text:
-                                  ('#' + content.data[key].Id + ' ' + severityCode +
-                                   ' ' + content.data[key].Message + ' ' +
-                                   content.data[key].Severity + ' ' +
-                                   content.data[key].AdditionalData.join(' '))
-                                      .toLowerCase(),
-                              meta: false,
-                              confirm: false,
-                              related_items: relatedItems,
-                              eventID: eventID,
-                              description: description,
-                              data: {key: key, value: content.data[key]}
-                            },
-                            content.data[key]));
-                      }
-                    }
-                    deferred.resolve({data: data, original: dataClone});
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
-            },
         getSensorsInfo: function(url) {
           return $http({
                    method: 'GET',
@@ -1463,42 +1303,68 @@ window.angular && (function(angular) {
                                   angular.forEach(r2.data['PCIeFunctions'], function(system) {
                                     return $http({
                                              method: 'GET',
-                                             url: DataService.getHost() + r2.data['PCIeFunctions']['@odata.id'],
+                                             url: DataService.getHost() +
+                                                 r2.data['PCIeFunctions']
+                                                        ['@odata.id'],
                                              withCredentials: true
                                            })
                                         .then(
                                             function(r3) {
                                               // nested 3rd level
-                                              angular.forEach(r3.data['Members'],function(system) {
+                                              angular.forEach(
+                                                  r3.data['Members'],
+                                                  function(system) {
                                                     return $http({
                                                              method: 'GET',
-                                                             url: DataService.getHost() + system['@odata.id'],
-                                                             withCredentials: true
+                                                             url:
+                                                                 DataService
+                                                                     .getHost() +
+                                                                 system
+                                                                     ['@odata.id'],
+                                                             withCredentials:
+                                                                 true
                                                            })
                                                         .then(
                                                             function(r4) {
-                                                              addinFunctions = r4.data;
-                                                              addinFunctions.Manufacturer = r2.data['Manufacturer'];
-                                                              cId = r2.data['Id'];
+                                                              addinFunctions =
+                                                                  r4.data;
+                                                              addinFunctions
+                                                                  .Manufacturer =
+                                                                  r2.data['Manufacturer'];
+                                                              cId =
+                                                                  r2.data['Id'];
                                                               if (pId != cId) {
-                                                                addinFunctions.GroupedBy = cId;
-                                                                evenOdd = !evenOdd;
+                                                                addinFunctions
+                                                                    .GroupedBy =
+                                                                    cId;
+                                                                evenOdd =
+                                                                    !evenOdd;
                                                               };
-                                                              addinFunctions.ParentId = cId;
-                                                              addinFunctions.EvenOdd = evenOdd;
-                                                              Devices.push(addinFunctions);
-                                                              pId = r2.data['Id'];
-                                                              deferred.resolve( Devices);
+                                                              addinFunctions
+                                                                  .ParentId =
+                                                                  cId;
+                                                              addinFunctions
+                                                                  .EvenOdd =
+                                                                  evenOdd;
+                                                              Devices.push(
+                                                                  addinFunctions);
+                                                              pId =
+                                                                  r2.data['Id'];
+                                                              deferred.resolve(
+                                                                  Devices);
                                                             },
                                                             function(error) {
-                                                                console.log(JSON.stringify(error));
+                                                              console.log(
+                                                                  JSON.stringify(
+                                                                      error));
                                                             });
-                                                });
+                                                  });
                                             },
                                             function(error) {
-                                              console.log(JSON.stringify(error));
+                                              console.log(
+                                                  JSON.stringify(error));
                                             });
-                                    });
+                                  });
                                 },
                                 function(error) {
                                   console.log(JSON.stringify(error));
@@ -1725,6 +1591,23 @@ window.angular && (function(angular) {
                 // try updating server even if initial disable attempt fails
                 return SERVICE.setRemoteLoggingServer(data);
               });
+        },
+        getHealthStatus: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            return $http({
+                     method: 'GET',
+                     url: DataService.getHost() + '/redfish/v1/Systems/' +
+                         sysName,
+                     withCredentials: true
+                   })
+                .then(
+                    function(response) {
+                      return response.data;
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                    });
+          });
         },
         getPowerConsumption: function() {
           return $http({

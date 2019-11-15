@@ -35,16 +35,6 @@ window.angular && (function(angular) {
       function loadOverviewData() {
         $scope.loading = true;
 
-        var getLogsPromise = APIUtils.getLogs().then(
-            function(data) {
-              $scope.logs = data.data.filter(function(log) {
-                return log.severity_flags.high == true;
-              });
-            },
-            function(error) {
-              console.log(JSON.stringify(error));
-            });
-
         var getFirmwaresPromise = APIUtils.getFirmwares().then(
             function(data) {
               $scope.bmc_firmware = data.bmcActiveVersion;
@@ -65,7 +55,6 @@ window.angular && (function(angular) {
             function(error) {
               console.log(JSON.stringify(error));
             });
-
 
         var getServerInfoPromise = APIUtils.getServerInfo().then(
             function(data) {
@@ -118,7 +107,6 @@ window.angular && (function(angular) {
             });
 
         var promises = [
-          getLogsPromise,
           getFirmwaresPromise,
           getLEDStatePromise,
           getBMCTimePromise,

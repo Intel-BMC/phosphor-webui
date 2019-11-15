@@ -111,7 +111,7 @@
 }
 
 .header-icon-wrapper:hover{
-  .header-icon, .status-icon{
+  .header-icon, .status-icon.status-on{
     @include LtBluefilter;
   }
 }

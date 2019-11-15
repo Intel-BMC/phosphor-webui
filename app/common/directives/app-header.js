@@ -76,10 +76,9 @@ window.angular && (function(angular) {
               };
             }
 
-
             $scope.loadServerHealth = function() {
-              APIUtils.getLogs().then(function(result) {
-                dataService.updateServerHealth(result.data);
+              APIUtils.getHealthStatus().then(function(result) {
+                dataService.updateServerHealth(result.Status.Health);
               });
             };
 
