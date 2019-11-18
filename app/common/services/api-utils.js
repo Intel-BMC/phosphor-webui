@@ -1609,6 +1609,23 @@ window.angular && (function(angular) {
                     });
           });
         },
+        getServerStatus: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            return $http({
+                     method: 'GET',
+                     url: DataService.getHost() + '/redfish/v1/Systems/' +
+                         sysName,
+                     withCredentials: true
+                   })
+                .then(
+                    function(response) {
+                      return response.data;
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                    });
+          });
+        },
         getPowerConsumption: function() {
           return $http({
                    method: 'GET',

@@ -10,10 +10,11 @@ window.angular && (function(angular) {
         'scope': {'path': '='},
         'title': 'No title',
         'controller': [
-          '$rootScope', '$scope', 'dataService', 'userModel', '$location',
-          '$route',
+          '$rootScope', '$scope', 'dataService', 'Constants', 'userModel',
+          '$location', '$route',
           function(
-              $rootScope, $scope, dataService, userModel, $location, $route) {
+              $rootScope, $scope, dataService, Constants, userModel, $location,
+              $route) {
             $scope.dataService = dataService;
 
             $scope.page_title = $rootScope.page_title;
@@ -77,12 +78,41 @@ window.angular && (function(angular) {
             }
 
             $scope.loadServerHealth = function() {
-              APIUtils.getHealthStatus().then(function(result) {
+              APIUtils.getServerStatus().then(function(result) {
                 dataService.updateServerHealth(result.Status.Health);
               });
             };
 
             $scope.loadServerStatus = function() {
+              console.log('loadServerStatus');
+              if (!userModel.isLoggedIn()) {
+                return;
+              }
+              APIUtils.getServerStatus().then(
+                  function(result) {
+                    if (result.PowerState == Constants.HOST_STATE_TEXT.off) {
+                      dataService.setPowerOffState();
+                    } else if (
+                        result.PowerState == Constants.HOST_STATE_TEXT.on) {
+                      dataService.setPowerOnState();
+                    } else if (
+                        result.PowerState ==
+                        Constants.HOST_STATE_TEXT.poweringoff) {
+                      dataService.setPowerOnState();
+                    } else if (
+                        result.PowerState ==
+                        Constants.HOST_STATE_TEXT.poweringon) {
+                      dataService.setPowerOnState();
+                    } else {
+                      dataService.setErrorState();
+                    };
+                  },
+                  function(error) {
+                    console.log(error);
+                  });
+            };
+
+            $scope.loadServerStatusO = function() {
               if (!userModel.isLoggedIn()) {
                 return;
               }

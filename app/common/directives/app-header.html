@@ -13,17 +13,16 @@
           ng-class="dataService.server_health == 'Critical' ? 'alert-text-critical' : dataService.server_health == 'Warning' ? 'alert-text-warning' : ''">
           <status-icon status="{{ dataService.server_health == 'Critical' ? 'error' :
                                         dataService.server_health == 'Warning' ? 'warn' :
-                                        dataService.server_health == 'OK' ? 'on' :
-                                        dataService.server_health == 'Unknown' ? 'off' : null }}">
+                                        dataService.server_health == 'OK' ? 'on' : null }}">
           </status-icon> H<span class="header__textlink">ealth</span>
         </a>
 
         <a class="header-icon-wrapper" href="#/server-control/power-operations"
-          ng-class="dataService.server_state == 'Quiesced' ? 'alert-text-critical' : ''">
-          <status-icon status="{{ dataService.server_state == 'Quiesced' ? 'error' :
-                                          dataService.server_state == 'Running' ? 'on' :
+          ng-class="dataService.server_state == 'Quiesced' ? 'alert-text-critical' : dataService.server_state == 'Off' ? 'alert-text-neutral' : ''">
+          <status-icon status="{{ dataService.server_state == 'On' ? 'on' :
                                           dataService.server_state == 'Off' ? 'off' :
-                                          dataService.server_state == 'Unreachable' ? 'off' : null }}">
+                                          dataService.server_state == 'PoweringOn' ? 'loading' :
+                                          dataService.server_state == 'PoweringOff' ? 'loading' : null }}">
           </status-icon> P<span class="header__textlink">ower</span>
         </a>
 

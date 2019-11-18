@@ -22,7 +22,7 @@
   <!-- Power Indicator Bar -->
   <div class="row">
     <div class="column small-12 power__indicator-wrapper"
-      ng-class="{'power__state-on': dataService.server_state == 'Running', 'power__state-off': dataService.server_state == 'Off', 'power__state-indet': dataService.server_state == 'Standby', 'power__state-error': dataService.server_state == 'Quiesced'}">
+      ng-class="{'power__state-on': dataService.server_state == 'On', 'power__state-off': dataService.server_state == 'Off', 'power__state-indet': dataService.server_state == 'Standby', 'power__state-error': dataService.server_state == 'Quiesced'}">
       <div id="power-indicator-bar" class="power__indicator-bar progress-bar-striped">
       </div>
 
@@ -39,7 +39,7 @@
   <!-- Power Operations Section -->
   <div class="row">
     <div class="operations-wrapper">
-      <div ng-show="(!operationPending) && (dataService.server_state == 'Running')">
+      <div ng-show="(!operationPending) && (dataService.server_state == 'On')">
 
         <!-- Reboot/shutdown sections -->
 

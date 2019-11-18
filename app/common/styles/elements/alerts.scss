@@ -64,7 +64,7 @@
   &.status-on, &.status-good{
     @include greenFilter;
   }
-  &.status-off, &.status-neutral{
+  &.status-off, &.status-loading{
     @include greyFilter;
   }
   &.status-warn, &.status-warning{
@@ -113,7 +113,10 @@
 .alert-text-info{
   color: $color-status-info-text;
 }
-.alert-text-neutral, .header-link-wrapper.off{
+.alert-text-neutral{
+  color: $color--grey-70 !important;
+}
+.header-link-wrapper.off{
   color: $color--grey-50;
 }
 

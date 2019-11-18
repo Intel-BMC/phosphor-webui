@@ -85,6 +85,14 @@ window.angular && (function(angular) {
         this.server_state = Constants.HOST_STATE_TEXT.off;
       };
 
+      this.setPoweringOffState = function() {
+        this.server_state = Constants.HOST_STATE_TEXT.poweringoff;
+      };
+
+      this.setPoweringOnState = function() {
+        this.server_state = Constants.HOST_STATE_TEXT.poweringon;
+      };
+
       this.setErrorState = function() {
         this.server_state = Constants.HOST_STATE_TEXT.error;
       };

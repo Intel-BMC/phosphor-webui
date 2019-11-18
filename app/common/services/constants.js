@@ -39,12 +39,14 @@ window.angular && (function(angular) {
         }
       ],
       HOST_STATE_TEXT: {
-        on: 'Running',
+        on: 'On',
         on_code: 'xyz.openbmc_project.State.Host.HostState.Running',
         off: 'Off',
         off_code: 'xyz.openbmc_project.State.Host.HostState.Off',
         error: 'Quiesced',
         error_code: 'xyz.openbmc_project.State.Host.HostState.Quiesced',
+        poweringon: 'Loading',
+        poweringoff: 'Loading',
         unreachable: 'Unreachable'
       },
       LED_STATE: {on: true, off: false},

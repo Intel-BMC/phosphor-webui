@@ -1,14 +1,18 @@
 // Power Operations SCSS
 #power-operations{
 
+  .status-label{
+    font-size: 12px;
+    color: #ffffff;
+  }
   label{
     font-size:14px;
     color: $primary-dark;
     @include mediaQuery(small) {
-      font-size:18px;
+      font-size: 18px;
     }
     @include mediaQuery(medium) {
-      font-size:18px;
+      font-size: 18px;
     }
     .helper-text{
       font-size:13px;
