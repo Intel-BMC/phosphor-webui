@@ -1,30 +1,21 @@
-.serial-lan__wrapper {
-  overflow: hidden;
-  .btn-export {
-    margin: 1.8em 0 1.8em 2em;
+#server-control-remote-console{
+
+  .terminal-container {
+    position: relative;
+    width: 100%;
   }
+
+  .window-terminal-container {
+    position: relative;
+    max-width: 70em;
+  }
+
+  #terminal{
+    height:25em;
+  }
+
 }
 
-.serial-lan__copy {
-  padding: 1em 0;
-}
-
-.serial-lan__header {
-  background: $primary-light;
-  padding-bottom: 1.2em;
-  line-height: 0;
-}
-
-.terminal-container {
-  position: relative;
-  width: 100%;
-}
-
-.window-terminal-container {
-  position: relative;
-  max-width: 70em;
-}
-
-#terminal{
-  height:25em;
+.serial-lan__actions button, .serial-lan__header button{
+  margin-bottom: 10px;
 }
