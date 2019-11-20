@@ -1,6 +1,6 @@
 // Overrides style for ngToast notifications
 .ng-toast {
-  margin-top: 4em;
+  margin-top: 5.5em;
   .close {
     color: $text-01;
     opacity: 1;
@@ -14,7 +14,6 @@
     border-left-style: solid;
     text-align: left;
     color: $text-01;
-    padding-left: 1rem;
     width: 350px;
   }
   .alert-content-container {
