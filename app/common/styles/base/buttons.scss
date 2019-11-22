@@ -101,8 +101,11 @@ button,
   @include resize-button('medium')
 }
 
-.btn-close svg{
-  fill: #ffffff;
+.btn.btn--close {
+  img{
+    width: 1.2em;
+    height: 1.2em;
+  }
 }
 
 /***

@@ -74,7 +74,7 @@ window.angular && (function(angular) {
       <p class="toolbar__selection-count">{{$ctrl.selectionCount}} selected</p>
       <div class="toolbar__batch-actions" ng-show="$ctrl.actions.length > 0">
         <button
-          class="btn  btn-tertiary"
+          class="btn btn-primary btn-small"
           type="button"
           aria-label="{{action.label}}"
           ng-repeat="action in $ctrl.actions"
@@ -86,7 +86,7 @@ window.angular && (function(angular) {
           {{action.label || action.type}}
         </button>
         <button
-          class="btn  btn-tertiary  btn-close"
+          class="btn btn-primary btn-small btn-close"
           type="button"
           aria-label="Cancel"
           ng-click="$ctrl.onClickClose()">

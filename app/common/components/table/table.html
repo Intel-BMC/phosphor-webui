@@ -9,9 +9,9 @@
             'bmc-table--selectable': $ctrl.selectable,
             'bmc-table--row-actions-enabled': '$ctrl.rowActionsEnabled',
           }">
-    <div class="table__head">
+    <div class="table__head fixed-table-header">
       <!-- Header row -->
-      <div class="table__row table__header">
+      <div class="table__row">
         <!-- Expandable empty cell -->
         <div ng-if="$ctrl.expandable" class="table__cell"></div>
         <!-- Select checkbox -->
@@ -21,7 +21,7 @@
           </table-checkbox>
         </div>
         <!-- Header items -->
-        <div ng-repeat="headerItem in $ctrl.header track by $index" class="table__cell align-left">
+        <div ng-repeat="headerItem in $ctrl.header track by $index" class="table__cell">
           <span ng-if="!$ctrl.sortable || !headerItem.sortable">
             {{headerItem.label}}
           </span>
@@ -55,7 +55,7 @@
           }">
         <!-- Row expansion trigger -->
         <div ng-if="$ctrl.expandable" class="table__cell bmc-table__cell">
-          <button type="button" class="btn  btn--expand" aria-label="expand row" ng-click="$ctrl.onClickExpand($index)">
+          <button type="button" class="btn btn--expand" aria-label="expand row" ng-click="$ctrl.onClickExpand($index)">
             <img src="../../../assets/icons/icon-chevron-right.svg" aria-hidden="true"></icon>
           </button>
         </div>

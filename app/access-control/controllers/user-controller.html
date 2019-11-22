@@ -14,7 +14,7 @@
   <section id="user-edit" class="page-content-rnd">
     <div class="local-users">
 
-      <div class="local-users__actions float-left">
+      <div class="local-users__actions">
         <button ng-disabled="userRoles === null || localUsers.length >= 15" ng-click="onClickAddUser()"
           class="btn-icon">
           <icon file="add--alt.svg" aria-hidden="true"></icon>
@@ -27,10 +27,8 @@
         emit-batch-action="onEmitBatchAction(value)" class="local-users__table">
       </bmc-table>
 
-  </section>
-
-  <section id="user-role-table" class="page-content-rnd">
-    <role-table></role-table>
+      <role-table></role-table>
+    </div>
   </section>
 
 </div>

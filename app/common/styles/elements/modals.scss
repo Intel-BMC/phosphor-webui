@@ -155,9 +155,10 @@
   .btn--close {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 5px;
     svg {
       height: 2em;
+      fill: #ffffff;
     }
   }
 }
