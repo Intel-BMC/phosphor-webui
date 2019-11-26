@@ -12,12 +12,13 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverControl').directive('kvmConsole', [
-    '$log', '$location',
-    function($log, $location) {
+    '$log', 'dataService', '$location',
+    function($log, dataService, $location) {
       return {
         restrict: 'E', template: require('./kvm-console.html'),
             scope: {newWindowBtn: '=?'}, link: function(scope, element) {
               var rfb;
+              scope.autoscale = true;
 
               element.on('$destroy', function() {
                 if (rfb) {
@@ -38,12 +39,12 @@ window.angular && (function(angular) {
                 $log.debug('RFB disconnected');
               }
 
-              var host = $location.host();
-              var port = $location.port();
-              var target = element[0].firstElementChild;
+              var host = dataService.server_id;
+              var target = angular.element(
+                  document.querySelector('#noVNC_container'))[0];
+
               try {
-                rfb = new RFB(
-                    target, 'wss://' + host + ':' + port + '/kvm/0', {});
+                rfb = new RFB(target, 'wss://' + host + '/kvm/0', {});
 
                 rfb.addEventListener('connect', connected);
                 rfb.addEventListener('disconnect', disconnected);
@@ -54,6 +55,35 @@ window.angular && (function(angular) {
                     'Unable to create RFB client -- ' + exc);
                 return;  // don't continue trying to connect
               };
+
+              scope.windowreload = function(autoscale) {
+                if (autoscale) {
+                  var myEl = angular.element(
+                      document.querySelector('#noVNC_container'));
+                  myEl.addClass('enforceAdjustment');
+                  // reload to force autoscale when toggled twice; TODO: could
+                  // check height and only reload if window is less than height
+                  // of noVNC
+                  location.reload();
+                };
+              };
+
+              scope.close = function() {
+                window.close();
+                if (rfb) {
+                  rfb.disconnect();
+                }
+              };
+
+              // on toggle, class "enforceAdjustment" override needed
+              // However the class must be removed on resize to keep cursor
+              // tracking
+              scope.set_rfbScale = function(displayScale) {
+                rfb.clipViewport = displayScale;
+                rfb.scaleViewport = displayScale;
+              };
+
+              scope.set_rfbScale(scope.autoscale);
 
               scope.openWindow = function() {
                 window.open(

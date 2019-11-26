@@ -1,13 +1,27 @@
-<div id="noVNC_container">
+<div class="display-option">
+  <div class="float-left">
+    <div class="toggle-text float-left">Autoscale</div>
+    <label class="switch float-left"><input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat"
+        ng-checked="true" type="checkbox" tabindex="0"
+        ng-click="autoscale = !autoscale; set_rfbScale(autoscale); windowreload(autoscale)">
+      <div class="slider round"></div>
+    </label>
+  </div>
+  <div class="kvm__actions float-right">
+    <button ng-click="sendCtrlAltDel()" class="btn btn-primary btn-xsmall float-right">
+      Send Ctrl+Alt+Del
+    </button>
+    <button class="btn btn btn-primary btn-xsmall float-right" ng-click="openWindow()" ng-show="newWindowBtn === true">
+      Open in new window
+    </button>
+    <button class="btn btn btn-primary btn-xsmall float-right" ng-click="close()" ng-show="!newWindowBtn">
+      Return to OpenBmc
+    </button>
+  </div>
+</div>
+
+<div id="noVNC_container" ng-class="autoscale ? 'allowResize' : 'overrideWidth'">
   <div id="noVNC_status_bar">
     <div id="noVNC_left_dummy_elem"></div>
   </div>
-</div>
-<div class="kvm__actions float-right">
-  <button
-    class="btn  btn-tertiary"
-    ng-click="openWindow()"
-    ng-show="newWindowBtn === true">
-    <icon file="icon-launch.svg" aria-hidden="true"></icon>Open in new window
-  </button>
 </div>

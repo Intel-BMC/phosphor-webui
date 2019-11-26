@@ -1,21 +1,3 @@
-<div id="KVM">
-
-    <div class="display-option float-right">
-        <button ng-click="sendCtrlAltDel()" class="btn btn-primary btn-xsmall">
-            Send Ctrl+Alt+Del
-        </button>
-    </div>
-
-    <div class="display-option float-left">
-        <div class="toggle-text float-left">Autoscale</div>
-        <label class="switch float-left"><input id="toggle__switch-round"
-                class="toggle-switch toggle-switch__round-flat" ng-checked="true" type="checkbox" tabindex="0"
-                ng-click="autoscale = !autoscale; set_rfbScale(autoscale); windowreload(autoscale)">
-            <div class="slider round"></div>
-        </label>
-    </div>
-
-    <div id="noVNC_container" ng-class="autoscale ? 'allowResize' : 'overrideWidth'">
-    </div>
-
+<div class="kvm-page page">
+  <kvm-console new-window-btn="true"></kvm-console>
 </div>
