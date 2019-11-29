@@ -23,6 +23,7 @@ window.angular && (function(angular) {
         }
         return value;
       };
+
       var SERVICE = {
         API_CREDENTIALS: Constants.API_CREDENTIALS,
         API_RESPONSE: Constants.API_RESPONSE,
@@ -51,54 +52,59 @@ window.angular && (function(angular) {
                   });
         },
         getSystemLogCount: function() {
-          if (DataService.systemName.length == 0) {
-            DataService.systemName = 'system';
-          }
-          var uri = '/redfish/v1/Systems/' + DataService.systemName +
-              '/LogServices/EventLog/Entries';
-          var initparams = {$top: 1};
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            var uri = '/redfish/v1/Systems/' +
+                'system' +
+                '/LogServices/EventLog/Entries';
+            var initparams = {$top: 1};
 
-          return $http({
-                   method: 'GET',
-                   url: DataService.getHost() + uri,
-                   params: initparams,
-                   withCredentials: true
-                 })
-              .then(
-                  function(response) {
-                    return response.data['Members@odata.count'];
-                  },
-                  function(error) {
-                    console.log(JSON.stringify(error));
-                  });
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + uri,
+              params: initparams,
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      deferred.resolve(response.data['Members@odata.count']);
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                    });
+
+            return deferred.promise;
+          });
         },
         getSystemLogs: function(outputCount, firstRecord) {
-          if (DataService.systemName.length == 0) {
-            DataService.systemName = 'system';
-          }
-          var uri = '/redfish/v1/Systems/' + DataService.systemName +
-              '/LogServices/EventLog/Entries';
-          var logEntries = [];
-          var initparams = {$top: outputCount, $skip: firstRecord};
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            var uri = '/redfish/v1/Systems/' + DataService.systemName +
+                '/LogServices/EventLog/Entries';
+            var logEntries = [];
+            var initparams = {$top: outputCount, $skip: firstRecord};
 
-          return $http({
-                   method: 'GET',
-                   url: DataService.getHost() + uri,
-                   params: initparams,
-                   withCredentials: true
-                 })
-              .then(
-                  function(response) {
-                    angular.forEach(response.data['Members'], function(log) {
-                      if (log.hasOwnProperty('Created')) {
-                        logEntries.push(log);
-                      }
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + uri,
+              params: initparams,
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      angular.forEach(response.data['Members'], function(log) {
+                        if (log.hasOwnProperty('Created')) {
+                          logEntries.push(log);
+                        }
+                      });
+                      deferred.resolve(logEntries);
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
                     });
-                    return logEntries;
-                  },
-                  function(error) {
-                    console.log(JSON.stringify(error));
-                  });
+
+            return deferred.promise;
+          });
         },
         clearSystemLogs: function() {
           var uri = '/redfish/v1/Systems/' + DataService.systemName +
@@ -1349,191 +1355,190 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
-        getHardwares: function(callback) {
-          $http({
-            method: 'GET',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/inventory/enumerate',
-            withCredentials: true
-          }).then(function(response) {
-            var json = JSON.stringify(response.data);
-            var content = JSON.parse(json);
-            var hardwareData = [];
-            var keyIndexMap = {};
-            var title = '';
-            var depth = '';
-            var data = [];
-            var searchText = '';
-            var componentIndex = -1;
-            var parent = '';
-
-            function isSubComponent(key) {
-              for (var i = 0; i < Constants.HARDWARE.parent_components.length;
-                   i++) {
-                if (key.split(Constants.HARDWARE.parent_components[i]).length ==
-                    2)
-                  return true;
-              }
-
-              return false;
-            }
-
-            function titlelize(title) {
-              title = title.replace(/([A-Z0-9]+)/g, ' $1').replace(/^\s+/, '');
-              for (var i = 0; i < Constants.HARDWARE.uppercase_titles.length;
-                   i++) {
-                if (title.toLowerCase().indexOf(
-                        (Constants.HARDWARE.uppercase_titles[i] + ' ')) > -1) {
-                  return title.toUpperCase();
-                }
-              }
-
-              return title;
-            }
-
-            function camelcaseToLabel(obj) {
-              var transformed = [], label = '', value = '';
-              for (var key in obj) {
-                label = key.replace(/([A-Z0-9]+)/g, ' $1').replace(/^\s+/, '');
-                if (obj[key] !== '') {
-                  value = obj[key];
-                  if (value == 1 || value == 0) {
-                    value = (value == 1) ? 'Yes' : 'No';
-                  }
-                  transformed.push({key: label, value: value});
-                }
-              }
-
-              return transformed;
-            }
-
-            function determineParent(key) {
-              var levels = key.split('/');
-              levels.pop();
-              return levels.join('/');
-            }
-
-            function getSearchText(data) {
-              var searchText = '';
-              for (var i = 0; i < data.length; i++) {
-                searchText += ' ' + data[i].key + ' ' + data[i].value;
-              }
-
-              return searchText;
-            }
-
-            for (var key in content.data) {
-              if (content.data.hasOwnProperty(key) &&
-                  key.indexOf(Constants.HARDWARE.component_key_filter) == 0) {
-                // All and only associations have the property "endpoints".
-                // We don't want to show forward/reverse association objects
-                // that the mapper created on the inventory panel.
-                // Example: An association from the BMC inventory item to the
-                // BMC firmware images. See:
-                // https://github.com/openbmc/docs/blob/master/architecture/object-mapper.md#associations
-                if (content.data[key].hasOwnProperty('endpoints')) {
-                  continue;
-                }
-                // There is also an "Associations" property created by the
-                // Association interface. These would show on the inventory
-                // panel under the individual inventory item dropdown. There
-                // can be a lot of associations in this property and they are
-                // long, full D-Bus paths. Not particularly useful. Remove
-                // for now.
-
-                if (content.data[key].hasOwnProperty('Associations')) {
-                  delete content.data[key].Associations;
-                }
-
-                // Remove the Purpose property from any inventory item.
-                // The purpose property isn't useful to a user.
-                // E.g. in a Power Supply:
-                // Purpose
-                // xyz.openbmc_project.Software.Version.VersionPurpose.Other
-                // Remove when we move inventory to Redfish
-                if (content.data[key].hasOwnProperty('Purpose')) {
-                  delete content.data[key].Purpose;
-                }
-
-                data = camelcaseToLabel(content.data[key]);
-                searchText = getSearchText(data);
-                title = key.split('/').pop();
-                title = titlelize(title);
-                // e.g. /xyz/openbmc_project/inventory/system and
-                // /xyz/openbmc_project/inventory/system/chassis are depths of 5
-                // and 6.
-                depth = key.split('/').length;
-                parent = determineParent(key);
-
-                if (!isSubComponent(key)) {
-                  hardwareData.push(Object.assign(
-                      {
-                        path: key,
-                        title: title,
-                        depth: depth,
-                        parent: parent,
-                        selected: false,
-                        expanded: false,
-                        search_text: title.toLowerCase() + ' ' +
-                            searchText.toLowerCase(),
-                        sub_components: [],
-                        original_data: {key: key, value: content.data[key]}
-                      },
-                      {items: data}));
-
-
-                  keyIndexMap[key] = hardwareData.length - 1;
-                } else {
-                  parent = determineParent(key)
-                  componentIndex = keyIndexMap[parent];
-                  data = content.data[key];
-                  data.title = title;
-                  hardwareData[componentIndex].sub_components.push(data);
-                  hardwareData[componentIndex].search_text +=
-                      ' ' + title.toLowerCase();
-
-                  // Sort the subcomponents alphanumeric so they are displayed
-                  // on the inventory page in order (e.g. core 0, core 1, core
-                  // 2, ... core 12, core 13)
-                  hardwareData[componentIndex].sub_components.sort(function(
-                      a, b) {
-                    return a.title.localeCompare(
-                        b.title, 'en', {numeric: true});
-                  });
-                }
-              }
-            }
-            // First, order the components by depth and then place the child
-            // components beneath their parent component alphanumerically. Can
-            // be removed with completion of
-            // https://github.com/openbmc/openbmc/issues/3401
-            // TODO: Remove this once implemented in back end
-            hardwareData.sort(function(a, b) {
-              if (a.depth < b.depth) return -1;
-              if (a.depth > b.depth) return 1;
-              return b.title.localeCompare(a.title, 'en', {numeric: true});
-            });
-
-            var orderedComponents = [];
-
-            for (var i = 0; i < hardwareData.length; i++) {
-              if (!keyIndexMap[hardwareData[i].parent]) {
-                orderedComponents.push(hardwareData[i]);
-              } else {
-                for (var j = 0; j < orderedComponents.length; j++) {
-                  if (orderedComponents[j].path === hardwareData[i].parent) {
-                    var child = hardwareData[i];
-                    orderedComponents.splice(j + 1, 0, child);
-                  }
-                }
-              }
-            }
-
-            if (callback) {
-              callback(orderedComponents, content.data);
-            } else {
-              return {data: orderedComponents, original_data: content.data};
-            }
+        getDevices: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            var Devices = [];
+            var addinFunctions;
+            var cId = '';
+            var pId = '';
+            var evenOdd = true;
+            return $http({
+                     method: 'GET',
+                     url: DataService.getHost() + '/redfish/v1/Systems/' +
+                         sysName,
+                     withCredentials: true
+                   })
+                .then(
+                    function(r1) {
+                      angular.forEach(r1.data['PCIeDevices'], function(system) {
+                        return $http({
+                                 method: 'GET',
+                                 url: DataService.getHost() +
+                                     system['@odata.id'],
+                                 withCredentials: true
+                               })
+                            .then(
+                                function(r2) {
+                                  // nested 2nd level
+                                  angular.forEach(r2.data['PCIeFunctions'], function(system) {
+                                    return $http({
+                                             method: 'GET',
+                                             url: DataService.getHost() + r2.data['PCIeFunctions']['@odata.id'],
+                                             withCredentials: true
+                                           })
+                                        .then(
+                                            function(r3) {
+                                              // nested 3rd level
+                                              angular.forEach(r3.data['Members'],function(system) {
+                                                    return $http({
+                                                             method: 'GET',
+                                                             url: DataService.getHost() + system['@odata.id'],
+                                                             withCredentials: true
+                                                           })
+                                                        .then(
+                                                            function(r4) {
+                                                              addinFunctions = r4.data;
+                                                              addinFunctions.Manufacturer = r2.data['Manufacturer'];
+                                                              cId = r2.data['Id'];
+                                                              if (pId != cId) {
+                                                                addinFunctions.GroupedBy = cId;
+                                                                evenOdd = !evenOdd;
+                                                              };
+                                                              addinFunctions.ParentId = cId;
+                                                              addinFunctions.EvenOdd = evenOdd;
+                                                              Devices.push(addinFunctions);
+                                                              pId = r2.data['Id'];
+                                                              deferred.resolve( Devices);
+                                                            },
+                                                            function(error) {
+                                                                console.log(JSON.stringify(error));
+                                                            });
+                                                });
+                                            },
+                                            function(error) {
+                                              console.log(JSON.stringify(error));
+                                            });
+                                    });
+                                },
+                                function(error) {
+                                  console.log(JSON.stringify(error));
+                                });
+                      });
+                      return deferred.promise;
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                    });
+          });
+        },
+        getDIMMs: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Memory',
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      var dimms = [];
+                      angular.forEach(response.data['Members'], function(dimm) {
+                        return $http({
+                                 method: 'GET',
+                                 url: DataService.getHost() + dimm['@odata.id'],
+                                 withCredentials: true
+                               })
+                            .then(
+                                function(response) {
+                                  dimms.push(response.data);
+                                  deferred.resolve(dimms);
+                                },
+                                function(error) {
+                                  console.log(JSON.stringify(error));
+                                })
+                      });
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
+        },
+        getCPUs: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Processors',
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      var cpu = [];
+                      angular.forEach(
+                          response.data['Members'], function(system) {
+                            return $http({
+                                     method: 'GET',
+                                     url: DataService.getHost() +
+                                         system['@odata.id'],
+                                     withCredentials: true
+                                   })
+                                .then(
+                                    function(response) {
+                                      cpu.push(response.data);
+                                      deferred.resolve(cpu);
+                                    },
+                                    function(error) {
+                                      console.log(JSON.stringify(error));
+                                    })
+                          });
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
+        },
+        getDrives: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Storage',
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      var drive = [];
+                      angular.forEach(
+                          response.data['Drives'], function(system) {
+                            return $http({
+                                     method: 'GET',
+                                     url: DataService.getHost() +
+                                         system['@odata.id'],
+                                     withCredentials: true
+                                   })
+                                .then(
+                                    function(response) {
+                                      drive.push(response.data);
+                                      deferred.resolve(drive);
+                                    },
+                                    function(error) {
+                                      console.log(JSON.stringify(error));
+                                    })
+                          });
+                    },
+                    function(error) {
+                      console.log(JSON.stringify(error));
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
           });
         },
         deleteLogs: function(logs) {
@@ -1543,7 +1548,6 @@ window.angular && (function(angular) {
           function finished() {
             defer.resolve();
           }
-
           logs.forEach(function(item) {
             promises.push($http({
               method: 'POST',

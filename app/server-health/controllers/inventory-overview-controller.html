@@ -1,57 +1,313 @@
 <loader loading="loading"></loader>
-<div class="inventory__container">
-  <div class="row column">
-    <h1>Hardware status</h1>
-  </div>
-  <div class="row column">
-    <div class="page-header">
-      <h2 class="inline">All hardware in the system</h2>
-      <a ng-href="data:text/json;charset=utf-8,{{originalData}}" class="btn  btn-tertiary float-right"  download="export_inventory.json" ng-show="hardwares.length"><icon file="icon-export.svg"></icon>Export</a>
+<div id="hardware_status">
+
+  <section class="page-content-box toggle-filter row">
+
+    <div class="columns col-md-1 col-sm-12"><label class="trim-text-medium">Show:</label>
     </div>
-  </div>
-  <div class="row column">
-    <p class="content-label" aria-label="hardware filter">Filter hardware components</p>
-    <div class="content__search">
-      <label for="content__search-input">Search</label>
-      <input id="content__search-input" type="text" ng-model="customSearch" ng-keydown="doSearchOnEnter($event)"/>
-      <div class="search-submit__wrapper">
-        <button class="btn" type="button" aria-label="clear filter" ng-click="clear()">
-            <icon file="icon-close.svg" aria-hidden="true"></icon>
+
+    <div class="columns col-sm-6 col-6" ng-repeat="type in hardwareList"
+      ng-class="(type == 'Add-in Cards') ? 'col-md-3' : 'col-md-2'">
+      <div class='filter-box'>
+        <button class="filter-btn" ng-click="toggleHardware(type)"
+          ng-class="(selectedHardwareType == type) ? 'btn-filter-primary' : 'btn-filter-secondary'">
+          <span class="">&#9679;</span>&nbsp;{{type}}
         </button>
-        <input id="content__search-submit" type="submit" class="btn btn-primary content__search-submit" value="Filter" ng-click="doSearchOnClick()"/>
       </div>
     </div>
-  </div>
-  <div class="row column inventory__table">
-    <h3 class="small-12 hardware__header">
-      Hardware
-    </h3>
-    <div class="small-12 harware__details" ng-repeat="inventory in hardwares|filter:filterBySearchTerms">
-      <div class="hardware__title row column" ng-class="{'expanded': inventory.expanded}" ng-click="inventory.expanded = ! inventory.expanded">
-        <h4>{{inventory.title}}</h4>
-        <button class="accord-trigger float-right" ng-class="{'active': inventory.expanded}" aria-expanded="{{inventory.expanded ? 'true' : 'false'}}" aria-expanded="{{inventory.expanded ? 'true' : 'false'}}" aria-label="{{inventory.expanded ? 'collapse' : 'expand'}}"></button>
-      </div>
-      <div class="hardware__items" ng-hide="!inventory.expanded" ng-class="{'expanded': inventory.expanded}">
-        <div class="row column">
-          <div class="items small-12 show-scroll" ng-class="{'large-9': inventory.sub_components.length}">
-            <div class="row column">
-              <div ng-repeat="item in inventory.items" class="small-4">
-                <h5 class="content-label">{{item.key}}</h5>
-                <p class="courier-bold">{{item.value}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="subcomponents show-scroll small-12 large-3" ng-show="inventory.sub_components.length">
-            <div class="row column">
-              <h5 class="small-12 content-label">Subcomponents</h5>
-              <p ng-repeat="sub_component in inventory.sub_components" class="large-6 small-3 courier-bold" ng-if="sub_component.Present">
-                <icon file="icon-warning.svg" aria-hidden="true" ng-if="!sub_component.Functional"></icon>
-                {{sub_component.title}}
-              </p>
-            </div>
-          </div>
+
+  </section>
+
+  <section class="page-content-box">
+
+    <div class="columns col-lg-4 col-md-4 col-sm-12"><label class="trim-text-medium">
+        Search hardware components:</label>
+    </div>
+    <div class="columns col-md-8 col-sm-12">
+      <div class="content__search search-box">
+        <input id="content__search-input" placeholder="Keyword" type="text" ng-model="customSearch"
+          ng-keydown="doSearchOnEnter($event)" />
+        <div class="search-submit__wrapper">
+          <button class="clear-input" ng-click="clear()">&#10005;</button>
+          <input id="content__search-submit" type="submit" class="btn content__search-submit" value="Search"
+            ng-click="doSearchOnClick()" />
         </div>
       </div>
     </div>
+
+  </section>
+
+
+  <div class="row">
+    <section id="CPU_list" class="col" ng-show="selectedHardwareType=='CPUs' || selectedHardwareType=='All'" ng-class="{
+        'col-md-4': (3 >= CPUData.length) && (3 >= (DimmTable | filter:filterDimms).length) && (5 >= DriveData.length),
+        'col-md-6': (6 >= CPUData.length && CPUData.length > 3) && (6 >= (DimmTable | filter:filterDimms).length && DriveData.length > 5),
+         'col-12': (CPUData.length > 6)}">
+      <div class="page-content-box">
+
+        <h5>CPUs</h5>
+
+        <div ng-show="(CPUData | filter:filterBySearchTermsCPU).length === 0 && searchTerms.length">
+          No CPUs match your search query.
+        </div>
+        <div ng-show="(CPUData | filter:filterBySearchTermsCPU).length === 0 && !searchTerms.length">
+          No CPUs available to display.
+        </div>
+
+        <uib-tabset active="CPU_tabs" justified="true">
+
+          <uib-tab id="CPU_tabs" index="$index" heading="{{CPU.Id}}"
+            ng-repeat="CPU in CPUData | filter:filterBySearchTermsCPU" ng-value="$index">
+
+            <table class="overview-config-table">
+              <tr ng-repeat="(key, value) in CPU"
+                ng-show="key.indexOf('@') != 0 && key.indexOf('Status') != 0 && key.indexOf('Id') != 0">
+                <td>{{parseNonSpacedWords(key)}}</td>
+                <td>{{value || 'N/A'}}</td>
+              </tr>
+            </table>
+
+          </uib-tab>
+
+        </uib-tabset>
+      </div>
+    </section>
+
+    <section id="DIMM_list" class="col" ng-show="selectedHardwareType=='DIMMs' || selectedHardwareType=='All'" ng-class="{
+      'col-md-4': (3 >= CPUData.length) && (3 >= (DimmTable | filter:filterDimms).length) && (5 >= DriveData.length),
+      'col-md-6': (6 >= CPUData.length && CPUData.length > 3) && (6 >= (DimmTable | filter:filterDimms).length && DriveData.length > 5),
+         'col-12': ((DimmTable | filter:filterDimms).length > 6)}">
+
+      <div class="page-content-box">
+        <h5>DIMMs</h5>
+
+        <div ng-show="filteredDimms.length == 0 && searchTerms.length">
+          No DIMMs match your search query.
+        </div>
+        <div ng-show="filteredDimms.length == 0 && !searchTerms.length">
+          No DIMMs available to display.
+        </div>
+
+        <uib-tabset active="Dimm_tabs" justified="true" ng-show="9 > (DimmTable | filter:filterDimms).length">
+          <uib-tab index="$index" heading="{{Dimm.Id}}"
+            ng-repeat="Dimm in DimmTable | filter:filterBySearchTerms | filter:filterDimms | orderBy:sortKey"
+            ng-value="$index">
+            <table class="Dimm_table overview-config-table">
+              <tr ng-repeat="(key, value) in Dimm"
+                ng-show="key.indexOf('@') != 0 && key.indexOf('Status') != 0 && key.indexOf('Id') != 0 && key.indexOf('Name') != 0">
+                <td>{{parseNonSpacedWords(key)}}</td>
+                <td>{{value || 'N/A'}}</td>
+              </tr>
+            </table>
+          </uib-tab>
+        </uib-tabset>
+
+        <div class="text-intro" ng-show="filteredDimms.length > 8 && filteredDimms.length != 0">
+          <div class="trim-text-medium">
+            <input type='checkbox' class="toggleDetailsVisibility" ng-click="toggleDIMMdetails = !toggleDIMMdetails;">
+            Show Details
+          </div>
+        </div>
+
+        <div class="table row column DIMM__table" ng-show="filteredDimms.length > 8 && filteredDimms.length != 0">
+          <div class="table__head fixed-table-header">
+            <div class="table__row">
+              <div class="table__cell status-icon trim-text-medium"></div>
+              <div class="table__cell sort_button_wrapper" ng-click='sortBy("Name")'>
+                <div class="column col-10">Slot Number</div>
+                <div class="column col-2"><span class="sortorder" ng-class="{reverse: reverse}"></span></div>
+              </div>
+              <div class="table__cell sort_button_wrapper" ng-click="sortBySeverity()">
+                <div class="column col-10">Status</div>
+                <div class="column col-2"><span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
+                </div>
+              </div>
+              <div class="table__cell">Enabled</div>
+              <div class="table__cell">Size</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">Capacity MiB</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">Memory Device Type</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">Type</div>
+            </div>
+          </div>
+
+          <div class="table__body">
+            <div class="table__row sensor-row__{{sensor.Status.Health}}"
+              ng-repeat="Dimm in filteredDimms = ( DimmTable | filter:filterBySearchTerms | filter:filterDimms | orderBy:sortKey:reverse)">
+              <div class="table__cell status-icon status__{{Dimm.Status.Health}} trim-text-medium">&nbsp;
+              </div>
+              <div class="table__cell">{{Dimm.Id || 'N/A'}}</div>
+              <div class="table__cell sensor__status">{{Dimm.Status.Health || 'N/A'}}</div>
+              <div class="table__cell">{{Dimm.Status.State || 'N/A'}}</div>
+              <div class="table__cell">{{Dimm.DataWidthBits || 'N/A'}}</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">{{Dimm.MemoryDeviceType || 'N/A'}} /
+                {{Dimm.MemoryType || 'N/A'}}</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">{{Dimm.CapacityMiB || 'N/A'}}</div>
+              <div class="table__cell trim-text-medium" ng-show="toggleDIMMdetails">{{Dimm.MemoryDeviceType || 'N/A'}}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="drives_list" class="col" ng-show="selectedHardwareType=='Drives' || selectedHardwareType=='All'"
+      ng-class="{
+        'col-md-4': (3 >= CPUData.length) && (3 >= (DimmTable | filter:filterDimms).length) && (5 >= DriveData.length),
+         'col-12': (DriveData.length > 5)}">
+      <div class="page-content-box">
+
+        <h5 ng-class="(DriveData.length > 5 && filteredDriveData.length != 0) ? 'float-left' : ''">Drives</h5>
+
+        <div ng-show="(DriveData | filter:filterBySearchTerms).length == 0">
+          No drives available to display.
+        </div>
+
+        <div class="text-intro" ng-show="(DriveData.length > 8) && (filteredDriveData.length != 0)">
+          <div class="trim-text-medium inline">
+            <input type='checkbox' ng-click="toggleDrivedetails = !toggleDrivedetails;">
+            Show
+            Details
+          </div>
+          <div class="trim-text-medium inline">
+            <input type='checkbox' ng-click="toggleDrive = !toggleDrive;">
+            Show
+            Disabled
+          </div>
+        </div>
+
+        <div class="table row column Drive__table" ng-show="DriveData.length > 5 && filteredDriveData.length != 0">
+
+          <div class="table__head">
+            <div class="table__row">
+              <div class="table__cell sort_button_wrapper status-icon_wrapper" ng-click='sortDriveBy("Name")'
+                ng-class="{reverse: reverse}">
+                Slot Number
+              </div>
+              <div class="table__cell status-icon trim-text-medium"></div>
+              <div class="table__cell sort_button_wrapper" ng-click='sortDriveBy("Manufacturer")'
+                ng-class="{reverse: reverse}">
+                Manufacturer
+              </div>
+              <div class="table__cell">
+                Status
+              </div>
+              <div class="table__cell sort_button_wrapper" ng-click='sortDriveBy("Model")' ng-show="toggleDrivedetails"
+                ng-class="{reverse: reverse}">
+                Model
+              </div>
+              <div class="table__cell sort_button_wrapper" ng-click='sortDriveBy("PartNumber")'
+                ng-show="toggleDrivedetails" ng-class="{reverse: reverse}">
+                Part Number
+              </div>
+              <div class="table__cell sort_button_wrapper" ng-click='sortDriveBy("Model")' ng-show="toggleDrivedetails"
+                ng-class="{reverse: reverse}">
+                Serial Number
+              </div>
+            </div>
+          </div>
+          <div class="table__body">
+            <div class="table__row sensor-row__{{sensor.Status.Health}}"
+              ng-repeat="drive in filteredDriveData = ( DriveData | filter:filterBySearchTerms | filter:filterByState | orderBy:sortDriveKey:reverse)">
+              <div class="table__cell status-icon status__{{drive.Status.Health}} trim-text-medium">&nbsp;
+              </div>
+              <div class="table__cell">{{drive.Name || 'N/A'}}</div>
+              <div class="table__cell">{{drive.Manufacturer || 'N/A'}}</div>
+              <div class="table__cell">{{drive.Status.Health}} {{drive.Status.State}}</div>
+              <div class="table__cell" ng-show="toggleDrivedetails">{{drive.Model || 'N/A'}}</div>
+              <div class="table__cell" ng-show="toggleDrivedetails">{{drive.PartNumber || 'N/A'}}</div>
+              <div class="table__cell" ng-show="toggleDrivedetails">{{drive.SerialNumber || 'N/A'}}</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <uib-tabset active="drives_tabs" justified="true" ng-show="5 >= DriveData.length">
+
+          <uib-tab id="drives_tabs" index="$index" heading="{{drive.Manufacturer}} {{drive.Model}}"
+            ng-repeat="drive in DriveData | filter:filterBySearchTerms| orderBy:sortKey:reverse" ng-value="$index">
+            <table class="overview-config-table">
+              <tr ng-repeat="(key, value) in drive"
+                ng-show="key.indexOf('@') != 0 && key.indexOf('Status') != 0 && key.indexOf('Name') != 0">
+                <td>{{parseNonSpacedWords(key)}}</td>
+                <td>{{value || 'N/A'}}</td>
+              </tr>
+            </table>
+          </uib-tab>
+
+        </uib-tabset>
+      </div>
+    </section>
+
   </div>
+
+
+
+  <section id="Devices_list" class="col" ng-show="selectedHardwareType=='PCIe Devices' || selectedHardwareType=='All'">
+    <div class="page-content-box">
+      <h5 ng-class="(PCIData.length > 7 && filteredPCIData.length != 0) ? 'float-left' : ''">PCIe Devices</h5>
+
+      <div ng-show="filteredPCIData.length == 0">
+        No PCIe devices available to display.
+      </div>
+
+      <div ng-show="PCIData.length > 7 && filteredPCIData.length != 0">
+        <div class="text-intro">
+          <div class="trim-text-medium">
+            <input type='checkbox' ng-click="toggleDevices = !toggleDevices;"> Show
+            Details
+          </div>
+        </div>
+        <div class="text-intro">
+          <div class="trim-text-medium">
+            <input type='checkbox' ng-checked="showasGroups" ng-click="sortPCIBy(sortPCIKey,true)">
+            Group
+            by Device
+          </div>
+        </div>
+      </div>
+
+      <div class="table row Device__table" ng-show="PCIData.length > 7 && filteredPCIData.length != 0">
+        <div class="table__head fixed-table-header">
+          <div class="table__row">
+            <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceId",false)'
+              ng-class="{reverse: reverse}">
+              Manufacturer
+            </div>
+            <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceId",false)'
+              ng-class="{reverse: reverse}">
+              Device ID
+            </div>
+            <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceClass",false)'
+              ng-class="{reverse: reverse}">
+              Device Class
+            </div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">Subsystem ID</div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">Revision ID</div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">Subsystem Vendor ID</div>
+          </div>
+        </div>
+        <div class="table__body">
+
+          <div class="table__row"
+            ng-repeat="device in filteredPCIData = (PCIData  | orderBy:sortPCIKey:reverse | filter:filterBySearchTermsPCI)"
+            ng-class="(device.EvenOdd || !showasGroups ? '' : 'device_group') + ' ' +  (device.GroupedBy && showasGroups ? 'device_sep' : '')">
+            <div class="table__cell">
+              <span ng-show="device.GroupedBy || !showasGroups">{{device.Manufacturer}} {{device.ParentId}}</span>
+              <span ng-show="!device.GroupedBy && showasGroups">&#8230;</span>
+            </div>
+            <div class="table__cell">{{device.DeviceId}}</div>
+            <div class="table__cell">{{parseNonSpacedWords(device.DeviceClass)}}</div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">{{device.SubsystemId}}</div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">{{device.RevisionId}}</div>
+            <div class="table__cell trim-text-medium" ng-show="toggleDevices">{{device.SubsystemVendorId}}</div>
+
+          </div>
+
+        </div>
+
+      </div>
+  </section>
+
 </div>
