@@ -11,22 +11,9 @@ window.angular && (function(angular) {
             '$scope', '$rootScope', '$location', 'dataService',
             function($scope, $rootScope, $location, dataService) {
               $scope.dataService = dataService;
-              $scope.showSubMenu = false;
-              $scope.configuration = false;
-              $scope.serverControl = false;
-
-              //  $scope.toggleNav = function() {
-              //    $scope.toggleNav = !$scope.toggleNav;
-              //  };
 
               $scope.$watch('toggleNav', function() {
-                $scope.toggleText = $scope.toggleNav ? 'Enlarge Navigation >' :
-                                                       '< Collapse Navigation';
-
                 $rootScope.toggleNavState = $scope.toggleNav;
-
-                //$scope.toggle ? $scope.showThresholds = true :
-                //$scope.showThresholds = false;
               })
 
               $scope.change = function(firstLevel) {
@@ -37,12 +24,11 @@ window.angular && (function(angular) {
                   $scope.showSubMenu = !$scope.showSubMenu;
                 }
               };
-              $scope.closeSubnav = function() {
-                //$scope.showSubMenu = false;
-              };
+
               $scope.RedirectToURL = function(destinationURL) {
                 $location.url(destinationURL);
               };
+
               $scope.$watch('path', function() {
                 var urlRoot = $location.path().split('/')[1];
                 if (urlRoot != '') {
@@ -52,8 +38,8 @@ window.angular && (function(angular) {
                 }
                 $scope.showSubMenu = true;
               });
+
               $scope.$watch('showNavigation', function() {
-                var paddingTop = 0;
                 var urlRoot = $location.path().split('/')[1];
                 if (urlRoot != '') {
                   $scope.firstLevel = urlRoot;
