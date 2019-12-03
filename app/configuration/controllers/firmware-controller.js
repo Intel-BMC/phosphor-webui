@@ -169,7 +169,7 @@ window.angular && (function(angular) {
       function warmReboot() {
         $scope.uploading = true;
         dataService.setUnreachableState();
-        APIUtils.hostReboot()
+        APIUtils.gracefulRestart()
             .then(function(response) {
               return response;
             })

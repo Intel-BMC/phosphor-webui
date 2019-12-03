@@ -80,7 +80,7 @@ window.angular && (function(angular) {
       const warmReboot = () => {
         $scope.operationPending = true;
         dataService.setUnreachableState();
-        APIUtils.hostReboot()
+        APIUtils.gracefulRestart()
             .then(() => {
               // Check for off state
               return checkHostStatus(
@@ -110,7 +110,7 @@ window.angular && (function(angular) {
       const coldReboot = () => {
         $scope.operationPending = true;
         dataService.setUnreachableState();
-        APIUtils.chassisPowerOff()
+        APIUtils.forceOff()
             .then(() => {
               // Check for off state
               return checkHostStatus(
@@ -144,7 +144,8 @@ window.angular && (function(angular) {
       const orderlyShutdown = () => {
         $scope.operationPending = true;
         dataService.setUnreachableState();
-        APIUtils.hostPowerOff()
+
+        APIUtils.gracefulShutdown()
             .then(() => {
               // Check for off state
               return checkHostStatus(
@@ -168,7 +169,8 @@ window.angular && (function(angular) {
       const immediateShutdown = () => {
         $scope.operationPending = true;
         dataService.setUnreachableState();
-        APIUtils.chassisPowerOff()
+
+        APIUtils.forceOff()
             .then(() => {
               // Check for off state
               return checkHostStatus(
@@ -300,6 +302,7 @@ window.angular && (function(angular) {
       $scope.resetForm = function() {
         $scope.boot = angular.copy($scope.originalBoot);
         $scope.TPMToggle = angular.copy($scope.originalTPMToggle);
+        $scope.TPMVersion = angular.copy($scope.originalTPMVersion);
       };
 
       /*
@@ -341,13 +344,19 @@ window.angular && (function(angular) {
        *   Get TPM status
        */
       const loadTPMStatus = function() {
+        // TO DO: Redfish currently does not include TPM policy; function below
+        // to be updated once it's completed
         APIUtils.getTPMStatus()
             .then(function(response) {
-              $scope.TPMToggle = response.data;
+              $scope.TPMVersion = response.data(TrustedModules.InterfaceType);
+              if ($scope.TPMVersion) {
+                $scope.TPMToggle = true;
+              }
               $scope.originalTPMToggle = angular.copy($scope.TPMToggle);
+              $scope.originalTPMVersion = angular.copy($scope.TPMVersion);
             })
             .catch(function(error) {
-              toastService.error('Unable to get TPM policy status.');
+              //  toastService.error('Unable to get TPM policy status.');
               console.log('Error loading TPM status', JSON.stringify(error));
             });
         $scope.loading = false;
@@ -403,18 +412,21 @@ window.angular && (function(angular) {
        *   Save TPM required policy
        */
       $scope.saveTPMPolicy = function(toggleDirty) {
-        //  if ($scope.hostBootSettings.toggle.$dirty) {
+        // TO DO: Redfish currently does not include TPM policy; function below
+        // to be updated once it's completed
         if (toggleDirty) {
           const tpmEnabled = $scope.TPMToggle.TPMEnable;
+          const tpmVersion = $scope.TPMToggle.TPMversion;
 
           if (tpmEnabled === undefined) {
             return;
           }
 
-          APIUtils.saveTPMEnable(tpmEnabled)
+          APIUtils.saveTPMEnable(tpmVersion)
               .then(
                   function(response) {
                     $scope.originalTPMToggle = angular.copy($scope.TPMToggle);
+                    $scope.originalTPMVersion = angular.copy($scope.TPMVersion);
                     toastService.success(
                         'Sucessfully updated TPM required policy.');
                   },
@@ -425,31 +437,9 @@ window.angular && (function(angular) {
         }
       };
 
-      /*
-       *   Emitted every time the view is reloaded
-       */
-      $scope.$on('$viewContentLoaded', function() {
-        APIUtils.getLastPowerTime()
-            .then(
-                function(data) {
-                  if (data.data == 0) {
-                    $scope.powerTime = 'not available';
-                  } else {
-                    $scope.powerTime = data.data;
-                  }
-                },
-                function(error) {
-                  toastService.error(
-                      'Unable to get last power operation time.');
-                  console.log(JSON.stringify(error));
-                })
-            .finally(function() {
-              $scope.loading = false;
-            });
-
-        loadBootSettings();
-        loadTPMStatus();
-      });
+      loadBootSettings();
+      loadTPMStatus();
     }
+
   ]);
 })(angular);

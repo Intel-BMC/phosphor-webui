@@ -84,7 +84,6 @@ window.angular && (function(angular) {
             };
 
             $scope.loadServerStatus = function() {
-              console.log('loadServerStatus');
               if (!userModel.isLoggedIn()) {
                 return;
               }

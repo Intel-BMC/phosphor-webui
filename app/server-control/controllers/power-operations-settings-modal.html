@@ -20,11 +20,11 @@
 
 
             <div class="row">
-              <div class="columns large-6 small-6">
+              <div class="columns large-5 small-5">
                 <legend for="boot-selected align-left">
                   Override system boot</legend>
               </div>
-              <div class="columns large-6 small-6">
+              <div class="columns large-7 small-7">
 
                 <select id="boot-selected" name="bootSelected" id="boot-selected" class="minimal"
                   ng-disabled="dataService.server_unreachable || bootOverrideError"
@@ -60,14 +60,14 @@
             <div class="row">
 
               <!-- TPM Required -->
-              <div class="columns large-6 small-6">
+              <div class="columns large-5 small-5">
                 <legend class="content-label align-left">
-                  Third Party Module</legend>
+                  Trusted Platform Module</legend>
                 <p class="helper-text"> Enable to ensure the system only boots when the TPM is functional. </p>
               </div>
 
               <!-- Toggle component -->
-              <div class="columns large-6 small-6">
+              <div class="columns large-7 small-7">
                 <div class="toggle-container">
                   <div class="toggle">
                     <input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat" name="toggle"
@@ -79,6 +79,20 @@
                   <span>
                     {{ TPMToggle.TPMEnable ? "On" : "Off" }}
                   </span>
+                </div>
+                <div class="radio-container padding" ng-show="TPMToggle.TPMEnable">
+                  <label class="radio-label inline">
+                    <input name="TPMversion" type="radio" ng-value="TCM1_0" ng-model="TPMToggle.TPMversion">
+                    Trusted Cryptography Module 1.0
+                  </label>
+                  <label class="radio-label inline">
+                    <input name="TPMversion" type="radio" ng-value="TPM1_2" ng-model="TPMToggle.TPMversion">
+                    Trusted Platform Module 1.2
+                  </label>
+                  <label class="radio-label inline">
+                    <input name="TPMversion" type="radio" ng-value="TPM2_0" ng-model="TPMToggle.TPMversion">
+                    Trusted Platform Module 2.0
+                  </label>
                 </div>
               </div>
             </div>

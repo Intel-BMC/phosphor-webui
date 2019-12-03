@@ -54,8 +54,7 @@ window.angular && (function(angular) {
         getSystemLogCount: function() {
           return this.getRedfishSysName().then(function(sysName) {
             var deferred = $q.defer();
-            var uri = '/redfish/v1/Systems/' +
-                'system' +
+            var uri = '/redfish/v1/Systems/' + sysName +
                 '/LogServices/EventLog/Entries';
             var initparams = {$top: 1};
 
@@ -79,7 +78,7 @@ window.angular && (function(angular) {
         getSystemLogs: function(outputCount, firstRecord) {
           return this.getRedfishSysName().then(function(sysName) {
             var deferred = $q.defer();
-            var uri = '/redfish/v1/Systems/' + DataService.systemName +
+            var uri = '/redfish/v1/Systems/' + sysName +
                 '/LogServices/EventLog/Entries';
             var logEntries = [];
             var initparams = {$top: outputCount, $skip: firstRecord};
@@ -691,28 +690,6 @@ window.angular && (function(angular) {
             withCredentials: true,
           });
         },
-        chassisPowerOff: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/state/chassis0/attr/RequestedPowerTransition',
-            withCredentials: true,
-            data: JSON.stringify(
-                {'data': 'xyz.openbmc_project.State.Chassis.Transition.Off'})
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    deferred.resolve(content.status);
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
-        },
         setLEDState: function(state) {
           return $http({
             method: 'PUT',
@@ -733,34 +710,40 @@ window.angular && (function(angular) {
               });
         },
         saveBootSettings: function(data) {
-          return $http({
-            method: 'PATCH',
-            url: DataService.getHost() + '/redfish/v1/Systems/system',
-            withCredentials: true,
-            data: data
+          return this.getRedfishSysName().then(function(sysName) {
+            return $http({
+              method: 'PATCH',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName,
+              withCredentials: true,
+              data: data
+            });
           });
         },
         getTPMStatus: function() {
-          return $http({
-                   method: 'GET',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/control/host0/TPMEnable',
-                   withCredentials: true
-                 })
-              .then(function(response) {
-                return response.data;
-              });
+          return this.getRedfishSysName().then(function(sysName) {
+            return $http({
+                     method: 'GET',
+                     url: DataService.getHost() + '/redfish/v1/Systems/' +
+                         sysName,
+                     withCredentials: true
+                   })
+                .then(function(response) {
+                  return response.data;
+                });
+          });
         },
-        saveTPMEnable: function(data) {
-          return $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/control/host0/TPMEnable/attr/TPMEnable',
-            withCredentials: true,
-            data: JSON.stringify({'data': data})
-          })
+        saveTPMEnable: function(interfacetype) {
+          var data = {};
+          data['TrustedModule']['InterfaceType'] = interfacetype;
+          return this.getRedfishSysName().then(function(sysName) {
+            return $http({
+              method: 'PATCH',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName,
+              withCredentials: true,
+              data: data
+            });
+          });
         },
-
         bmcReboot: function() {
           return $http({
             method: 'PUT',
@@ -783,70 +766,96 @@ window.angular && (function(angular) {
               });
         },
         hostPowerOn: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/state/host0/attr/RequestedHostTransition',
-            withCredentials: true,
-            data: JSON.stringify(
-                {'data': 'xyz.openbmc_project.State.Host.Transition.On'})
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    deferred.resolve(content.status);
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'POST',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Actions/ComputerSystem.Reset',
+              withCredentials: true,
+              data: JSON.stringify({'ResetType': 'On'})
+            })
+                .then(
+                    function(response) {
+                      var json = JSON.stringify(response.data);
+                      var content = JSON.parse(json);
+                      deferred.resolve(content.status);
+                    },
+                    function(error) {
+                      console.log(error);
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
         },
-        hostPowerOff: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/state/host0/attr/RequestedHostTransition',
-            withCredentials: true,
-            data: JSON.stringify(
-                {'data': 'xyz.openbmc_project.State.Host.Transition.Off'})
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    deferred.resolve(content.status);
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
+        forceOff: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'POST',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Actions/ComputerSystem.Reset',
+              withCredentials: true,
+              data: JSON.stringify({'ResetType': 'ForceOff'})
+            })
+                .then(
+                    function(response) {
+                      var json = JSON.stringify(response.data);
+                      var content = JSON.parse(json);
+                      deferred.resolve(content.status);
+                    },
+                    function(error) {
+                      console.log(error);
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
         },
-        hostReboot: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/state/host0/attr/RequestedHostTransition',
-            withCredentials: true,
-            data: JSON.stringify(
-                {'data': 'xyz.openbmc_project.State.Host.Transition.Reboot'})
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    deferred.resolve(content.status);
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
+        gracefulShutdown: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'POST',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Actions/ComputerSystem.Reset',
+              withCredentials: true,
+              data: JSON.stringify({'ResetType': 'GracefulShutdown'})
+            })
+                .then(
+                    function(response) {
+                      var json = JSON.stringify(response.data);
+                      var content = JSON.parse(json);
+                      deferred.resolve(content.status);
+                    },
+                    function(error) {
+                      console.log(error);
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
+        },
+        gracefulRestart: function() {
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'POST',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName +
+                  '/Actions/ComputerSystem.Reset',
+              withCredentials: true,
+              data: JSON.stringify({'ResetType': 'GracefulRestart'})
+            })
+                .then(
+                    function(response) {
+                      var json = JSON.stringify(response.data);
+                      var content = JSON.parse(json);
+                      deferred.resolve(content.status);
+                    },
+                    function(error) {
+                      console.log(error);
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
         },
         getLastPowerTime: function() {
           return $http({

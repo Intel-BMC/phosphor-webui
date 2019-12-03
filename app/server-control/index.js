@@ -28,7 +28,7 @@ window.angular && (function(angular) {
                 authenticated: true
               })
               .when('/server-control/power-operations', {
-                title: 'Power Operations',
+                title: 'Server Power',
                 'template':
                     require('./controllers/power-operations-controller.html'),
                 'controller': 'powerOperationsController',
