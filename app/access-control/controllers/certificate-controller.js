@@ -198,13 +198,14 @@ window.angular && (function(angular) {
             });
       };
 
-      $scope.addCertModal = function() {
-        openAddCertModal();
+      $scope.addCertModal = function(action) {
+        openAddCertModal(action);
       };
 
-      function openAddCertModal() {
+      function openAddCertModal(action) {
         const modalTemplateAddCert =
             require('./certificate-modal-add-cert.html');
+        $scope.action = action;
         $uibModal
             .open({
               template: modalTemplateAddCert,
@@ -270,7 +271,7 @@ window.angular && (function(angular) {
 
       var getBmcTime = function() {
         APIUtils.getBMCTime().then(function(data) {
-          $scope.bmcTime = data.data.Elapsed;
+          $scope.bmcTime = data.Elapsed;
         });
 
         return $scope.bmcTime;

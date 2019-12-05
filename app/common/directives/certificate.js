@@ -94,6 +94,26 @@ window.angular && (function(angular) {
               return;
             };
 
+            $scope.addCertModal = function(action) {
+              openAddCertModal(action);
+            };
+
+            function openAddCertModal(action) {
+              const modalTemplateAddCert = require(
+                  '../../access-control/controllers/certificate-modal-add-cert.html');
+              $scope.action = action;
+              $uibModal
+                  .open({
+                    template: modalTemplateAddCert,
+                    windowTopClass: 'uib-modal',
+                    scope: $scope,
+                    ariaLabelledBy: 'modal_label',
+                  })
+                  .result.catch(function() {
+                    // do nothing
+                  });
+            };
+
             $scope.replaceCertificate = function(certificate) {
               $scope.loading = true;
               if (certificate.file.name.split('.').pop() !==

@@ -16,21 +16,25 @@ window.angular && (function(angular) {
         function($routeProvider) {
           $routeProvider
               .when('/access-control', {
+                title: 'LDAP',
                 'template': require('./controllers/ldap-controller.html'),
                 'controller': 'ldapController',
                 authenticated: true
               })
               .when('/access-control/ldap', {
+                title: 'LDAP',
                 'template': require('./controllers/ldap-controller.html'),
                 'controller': 'ldapController',
                 authenticated: true
               })
               .when('/access-control/local-users', {
+                title: 'User Management',
                 'template': require('./controllers/user-controller.html'),
                 'controller': 'userController',
                 authenticated: true
               })
               .when('/access-control/ssl-certificates', {
+                title: 'SSL Certificates',
                 'template':
                     require('./controllers/certificate-controller.html'),
                 'controller': 'certificateController',
