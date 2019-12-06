@@ -1158,81 +1158,26 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
-        // Even though NTPServers is a network interface specific path
-        // (e.g. /xyz/openbmc_project/network/eth0/attr/NTPServers) it acts
-        // like a global setting. Just use eth0 for setting and getting the
-        // NTP Servers until it is moved to a non-network interface specific
-        // path like it is in Redfish. TODO: openbmc/phosphor-time-manager#4
-        getNTPServers: function() {
-          return $http({
-                   method: 'GET',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/network/eth0/attr/NTPServers',
-                   withCredentials: true
-                 })
-              .then(function(response) {
-                return response.data;
-              });
-        },
         setNTPServers: function(ntpServers) {
+          var data = {};
+          data.NTP = {};
+          data.NTP.NTPServers = ntpServers;
           return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/network/eth0/attr/NTPServers',
-                   withCredentials: true,
-                   data: JSON.stringify({'data': ntpServers})
-                 })
-              .then(function(response) {
-                return response.data;
-              });
+            method: 'PATCH',
+            url: DataService.getHost() +
+                '/redfish/v1/Managers/bmc/NetworkProtocol',
+            withCredentials: true,
+            data: data
+          });
         },
-        setTimeMode: function(timeMode) {
+        setNTPEnabled: function(useNTP) {
           return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod',
-                   withCredentials: true,
-                   data: JSON.stringify({'data': timeMode})
-                 })
-              .then(function(response) {
-                return response.data;
-              });
-        },
-        setTimeOwner: function(timeOwner) {
-          return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/time/owner/attr/TimeOwner',
-                   withCredentials: true,
-                   data: JSON.stringify({'data': timeOwner})
-                 })
-              .then(function(response) {
-                return response.data;
-              });
-        },
-        setBMCTime: function(time) {
-          return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/time/bmc/attr/Elapsed',
-                   withCredentials: true,
-                   data: JSON.stringify({'data': time})
-                 })
-              .then(function(response) {
-                return response.data;
-              });
-        },
-        setHostTime: function(time) {
-          return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/time/host/attr/Elapsed',
-                   withCredentials: true,
-                   data: JSON.stringify({'data': time})
-                 })
-              .then(function(response) {
-                return response.data;
-              });
+            method: 'PATCH',
+            url: DataService.getHost() +
+                '/redfish/v1/Managers/bmc/NetworkProtocol',
+            withCredentials: true,
+            data: JSON.stringify({'NTP': {'ProtocolEnabled': useNTP}})
+          });
         },
         getCertificateLocations: function() {
           return $http({
@@ -1608,6 +1553,21 @@ window.angular && (function(angular) {
                 // try updating server even if initial disable attempt fails
                 return SERVICE.setRemoteLoggingServer(data);
               });
+        },
+        getNTPValues: function() {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() +
+                       '/redfish/v1/Managers/bmc/NetworkProtocol',
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    return response.data;
+                  },
+                  function(error) {
+                    console.log(JSON.stringify(error));
+                  });
         },
         getHealthStatus: function() {
           return this.getRedfishSysName().then(function(sysName) {
