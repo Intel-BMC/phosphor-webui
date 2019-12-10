@@ -121,7 +121,7 @@ window.angular && (function(angular) {
             // Dependencies
             'ngRoute', 'angular-clipboard', 'ngToast', 'ngAnimate',
             'ngMessages', 'app.common.directives.dirPagination', 'ngSanitize',
-            'ui.bootstrap',
+            'ui.bootstrap', 'ngCookies',
             // Basic resources
             'app.common.services', 'app.common.directives',
             'app.common.filters', 'app.common.components',
@@ -179,8 +179,8 @@ window.angular && (function(angular) {
         }
       ])
       .run([
-        '$rootScope', '$location', 'dataService', 'userModel',
-        function($rootScope, $location, dataService, userModel) {
+        '$rootScope', '$location', 'dataService', 'userModel', '$cookies',
+        function($rootScope, $location, dataService, userModel, $cookies) {
           $rootScope.dataService = dataService;
           dataService.path = $location.path();
 
@@ -220,7 +220,10 @@ window.angular && (function(angular) {
           });
 
           $rootScope.$on('timedout-user', function() {
+            console.log('timedout-user event triggered');
             sessionStorage.removeItem('LOGIN_ID');
+            $cookies.remove('IsAuthenticated');
+
             $location.path('/login');
           });
         }
