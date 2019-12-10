@@ -1,8 +1,6 @@
 
 #configuration-network{
   .action-wrapper{
-    //   flex-grow: 1;
-    //flex-basis: auto;
     min-width: 124px;
     &.table__cell{
       padding-left: 0;
@@ -11,17 +9,8 @@
   .dns-settings .table__cell:first-child{
     flex-grow: .4;
   }
-  .dns-settings .table__cell:nth-child(2){
-  }
   .dns-settings .table input{
     width:100%;
-  }
-
-  .ipv4-settings .table__cell{
-    text-align: left;
-  }
-  .ipv4-settings .table__cell:nth-child(3){
-    flex-grow: .6;
   }
   .ipv4-settings .table__cell:nth-child(4){
     flex-grow: .6;
@@ -31,5 +20,10 @@
   }
   .table__row{
     font-size: 14px;
+  }
+  .first-section{
+    &.highlighted{
+    padding-top: 50px;
+    }
   }
 }

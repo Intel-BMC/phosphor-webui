@@ -67,9 +67,9 @@ window.angular && (function(angular) {
                 return;
               }
               // TODO: change to Redfish then can uncomment
-              //   APIUtils.getNetworkInfo().then(function(data) {
-              //     dataService.setNetworkInfo(data);
-              //   });
+              APIUtils.getNetworkInfo().then(function(data) {
+                dataService.setNetworkInfo(data);
+              });
             };
 
             $scope.loadSystemName = function() {

@@ -1,15 +1,27 @@
 <loader loading="loading"></loader>
 <div id="configuration-network">
 
-  <div class="float-right padding">
-    <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;refresh()">Reset</button>
-    <button type="button" class="btn btn-tertiary" ng-click="confirmSettings=true;"
-      ng-class="rowUpdate ? 'highlighted' : ''">
-      Save Page Settings
-    </button>
-  </div>
-
   <section class="columns col-12">
+    <div class="page-controls" ng-class="{'highlighted' : rowUpdate, 'collapsed' : $root.toggleNavState}">
+      <button type="button" class="offset-close float-left btn btn--close" ng-click="rowUpdate=false;dismiss=true"
+        aria-label="close">
+        <icon file="icon-close.svg" aria-hidden="true"></icon>
+      </button>
+
+      <p class="float-left trim-text-medium">Click "Save Page Settings" to save all changes.</p>
+
+      <div class="float-right padding">
+        <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;dismiss=false;refresh()">Reset</button>
+        <button type="button" class="btn btn-tertiary" ng-click="confirmSettings=true;"
+          ng-class="rowUpdate ? 'highlighted' : ''">
+          Save Page Settings
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="columns col-12 first-section" ng-class="{'highlighted': rowUpdate}">
     <div class="page-content-box">
 
       <div class="columns col-md-3 col-sm-12">
@@ -19,9 +31,8 @@
         <div class="select-box">
           <select id="netinterface-select" ng-model="selectedInterface" name="dropdown" class="minimal"
             ng-change="selectInterface(selectedInterface)">
-            <option ng-selected="{{$index}}" ng-repeat="interface_id in network.interface_ids track by $index"
-              value="{{interface_id}}">
-              {{interface_id}}</option>
+            <option ng-selected="{{$index}}" ng-repeat="ethernet in eth track by $index" value="{{ethernet.Id}}">
+              {{ethernet.Id}}</option>
           </select>
         </div>
       </div>
@@ -29,201 +40,208 @@
     </div>
   </section>
 
-  <div class="row">
+  <section class="columns col-12">
+    <div class="page-content-box">
+      <h5>{{selectedInterface}} Common settings</h5>
 
-    <section class="columns col-12">
-      <div class="page-content-box">
-        <h5>{{selectedInterface}} Common settings</h5>
-
-        <div class="table row column common-settings">
-          <div class="table__head fixed-table-header">
-            <div class="table__row">
-              <div class="table__cell">Hostname</div>
-              <div class="table__cell">MAC address</div>
-              <div class="table__cell">Default Gateway</div>
-              <div class="table__cell action-wrapper"></div>
-            </div>
+      <div class="table row column common-settings">
+        <div class="table__head">
+          <div class="table__row">
+            <div class="table__cell">Hostname</div>
+            <div class="table__cell">MAC address</div>
+            <div class="table__cell">IPv6 Default Gateway</div>
+            <div class="table__cell action-wrapper"></div>
           </div>
-          <div class="table__body">
-            <div class="table__row">
-              <div class="table__cell">
-                <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__mac" type="text"
-                  ng-model="hostname" />
-              </div>
-              <div class="table__cell">
-                <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__host" type="text"
-                  ng-model="interface.MACAddress" />
-              </div>
-              <div class="table__cell">
-                <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__domain" type="text"
-                  ng-model="defaultGateway" />
-              </div>
-              <div class="table__cell action-wrapper">
+        </div>
+        <div class="table__body">
+          <div class="table__row">
+            <div class="table__cell">
+              <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__mac" type="text"
+                ng-model="interface.HostName" />
+            </div>
+            <div class="table__cell">
+              <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__host" type="text"
+                ng-model="interface.MACAddress" />
+            </div>
+            <div class="table__cell">
+              <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__domain" type="text"
+                ng-model="interface.IPv6DefaultGateway" />
+            </div>
+            <div class="table__cell action-wrapper">
 
-                <div class="bmc-table__row-actions ng-scope">
-                  <button ng-show="!editCommonSettings" type="button" class="btn btn-primary btn-small"
-                    ng-click="editCommonSettings=true">
-                    <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
-                  </button>
+              <div class="bmc-table__row-actions ng-scope">
+                <button ng-show="!editCommonSettings" type="button" class="btn btn-primary btn-small"
+                  ng-click="editCommonSettings=true">
+                  <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
+                </button>
 
-                  <button ng-show="editCommonSettings"
-                    ng-class="!defaultGateway || !hostname || !interface.MACAddress ? 'disabled' : ''" type="button"
-                    class="btn btn-primary btn-small" ng-click="editCommonSettings=false;updatedRow()">
-                    <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
-                  </button>
+                <button ng-show="editCommonSettings"
+                  ng-class="!interface.HostName || !interface.MACAddress || !interface.IPv6DefaultGateway ? 'disabled' : ''"
+                  type="button" class="btn btn-primary btn-small" ng-click="editCommonSettings=false;updatedRow()"
+                  ng-disabled="!interface.HostName || !interface.MACAddress || !interface.IPv6DefaultGateway">
+                  <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
+                </button>
 
-                  <button ng-show="editCommonSettings" type="button" class="btn btn-primary btn-small"
-                    ng-click="editCommonSettings=false">
-                    <icon alt="Cancel" title="Cancel" ng-file="icon-close.svg"></icon>
-                  </button>
-                </div>
-
+                <button ng-show="editCommonSettings" type="button" class="btn btn-primary btn-small"
+                  ng-click="editCommonSettings=false">
+                  <icon alt="Cancel" title="Cancel" ng-file="icon-close.svg"></icon>
+                </button>
               </div>
+
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </div>
+  <section class="columns col-12">
 
-  <div class="row">
+    <div class="page-content-box">
+      <h5>{{selectedInterface}} IPV4 settings</h5>
 
-    <section class="columns col-lg-6 col-md-12">
-      <div class="page-content-box">
-        <h5>{{selectedInterface}} IPV4 settings</h5>
+      <label class="control-radio" for="dhcp-address">Obtain an IP address automatically using DHCP
+        <input type="radio" name="ip-address" id="dhcp-address" ng-checked="true"
+          ng-model="interface.DHCPv4.DHCPEnabled" ng-value="true" ng-change="updatedRow(); editIPV4Settings=false">
+        <span class="control__indicator control__indicator-on"></span>
+      </label>
 
-        <label class="control-radio" for="dhcp-address">Obtain an IP address automatically using DHCP
-          <input type="radio" name="ip-address" id="dhcp-address" ng-checked="true" ng-model="interface.DHCPEnabled"
-            ng-value="true">
-          <span class="control__indicator control__indicator-on"></span>
-        </label>
+      <label class="control-radio" for="static-ip-address">Assign a static IP address
+        <input type="radio" name="ip-address" id="static-ip-address" ng-model="interface.DHCPv4.DHCPEnabled"
+          ng-value="false" ng-change="updatedRow()" />
+        <span class="control__indicator control__indicator-on"></span>
+      </label>
 
-        <label class="control-radio" for="static-ip-address">Assign a static IP address
-          <input type="radio" name="ip-address" id="static-ip-address" ng-model="interface.DHCPEnabled" ng-value="false"
-            ng-click="addIpv4Field(true)" />
-          <span class="control__indicator control__indicator-on"></span>
-        </label>
+      <div class="message-box" ng-show="interface.IPv4Addresses.length == 0">
+        No IPV4 addresses currently specified.
+      </div>
 
-
-        <div class="message-box" ng-show="!interface.DHCPEnabled && interface.ipv4.values.length == 0">
-          No IPV4 addresses currently specified.
+      <div class="table row column ipv4-settings" ng-show="interface.IPv4Addresses.length > 0">
+        <div class="table__head">
+          <div class="table__row">
+            <div class="table__cell">IPV4 address</div>
+            <div class="table__cell">Gateway</div>
+            <div class="table__cell">Subnet Mask</div>
+            <div class="table__cell action-wrapper">
+            </div>
+          </div>
         </div>
-
-        <div class="table row column ipv4-settings"
-          ng-show="!interface.DHCPEnabled && interface.ipv4.values.length > 0">
-          <div class="table__head fixed-table-header">
-            <div class="table__row">
-              <div class="table__cell">IPV4 address</div>
-              <div class="table__cell">Gateway</div>
-              <div class="table__cell">Prefix Length</div>
-              <div class="table__cell action-wrapper">
-              </div>
+        <div class="table__body">
+          <div class="table__row" ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'"
+            ng-repeat="ipv4 in interface.IPv4Addresses track by $index">
+            <div class="table__cell">
+              <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
+                type="text" ng-model="ipv4.Address" ng-disabled="interface.DHCPv4.DHCPEnabled" />
             </div>
-          </div>
-          <div class="table__body">
-            <div class="table__row" ng-repeat="ipv4 in interface.ipv4.values track by $index">
-              <div class="table__cell">
-                <input ng-class="editIPV4Settings ? 'hideborders' : 'showborders'" id="ipv4-address-{{$index+1}}"
-                  ng-change="ipv4.updateAddress = true" type="text" ng-disabled="interface.DHCPEnabled"
-                  ng-model="ipv4.Address" />
-              </div>
-              <div class="table__cell">
-                <input ng-class="editIPV4Settings ? 'hideborders' : 'showborders'" id="ipv4-gateway-{{$index+1}}"
-                  ng-change="ipv4.updateGateway = true" type="text" ng-disabled="interface.DHCPEnabled" value=""
-                  ng-model="ipv4.Gateway" />
-              </div>
-              <div class="table__cell">
-                <input ng-class="editIPV4Settings ? 'hideborders' : 'showborders'" id="ipv4-prefix-{{$index+1}}"
-                  ng-change="ipv4.updatePrefix = true" type="number" min="1" max="32" step="1"
-                  ng-disabled="interface.DHCPEnabled" ng-model="ipv4.PrefixLength" />
-              </div>
-              <div class="table__cell action-wrapper">
-
-                <div class="bmc-table__row-actions ng-scope">
-                  <button ng-show="!editIPV4Settings"
-                    ng-class="!ipv4.PrefixLength || !ipv4.Gateway || !ipv4.Address ? 'disabled' : ''"
-                    class="btn btn-primary btn-small" ng-click="editIPV4Settings=true; updatedRow()">
-                    <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
-                  </button>
-                  <button ng-show="editIPV4Settings" class="btn btn-primary btn-small"
-                    ng-click="editIPV4Settings=false">
-                    <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
-                  </button>
-                  <button class="btn btn-primary btn-small" ng-click="removeIpv4Address($index)">
-                    <icon alt="Remove" title="Remove" ng-file="icon-trashcan.svg"></icon>
-                  </button>
-
-                </div>
-
-              </div>
+            <div class="table__cell">
+              <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
+                type="text" value="" ng-model="ipv4.Gateway" ng-disabled="interface.DHCPv4.DHCPEnabled" />
             </div>
-          </div>
-          <div class="float-left" ng-show="!interface.DHCPEnabled">
-            <button ng-click="addIpv4Field(false)" class="btn-icon">
-              <icon alt="Add" title="Add" ng-file="add--alt.svg"></icon>
-              Add IPV4 address
-            </button>
+            <div class="table__cell">
+              <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
+                type="text" ng-model="ipv4.SubnetMask" ng-disabled="interface.DHCPv4.DHCPEnabled" />
+            </div>
+            <div class="table__cell action-wrapper">
+
+              <div class="bmc-table__row-actions ng-scope">
+                <button ng-show="editIPV4Settings[$index]"
+                  ng-class="!ipv4.SubnetMask || !ipv4.Gateway || !ipv4.Address ? 'disabled' : ''"
+                  class="btn btn-primary btn-small" ng-disabled="!ipv4.SubnetMask || !ipv4.Gateway || !ipv4.Address"
+                  ng-click="editIPV4Settings[$index]=false; updatedRow()" ng-disabled="interface.DHCPv4.DHCPEnabled">
+                  <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
+                </button>
+                <button ng-show="!editIPV4Settings[$index]" class="btn btn-primary btn-small"
+                  ng-click="editIPV4Settings[$index]=true" ng-disabled="interface.DHCPv4.DHCPEnabled">
+                  <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
+                </button>
+                <button ng-show="editIPV4Settings[$index]" class="btn btn-primary btn-small"
+                  ng-click="removeIpv4Address($index)" ng-disabled="interface.DHCPv4.DHCPEnabled">
+                  <icon alt="Remove" title="Remove" ng-file="icon-trashcan.svg"></icon>
+                </button>
+
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
-    </section>
+      <div class="float-left">
+        <button ng-click="addIpv4Field(false)" class="btn-icon">
+          <icon alt="Add" title="Add" ng-file="add--alt.svg"></icon>
+          Add IPV4 address
+        </button>
+      </div>
+    </div>
+  </section>
 
-    <section class="columns col-lg-6 col-md-12">
-      <div class="page-content-box">
-        <h5>{{selectedInterface}} DNS settings</h5>
-        <div class="message-box" ng-show="interface.Nameservers.length == 0">
-          No DNS settings currently specified.
-        </div>
-        <div class="table row column dns-settings" ng-show="interface.Nameservers.length > 0">
-          <div class="table__head fixed-table-header">
-            <div class="table__row">
-              <div class="table__cell">#</div>
-              <div class="table__cell">DNS</div>
-              <div class="table__cell action-wrapper"></div>
-            </div>
-          </div>
-          <div class="table__body">
-            <div class="table__row" ng-repeat="dns in interface.Nameservers track by $index">
-              <div class="table__cell">{{$index+1}}
-              </div>
+  <section class="columns col--12">
+    <div class="page-content-box">
+      <h5>{{selectedInterface}} DNS settings</h5>
 
-              <div class="table__cell">
-                <input ng-class="!editDNSSettings ? 'showborders' : 'hideborders'"
-                  id="net-config__prime-dns{{$index+1}}" type="text" ng-model="dns"
-                  ng-blur="interface.Nameservers[$index] = dns" set-focus-on-new-input />
-              </div>
-
-              <div class="table__cell action-wrapper">
-
-                <div class="bmc-table__row-actions ng-scope">
-                  <button ng-class="!dns ? 'disabled' : ''" ng-show="!editDNSSettings" class="btn btn-primary btn-small"
-                    ng-click="editDNSSettings=true;updatedRow()">
-                    <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
-                  </button>
-                  <button ng-show="editDNSSettings" class="btn btn-primary btn-small" ng-click="editDNSSettings=false">
-                    <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
-                  </button>
-                  <button class="btn btn-primary btn-small" ng-click="removeDNSField($index)">
-                    <icon alt="Remove" title="Remove" ng-file="icon-trashcan.svg"></icon>
-                  </button>
-                </div>
-
-              </div>
-
-            </div>
+      <div class="message-box" ng-show="interface.NameServers.length == 0">
+        No DNS servers currently specified.
+      </div>
+      <div class="table row column dns-settings" ng-show="interface.StaticNameServers.length > 0">
+        <div class="table__head">
+          <div class="table__row">
+            <div class="table__cell">#</div>
+            <div class="table__cell">DNS</div>
+            <div class="table__cell action-wrapper"></div>
           </div>
         </div>
+        <div class="table__body">
+          <div class="table__row" ng-class="!editDNSSettings[$index] ? 'hideborders' : 'showborders'"
+            ng-repeat="dns in interface.StaticNameServers track by $index">
+            <div class="table__cell">{{$index+1}}
+            </div>
 
-        <div>
-          <button ng-click="addDNSField()" class="btn-icon">
-            <icon alt="Add" title="Add" ng-file="add--alt.svg"></icon>
-            Add DNS server
-          </button>
+            <div class="table__cell">
+              <input ng-class="!editDNSSettings[$index] ? 'hideborders' : 'showborders'"
+                id="net-config__prime-dns{{$index+1}}" type="text" ng-model="dns" ng-change="updatedDNS()"
+                ng-blur="interface.StaticNameServers[$index] = dns" set-focus-on-new-input />
+            </div>
+
+            <div class="table__cell action-wrapper">
+
+              <div class="bmc-table__row-actions ng-scope">
+                <button ng-class="!dns ? 'disabled' : ''" ng-show="editDNSSettings[$index]"
+                  class="btn btn-primary btn-small" ng-disabled="!dns"
+                  ng-click="editDNSSettings[$index]=false;updatedRow()">
+                  <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
+                </button>
+                <button ng-show="!editDNSSettings[$index]" class="btn btn-primary btn-small"
+                  ng-click="editDNSSettings[$index]=true">
+                  <icon alt="Edit" title="Edit" ng-file="icon-edit.svg"></icon>
+                </button>
+                <button ng-show="editDNSSettings[$index]" class="btn btn-primary btn-small"
+                  ng-click="removeDNSField($index)">
+                  <icon alt="Remove" title="Remove" ng-file="icon-trashcan.svg"></icon>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
         </div>
       </div>
-    </section>
 
+      <div>
+        <button ng-click="addDNSField()" class="btn-icon">
+          <icon alt="Add" title="Add" ng-file="add--alt.svg"></icon>
+          Add DNS server
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <div class="float-right padding" ng-class="rowUpdate ? 'highlighted' : ''">
+    <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;refresh()">Reset</button>
+    <button type="button" class="btn btn-tertiary" ng-click="confirmSettings=true;"
+      ng-class="(rowUpdate || dismiss) ? 'highlighted' : ''" ng-disabled="!rowUpdate && !dismiss">
+      Save Page Settings
+    </button>
   </div>
 
 </div>

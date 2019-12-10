@@ -10,60 +10,121 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.configuration').controller('networkController', [
-    '$scope', '$window', 'APIUtils', 'dataService', '$timeout', '$route', '$q',
+    '$scope', 'APIUtils', '$filter', 'dataService', '$timeout', '$route', '$q',
     'toastService',
     function(
-        $scope, $window, APIUtils, dataService, $timeout, $route, $q,
+        $scope, APIUtils, $filter, dataService, $timeout, $route, $q,
         toastService) {
       $scope.dataService = dataService;
-      $scope.network = {};
       $scope.oldInterface = {};
       $scope.interface = {};
-      $scope.networkDevice = false;
-      $scope.hostname = '';
-      $scope.defaultGateway = '';
+      $scope.filterById = '';
+      $scope.IPv6DefaultGateway = '';
       $scope.selectedInterface = '';
       $scope.confirmSettings = false;
-      $scope.loading = false;
+      $scope.loading = true;
+      $scope.editIPV4Settings = [];
+      $scope.editDNSSettings = [];
       $scope.ipv4sToDelete = [];
       $scope.rowUpdate = false;
+      $scope.dnsUpdate = false;
+      $scope.ipv4Update = false;
+      $scope.dismiss = false;
+      $scope.interface.IPv4Addresses = [];
+      $scope.interface.IPv4StaticAddresses = [];
+      $scope.interface.StaticNameServers = [];
+      $scope.removeIPv4Addresses = [];
+      $scope.IPv4AddressesArray = [];
+      $scope.dnsServersArray = [];
+      $scope.toAddOnEndofArray = [];
+      $scope.toAddOnEndofDNSArray = [];
+      $scope.validateIPV4 = false;
 
       loadNetworkInfo();
 
+      $scope.addDNSField = function(newRow) {
+        $scope.editDNSSettings[$scope.interface.StaticNameServers.length] =
+            true;
 
-      $scope.selectInterface = function(interfaceId) {
-        $scope.interface = $scope.network.interfaces[interfaceId];
-        // Copy the interface so we know later if changes were made to the page
-        $scope.oldInterface = JSON.parse(JSON.stringify($scope.interface));
-        $scope.selectedInterface = interfaceId;
-        $scope.networkDevice = false;
-      };
-
-      $scope.addDNSField = function() {
-        $scope.interface.Nameservers.push('');
+        if ((newRow && $scope.interface.StaticNameServers == false) ||
+            !newRow) {
+          $scope.interface.StaticNameServers.push('');
+        }
       };
 
       $scope.removeDNSField = function(index) {
-        $scope.interface.Nameservers.splice(index, 1);
+        $scope.interface.StaticNameServers.splice(index, 1);
+        $scope.dnsUpdate = true;
+        $scope.updatedRow();
       };
 
       $scope.addIpv4Field = function(newRow) {
-        if ((newRow && $scope.interface.ipv4.values.length == 0) || !newRow) {
-          $scope.interface.ipv4.values.push(
-              {Address: '', PrefixLength: '', Gateway: ''});
+        $scope.editIPV4Settings[$scope.interface.IPv4Addresses.length] = true;
+        if ((newRow && $scope.interface.IPv4Addresses == false) || !newRow) {
+          $scope.interface.IPv4Addresses.push(
+              {Address: '', SubnetMask: '', Gateway: ''});
         }
       };
 
       $scope.removeIpv4Address = function(index) {
         // Check if the IPV4 being removed has an id. This indicates that it is
         // an existing address and needs to be removed in the back end.
-        if ($scope.interface.ipv4.values[index].id) {
-          $scope.ipv4sToDelete.push($scope.interface.ipv4.values[index]);
+        $scope.removeIPv4Addresses.push(index);
+
+        if ($scope.interface.IPv4Addresses[index].id) {
+          $scope.ipv4sToDelete.push($scope.interface.IPv4Addresses[index]);
         }
-        $scope.interface.ipv4.values.splice(index, 1);
+        $scope.interface.IPv4Addresses.splice(index, 1);
+        $scope.updatedipv4();
+        $scope.updatedRow();
       };
+
       $scope.updatedRow = function() {
         $scope.rowUpdate = true;
+      };
+
+      $scope.updatedDNS = function() {
+        $scope.dnsUpdate = true;
+      };
+
+      $scope.updatedipv4 = function() {
+        $scope.ipv4Update = true;
+      };
+
+      $scope.validate = function() {
+        for (let i = 0; i < $scope.interface.IPv4Addresses.length; i++) {
+          if ($scope.interface.IPv4Addresses[i]) {
+            if (!APIUtils.validIPV4IP(
+                    $scope.interface.IPv4Addresses[i].Address)) {
+              toastService.error(
+                  $scope.interface.IPv4Addresses[i].Address +
+                  ' invalid IP parameter');
+              $scope.loading = false;
+              return false;
+            }
+
+            if ($scope.interface.IPv4Addresses[i].Gateway &&
+                !APIUtils.validIPV4IP(
+                    $scope.interface.IPv4Addresses[i].Gateway)) {
+              toastService.error(
+                  $scope.interface.IPv4Addresses[i].Address +
+                  ' invalid gateway parameter');
+              $scope.loading = false;
+              return false;
+            }
+
+            if ($scope.interface.IPv4Addresses[i].SubnetMask &&
+                !APIUtils.validIPV4IP(
+                    $scope.interface.IPv4Addresses[i].SubnetMask)) {
+              toastService.error(
+                  $scope.interface.IPv4Addresses[i].Address +
+                  ' invalid subnet mask parameter');
+              $scope.loading = false;
+              return false;
+            }
+          }
+        }
+        return true;
       };
 
       $scope.setNetworkSettings = function() {
@@ -72,105 +133,93 @@ window.angular && (function(angular) {
         $scope.loading = true;
         var promises = [];
 
+        // TODO: Re-enable when MACAddress allows updating in Redfish
+        // get Base.1.4.0.InternalError
+
         // MAC Address are case-insensitive
+        /*
         if ($scope.interface.MACAddress.toLowerCase() !=
-            dataService.mac_address.toLowerCase()) {
+            $scope.oldInterface.MACAddress.toLowerCase()) {
           promises.push(setMACAddress());
         }
-        if ($scope.defaultGateway != dataService.defaultgateway) {
-          promises.push(setDefaultGateway());
+        */
+
+        // TODO: Re-enable when IPv6StaticDefaultGateways is available in
+        // Redfish (IPv6DefaultGateway is readonly)
+        /*
+        if ($scope.IPv6DefaultGateway != dataService.IPv6DefaultGateway) {
+          promises.push(setIPv6DefaultGateway());
         }
-        if ($scope.hostname != dataService.hostname) {
+        */
+
+        if ($scope.interface.HostName != $scope.dataService.hostname) {
           promises.push(setHostname());
         }
-        if ($scope.interface.DHCPEnabled != $scope.oldInterface.DHCPEnabled) {
+        if ($scope.interface.DHCPv4.DHCPEnabled !=
+            $scope.oldInterface.DHCPv4.DHCPEnabled) {
           promises.push(setDHCPEnabled());
         }
 
-        // Remove any empty strings from the array. Important because we add an
-        // empty string to the end so the user can add a new DNS server, if the
-        // user doesn't fill out the field, we don't want to add.
-        $scope.interface.Nameservers =
-            $scope.interface.Nameservers.filter(Boolean);
-        // toString() is a cheap way to compare 2 string arrays
-        if ($scope.interface.Nameservers.toString() !=
-            $scope.oldInterface.Nameservers.toString()) {
-          promises.push(setNameservers());
-        }
 
         // Set IPV4 IP Addresses, Netmask Prefix Lengths, and Gateways
-        if (!$scope.interface.DHCPEnabled) {
-          // Delete existing IPV4 addresses that were removed
-          promises.push(removeIPV4s());
-          // Update any changed IPV4 addresses and add new
-          for (var i in $scope.interface.ipv4.values) {
-            if (!APIUtils.validIPV4IP(
-                    $scope.interface.ipv4.values[i].Address)) {
-              toastService.error(
-                  $scope.interface.ipv4.values[i].Address +
-                  ' invalid IP parameter');
-              $scope.loading = false;
-              return;
-            }
-            if ($scope.interface.ipv4.values[i].Gateway &&
-                !APIUtils.validIPV4IP(
-                    $scope.interface.ipv4.values[i].Gateway)) {
-              toastService.error(
-                  $scope.interface.ipv4.values[i].Address +
-                  ' invalid gateway parameter');
-              $scope.loading = false;
-              return;
-            }
-            // The netmask prefix length will be undefined if outside range
-            if (!$scope.interface.ipv4.values[i].PrefixLength) {
-              toastService.error(
-                  $scope.interface.ipv4.values[i].Address +
-                  ' invalid Prefix Length parameter');
-              $scope.loading = false;
-              return;
-            }
-            if ($scope.interface.ipv4.values[i].updateAddress ||
-                $scope.interface.ipv4.values[i].updateGateway ||
-                $scope.interface.ipv4.values[i].updatePrefix) {
-              // If IPV4 has an id it means it already exists in the back end,
-              // and in order to update it is required to remove previous IPV4
-              // address and add new one. See openbmc/openbmc/issues/2163.
-              // TODO: update to use PUT once issue 2163 is resolved.
-              if ($scope.interface.ipv4.values[i].id) {
-                promises.push(updateIPV4(i));
-              } else {
-                promises.push(addIPV4(i));
-              }
-            }
-          }
-        }
+        $scope.validateIPV4 = $scope.validate();
+        if ($scope.validateIPV4 == true) {
+          // if ($scope.interface.DHCPv4.DHCPEnabled == false) {
+          // IPv4Addresses
+          var ipv4Count = Math.max(
+              $scope.interface.IPv4Addresses.length,
+              $scope.oldInterface.IPv4Addresses.length);
 
-        if (promises.length) {
-          $q.all(promises).then(
-              function(response) {
-                // Since an IPV4 interface (e.g. IP address, gateway, or
-                // netmask) edit is a delete then an add and the GUI can't
-                // calculate the interface id (e.g. 5c083707) beforehand and it
-                // is not returned by the REST call, openbmc#3227, reload the
-                // page after an edit, which makes a 2nd REST call. Do this for
-                // all network changes due to the possibility of a set network
-                // failing even though it returned success, openbmc#1641, and to
-                // update dataService and oldInterface to know which data has
-                // changed if the user continues to edit network settings.
-                // TODO: The reload is not ideal. Revisit this.
-                $timeout(function() {
-                  loadNetworkInfo();
-                  $scope.loading = false;
+          for (let i = 0; i < ipv4Count; i++) {
+            if ($scope.ipv4Update) {
+              promises.push(constructIPV4(i));
+            };
+          }
+          if ($scope.ipv4Update) {
+            promises.push(finalizeIPV4());
+          };
+          // };
+
+          // StaticNameServers
+          // Compare which is bigger to include all in interation
+          var dnsCount = Math.max(
+              $scope.interface.StaticNameServers.length,
+              $scope.oldInterface.StaticNameServers.length);
+          for (let i = 0; i < dnsCount; i++) {
+            if ($scope.dnsUpdate) {
+              promises.push(constructDNS(i));
+            };
+          }
+
+          if ($scope.dnsUpdate) {
+            promises.push(finalizeDNS());
+          };
+
+          if (promises.length) {
+            $q.all(promises).then(
+                function(response) {
                   toastService.success('Network settings saved');
-                }, 4000);
-              },
-              function(error) {
-                $scope.loading = false;
-                toastService.error('Network settings could not be saved');
-              })
-        } else {
-          $scope.loading = false;
-        }
+                  $scope.loading = false;
+
+
+                  $scope.dnsUpdate = false;
+                  $scope.ipv4Update = false;
+                  $scope.rowUpdate = false;
+
+                  // update values for oldInterface
+                  $scope.oldInterface =
+                      JSON.parse(JSON.stringify($scope.interface));
+                },
+                function(error) {
+                  $scope.interface =
+                      JSON.parse(JSON.stringify($scope.oldInterface));
+                  $scope.loading = false;
+                  toastService.error('Network settings could not be saved');
+                })
+          } else {
+            $scope.loading = false;
+          }
+        };
       };
 
       function setMACAddress() {
@@ -178,143 +227,205 @@ window.angular && (function(angular) {
             .setMACAddress(
                 $scope.selectedInterface, $scope.interface.MACAddress)
             .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                });
-      }
-
-      function setDefaultGateway() {
-        return APIUtils.setDefaultGateway($scope.defaultGateway)
-            .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                });
-      }
-
-      function setHostname() {
-        return APIUtils.setHostname($scope.hostname)
-            .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                });
-      }
-
-      function setDHCPEnabled() {
-        return APIUtils
-            .setDHCPEnabled(
-                $scope.selectedInterface, $scope.interface.DHCPEnabled)
-            .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                });
-      }
-
-      function setNameservers() {
-        return APIUtils
-            .setNameservers(
-                $scope.selectedInterface, $scope.interface.Nameservers)
-            .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                });
-      }
-
-      function removeIPV4s() {
-        return $scope.ipv4sToDelete.map(function(ipv4) {
-          return APIUtils.deleteIPV4($scope.selectedInterface, ipv4.id)
-              .then(
-                  function(data) {},
-                  function(error) {
-                    console.log(JSON.stringify(error));
-                    return $q.reject();
-                  })
-        });
-      }
-
-      function addIPV4(index) {
-        return APIUtils
-            .addIPV4(
-                $scope.selectedInterface,
-                $scope.interface.ipv4.values[index].Address,
-                $scope.interface.ipv4.values[index].PrefixLength,
-                $scope.interface.ipv4.values[index].Gateway)
-            .then(
-                function(data) {},
-                function(error) {
-                  console.log(JSON.stringify(error));
-                  return $q.reject();
-                })
-      }
-
-      function updateIPV4(index) {
-        // The correct way to edit an IPV4 interface is to remove it and then
-        // add a new one
-        return APIUtils
-            .deleteIPV4(
-                $scope.selectedInterface,
-                $scope.interface.ipv4.values[index].id)
-            .then(
                 function(data) {
-                  return APIUtils
-                      .addIPV4(
-                          $scope.selectedInterface,
-                          $scope.interface.ipv4.values[index].Address,
-                          $scope.interface.ipv4.values[index].PrefixLength,
-                          $scope.interface.ipv4.values[index].Gateway)
-                      .then(
-                          function(data) {},
-                          function(error) {
-                            console.log(JSON.stringify(error));
-                            return $q.reject();
-                          });
+
                 },
                 function(error) {
                   console.log(JSON.stringify(error));
                   return $q.reject();
                 });
-      }
+      };
+
+      function setIPv6DefaultGateway() {
+        return APIUtils
+            .setIPv6DefaultGateway(
+                $scope.selectedInterface, $scope.interface.IPv6DefaultGateway)
+            .then(
+                function(data) {},
+                function(error) {
+                  console.log(JSON.stringify(error));
+                  return $q.reject();
+                });
+      };
+
+      function setHostname() {
+        return APIUtils
+            .setHostname($scope.selectedInterface, $scope.interface.HostName)
+            .then(
+                function(data) {},
+                function(error) {
+                  console.log(JSON.stringify(error));
+                  return $q.reject();
+                });
+      };
+
+      function setDHCPEnabled() {
+        return APIUtils
+            .setDHCPEnabled(
+                $scope.selectedInterface, $scope.interface.DHCPv4.DHCPEnabled)
+            .then(
+                function(data) {},
+                function(error) {
+                  console.log(JSON.stringify(error));
+                  return $q.reject();
+                });
+      };
+      function constructIPV4(index) {
+        if (!$scope.oldInterface.IPv4StaticAddresses[index]) {
+          // 1: If new, put on end
+          if ($scope.interface.IPv4Addresses[index]) {
+            $scope.IPv4AddressesArray.push({
+              Address: $scope.interface.IPv4Addresses[index].Address,
+              SubnetMask: $scope.interface.IPv4Addresses[index].SubnetMask,
+              Gateway: $scope.interface.IPv4Addresses[index].Gateway
+            });
+          };
+        } else if ($scope.removeIPv4Addresses.includes(index)) {
+          // 2: If gone, change to null
+          $scope.IPv4AddressesArray.push(null);
+          // Must duplicate the current item in array to next spot in array
+          $scope.interface.IPv4Addresses.push(
+              $scope.interface.IPv4Addresses[index]);
+        } else if (
+            $scope.interface.IPv4Addresses[index].Address ==
+                $scope.oldInterface.IPv4StaticAddresses[index].Address &&
+            $scope.interface.IPv4Addresses[index].Gateway ==
+                $scope.oldInterface.IPv4StaticAddresses[index].Gateway &&
+            $scope.interface.IPv4Addresses[index].SubnetMask ==
+                $scope.oldInterface.IPv4StaticAddresses[index].SubnetMask) {
+          // 3: If same, make empty array
+          $scope.IPv4AddressesArray.push({});
+        } else if (
+            $scope.interface.IPv4Addresses[index].Address !=
+                $scope.oldInterface.IPv4StaticAddresses[index].Address ||
+            $scope.interface.IPv4Addresses[index].Gateway !=
+                $scope.oldInterface.IPv4StaticAddresses[index].Gateway ||
+            $scope.interface.IPv4Addresses[index].SubnetMask !=
+                $scope.oldInterface.IPv4StaticAddresses[index].SubnetMask) {
+          // 4: If values changed, make original null and add array item on end
+          $scope.IPv4AddressesArray.push(null);
+          $scope.toAddOnEndofArray.push(index);
+        };
+      };
+
+      function finalizeIPV4() {
+        if ($scope.ipv4Update) {
+          for (var i in $scope.toAddOnEndofArray) {
+            // Can't use AddressOrigin: Static so build this way
+            $scope.IPv4AddressesArray.push({
+              Address:
+                  $scope.interface.IPv4Addresses[$scope.toAddOnEndofArray[i]]
+                      .Address,
+              SubnetMask:
+                  $scope.interface.IPv4Addresses[$scope.toAddOnEndofArray[i]]
+                      .SubnetMask,
+              Gateway:
+                  $scope.interface.IPv4Addresses[$scope.toAddOnEndofArray[i]]
+                      .Gateway
+            });
+          };
+        };
+        return APIUtils
+            .addIPv4StaticAddress(
+                $scope.IPv4AddressesArray, $scope.selectedInterface)
+            .then(
+                function(data) {
+                  $scope.IPv4AddressesArray = [];
+                  // Remove from array
+                  for (let i = 0; i < $scope.interface.IPv4Addresses.length;
+                       i++) {
+                    if ($scope.removeIPv4Addresses.includes(i)) {
+                      $scope.interface.IPv4Addresses.splice(i, 1)
+                    };
+                  };
+                },
+                function(error) {
+                  $scope.IPv4AddressesArray = [];
+                  console.log(JSON.stringify(error));
+                  return $q.reject();
+                })
+      };
+
+      function constructDNS(index) {
+        if (!$scope.oldInterface.StaticNameServers[index]) {
+          if ($scope.interface.StaticNameServers[index]) {
+            // 1: If new, put on end
+            $scope.toAddOnEndofDNSArray.push(index);
+          };
+        } else if (!$scope.interface.StaticNameServers[index]) {
+          // 2: If gone, change to null
+        } else if (
+            $scope.interface.StaticNameServers[index] ==
+            $scope.oldInterface.StaticNameServers[index]) {
+          // 3: If same, make empty array
+          $scope.dnsServersArray.push(
+              $scope.interface.StaticNameServers[index]);
+        } else if (
+            $scope.interface.StaticNameServers[index] !=
+            $scope.oldInterface.StaticNameServers[index]) {
+          // 4: If values changed, make original null and add new array item
+          // on end
+          $scope.toAddOnEndofDNSArray.push(index);
+        };
+      };
+
+      function finalizeDNS() {
+        if ($scope.dnsUpdate) {
+          for (var i in $scope.toAddOnEndofDNSArray) {
+            $scope.dnsServersArray.splice(
+                ($scope.dnsServersArray.length), 0,
+                $scope.interface.StaticNameServers
+                    [$scope.toAddOnEndofDNSArray[i]])
+          };
+
+          return APIUtils
+              .setNameservers($scope.dnsServersArray, $scope.selectedInterface)
+              .then(
+                  function(data) {
+                    $scope.dnsServersArray = [];
+                  },
+                  function(error) {
+                    $scope.dnsServersArray = [];
+                    console.log(JSON.stringify(error));
+                    return $q.reject();
+                  })
+        };
+      };
 
       $scope.refresh = function() {
-        loadNetworkInfo();
+        $scope.interface = $scope.oldInterface;
+      };
+
+      $scope.selectInterface = function(val) {
+        $scope.filterById = val;
+
+        $scope.interface = $filter('filter')($scope.eth, $scope.filterById);
+        $scope.interface = $scope.interface[0];
+
+        $scope.oldInterface = JSON.parse(JSON.stringify($scope.interface));
       };
 
       function loadNetworkInfo() {
         APIUtils.getNetworkInfo().then(function(data) {
-          dataService.setNetworkInfo(data);
-          $scope.network = data.formatted_data;
-          $scope.hostname = data.hostname;
-          $scope.defaultGateway = data.defaultgateway;
-          if ($scope.network.interface_ids.length) {
+          $scope.eth = data;
+          if ($scope.eth[0].Id.length) {
             // Use the first network interface if the user hasn't chosen one
-            if (!$scope.selectedInterface ||
-                !$scope.network.interfaces[$scope.selectedInterface]) {
-              $scope.selectedInterface = $scope.network.interface_ids[0];
+            if (!$scope.selectedInterface) {
+              $scope.selectedInterface = $scope.eth[0].Id;
+              $scope.filterById = $scope.selectedInterface;
+              $scope.interface =
+                  $filter('filter')($scope.eth, $scope.filterById);
+              $scope.interface = $scope.interface[0];
             }
-            $scope.interface =
-                $scope.network.interfaces[$scope.selectedInterface];
+
             // Copy the interface so we know later if changes were made to the
             // page
             $scope.oldInterface = JSON.parse(JSON.stringify($scope.interface));
-          };
-          // Add id values and update flags to corresponding IPV4 objects
-          for (var i = 0; i < $scope.interface.ipv4.values.length; i++) {
-            $scope.interface.ipv4.values[i].id = $scope.interface.ipv4.ids[i];
-            $scope.interface.ipv4.values[i].updateAddress = false;
-            $scope.interface.ipv4.values[i].updateGateway = false;
-            $scope.interface.ipv4.values[i].updatePrefix = false;
+
+            $scope.loading = false;
           };
         });
-      }
+      };
     }
   ]);
 })(angular);

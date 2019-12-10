@@ -11,6 +11,9 @@ $header_Height: 50px;
   @if ($location=="page-container"){
     margin-top: $header_Height;
   }
+  @if ($location=="page-controls"){
+    top: $header_Height;
+  }
 
   @include mediaQuery(medium) {
     $header_Height: 50px;
@@ -19,6 +22,9 @@ $header_Height: 50px;
     }
     @if ($location=="page-container"){
       margin-top: $header_Height;
+    }
+    @if ($location=="page-controls"){
+      top: $header_Height;
     }
   }
 }

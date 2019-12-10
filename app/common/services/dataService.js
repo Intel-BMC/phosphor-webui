@@ -72,9 +72,11 @@ window.angular && (function(angular) {
       this.user_id = this.getUser();
 
       this.setNetworkInfo = function(data) {
-        this.hostname = data.hostname;
-        this.defaultgateway = data.defaultgateway;
-        this.mac_address = data.mac_address;
+        this.hostname = data[0].HostName;
+        // TODO: this value only is for the first ethernet connection; removed
+        // since is not used
+        // this.defaultgateway = data[0].IPv6DefaultGateway;
+        // this.mac_address = data[0].MACAddress;
       };
 
       this.setPowerOnState = function() {
