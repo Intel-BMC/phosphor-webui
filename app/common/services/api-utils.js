@@ -489,24 +489,25 @@ window.angular && (function(angular) {
               });
         },
         getLEDState: function() {
-          var deferred = $q.defer();
-          $http({
-            method: 'GET',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/led/groups/enclosure_identify',
-            withCredentials: true
-          })
-              .then(
-                  function(response) {
-                    var json = JSON.stringify(response.data);
-                    var content = JSON.parse(json);
-                    deferred.resolve(content.data.Asserted);
-                  },
-                  function(error) {
-                    console.log(error);
-                    deferred.reject(error);
-                  });
-          return deferred.promise;
+          return this.getRedfishSysName().then(function(sysName) {
+            var deferred = $q.defer();
+            $http({
+              method: 'GET',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName,
+              withCredentials: true
+            })
+                .then(
+                    function(response) {
+                      var json = JSON.stringify(response.data);
+                      var content = JSON.parse(json);
+                      deferred.resolve(content.IndicatorLED);
+                    },
+                    function(error) {
+                      console.log(error);
+                      deferred.reject(error);
+                    });
+            return deferred.promise;
+          });
         },
         login: function(username, password, callback) {
           $http({
@@ -691,13 +692,20 @@ window.angular && (function(angular) {
           });
         },
         setLEDState: function(state) {
-          return $http({
-            method: 'PUT',
-            url: DataService.getHost() +
-                '/xyz/openbmc_project/led/groups/enclosure_identify/attr/Asserted',
-            withCredentials: true,
-            data: JSON.stringify({'data': state})
-          })
+          return this.getRedfishSysName().then(function(sysName) {
+            var data = {};
+            if (state) {
+              data['IndicatorLED'] = Constants.LED_STATE_TEXT.on;
+            } else {
+              data['IndicatorLED'] = Constants.LED_STATE_TEXT.off;
+            }
+            return $http({
+              method: 'PATCH',
+              url: DataService.getHost() + '/redfish/v1/Systems/' + sysName,
+              withCredentials: true,
+              data: data
+            });
+          });
         },
         getBootOptions: function() {
           return $http({

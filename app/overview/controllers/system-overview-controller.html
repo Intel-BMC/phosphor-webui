@@ -364,7 +364,7 @@
           <div class="toggle-container">
             <div class="toggle">
               <input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat" type="checkbox"
-                tabindex="0" ng-click="toggleLED()" ng-checked="dataService.LED_state == 'on'"
+                tabindex="0" ng-click="toggleLED()" ng-checked="dataService.LED_state"
                 ng-disabled="dataService.server_unreachable" />
               <label for="toggle__switch-round" tabindex="0">
                 <span class="uid-switch__status">{{
@@ -377,7 +377,7 @@
         <div class="float-left">
           <div class="normal-text">Server ID LED</div>
           <div class="grey-small">
-            {{ dataService.LED_state == 'on' ? "On" : "Off" }}
+            {{ dataService.LED_state ? "On" : "Off" }}
           </div>
         </div>
       </div>

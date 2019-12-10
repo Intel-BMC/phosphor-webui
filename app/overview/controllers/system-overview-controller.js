@@ -46,10 +46,10 @@ window.angular && (function(angular) {
 
         var getLEDStatePromise = APIUtils.getLEDState().then(
             function(data) {
-              if (data == APIUtils.LED_STATE.on) {
-                dataService.LED_state = APIUtils.LED_STATE_TEXT.on;
+              if (data == APIUtils.LED_STATE_TEXT.on) {
+                dataService.LED_state = APIUtils.LED_STATE.on;
               } else {
-                dataService.LED_state = APIUtils.LED_STATE_TEXT.off;
+                dataService.LED_state = APIUtils.LED_STATE.off;
               }
             },
             function(error) {
@@ -122,14 +122,13 @@ window.angular && (function(angular) {
       }
 
       $scope.toggleLED = function() {
-        var toggleState =
-            (dataService.LED_state == APIUtils.LED_STATE_TEXT.on) ?
+        var toggleState = (dataService.LED_state == APIUtils.LED_STATE.on) ?
             APIUtils.LED_STATE.off :
             APIUtils.LED_STATE.on;
         dataService.LED_state =
-            (dataService.LED_state == APIUtils.LED_STATE_TEXT.on) ?
-            APIUtils.LED_STATE_TEXT.off :
-            APIUtils.LED_STATE_TEXT.on;
+            (dataService.LED_state == APIUtils.LED_STATE.on) ?
+            APIUtils.LED_STATE.off :
+            APIUtils.LED_STATE.on;
         APIUtils.setLEDState(toggleState, function(status) {});
       };
 

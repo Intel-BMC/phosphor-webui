@@ -50,7 +50,7 @@ window.angular && (function(angular) {
         unreachable: 'Unreachable'
       },
       LED_STATE: {on: true, off: false},
-      LED_STATE_TEXT: {on: 'on', off: 'off'},
+      LED_STATE_TEXT: {on: 'Lit', off: 'Off'},
       SEVERITY_TO_PRIORITY_MAP: {
         Emergency: 'High',
         Alert: 'High',
