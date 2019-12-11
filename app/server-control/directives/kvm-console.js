@@ -26,7 +26,7 @@ window.angular && (function(angular) {
                 }
               });
 
-              function sendCtrlAltDel() {
+              scope.sendCtrlAltDel = function() {
                 rfb.sendCtrlAltDel();
                 return false;
               };
