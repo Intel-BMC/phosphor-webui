@@ -122,11 +122,7 @@ window.angular && (function(angular) {
                     'Certificate must be replaced with a .pem file.');
                 return;
               }
-              var file =
-                  document
-                      .getElementById(
-                          'upload_' + certificate.Description + certificate.Id)
-                      .files[0];
+              var file = certificate.file;
               var reader = new FileReader();
               reader.onloadend = function(e) {
                 var data = {};
