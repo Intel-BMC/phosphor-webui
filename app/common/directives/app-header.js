@@ -22,60 +22,11 @@ window.angular && (function(angular) {
               $scope.page_title = data.title;
             });
 
-            try {
-              // Create a secure websocket with URL as /subscribe
-              // TODO: Need to put in a generic APIUtils to avoid duplicate
-              // controller
-              var ws = new WebSocket(
-                  'wss://' + dataService.server_id + '/subscribe');
-            } catch (error) {
-              console.log('WebSocket', error);
-            }
-
             $scope.page_title = $rootScope.page_title;
 
             $scope.$on('$routeChangeSuccess', function(event, data) {
               $scope.page_title = data.title;
             });
-
-            if (ws !== undefined) {
-              // Specify the required event details as JSON dictionary
-              var data = JSON.stringify({
-                'paths': ['/xyz/openbmc_project/state/host0'],
-                'interfaces': ['xyz.openbmc_project.State.Host']
-              });
-
-              // Send the JSON dictionary data to host
-              ws.onopen = function() {
-                ws.send(data);
-                console.log('host0 ws opened');
-              };
-
-              // Close the web socket
-              ws.onclose = function() {
-                console.log('host0 ws closed');
-              };
-
-              // Websocket event handling function which catches the
-              // current host state
-              ws.onmessage = function(evt) {
-                // Parse the response (JSON dictionary data)
-                var content = JSON.parse(evt.data);
-
-                // Fetch the current server power state
-                if (content.hasOwnProperty('properties') &&
-                    content['properties'].hasOwnProperty('CurrentHostState')) {
-                  // Refresh the host state and status
-                  // TODO: As of now not using the current host state
-                  // value for updating the data Service state rather
-                  // using it to detect the command line state change.
-                  // Tried different methods like creating a separate
-                  // function, adding ws under $scope etc.. but auto
-                  // refresh is not happening.
-                  $scope.loadServerStatus();
-                }
-              };
-            }
 
             $scope.loadServerHealth = function() {
               APIUtils.getServerStatus().then(function(result) {
@@ -111,35 +62,14 @@ window.angular && (function(angular) {
                   });
             };
 
-            $scope.loadServerStatusO = function() {
-              if (!userModel.isLoggedIn()) {
-                return;
-              }
-              APIUtils.getHostState().then(
-                  function(status) {
-                    if (status ==
-                        'xyz.openbmc_project.State.Host.HostState.Off') {
-                      dataService.setPowerOffState();
-                    } else if (
-                        status ==
-                        'xyz.openbmc_project.State.Host.HostState.Running') {
-                      dataService.setPowerOnState();
-                    } else {
-                      dataService.setErrorState();
-                    }
-                  },
-                  function(error) {
-                    console.log(error);
-                  });
-            };
-
             $scope.loadNetworkInfo = function() {
               if (!userModel.isLoggedIn()) {
                 return;
               }
-              APIUtils.getNetworkInfo().then(function(data) {
-                dataService.setNetworkInfo(data);
-              });
+              // TODO: change to Redfish then can uncomment
+              //   APIUtils.getNetworkInfo().then(function(data) {
+              //     dataService.setNetworkInfo(data);
+              //   });
             };
 
             $scope.loadSystemName = function() {
