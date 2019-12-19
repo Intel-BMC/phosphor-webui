@@ -28,22 +28,30 @@
         <label for="upload_cert_new" class="" ng-show="action=='Add'">
           <input name="uploadCertNew" id="upload_cert_new" type="file" file="newCertificate.file" class="hide" />
           <span class="btn btn-secondary">Choose a file</span>
+
+          <button type="reset" class="btn file-upload-reset" ng-if="newCertificate.file.name"
+            ng-click="newCertificate.file = '';" aria-label="remove selected file">
+            <icon file="icon-close.svg" aria-hidden="true"></icon>
+          </button>
+
           <span class="inline"><span ng-hide="newCertificate.file">No file chosen</span><span
               ng-show="newCertificate.file">{{ newCertificate.file.name }}</span></span>
         </label>
 
+
         <label for="upload_cert_replace" class="" ng-show="action=='Replace'">
           <input name="uploadCertReplace" id="upload_cert_replace" type="file" file="cert.file" class="hide" />
           <span class="btn btn-secondary">Choose a file</span>
+
+
+          <button type="reset" class="btn file-upload-reset" ng-if="cert.file.name" ng-click="cert.file = '';"
+            aria-label="remove selected file">
+            <icon file="icon-close.svg" aria-hidden="true"></icon>
+          </button>
+
           <span class="inline"><span ng-hide="cert.file">No file chosen</span><span
               ng-show="cert.file">{{ cert.file.name }}</span></span>
         </label>
-
-
-        <button type="reset" class="btn file-upload-reset" ng-if="newCertificate.file.name"
-          ng-click="newCertificate.file = '';" aria-label="remove selected file">
-          <icon file="icon-close.svg" aria-hidden="true"></icon>
-        </button>
 
       </div>
     </div>

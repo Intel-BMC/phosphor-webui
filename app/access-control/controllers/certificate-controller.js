@@ -129,75 +129,6 @@ window.angular && (function(angular) {
         }
       };
 
-      // add optional name
-      $scope.names = [];
-      $scope.addOptionalRow = function() {
-        $scope.names.push({Value: ''})
-      };
-
-      // remove optional name row
-      $scope.deleteOptionalRow = function(index) {
-        $scope.names.splice(index, 1);
-        if ($scope.names.length == 0) {
-          $scope.names = [];
-        }
-      };
-
-      // create a CSR object to send to the backend
-      $scope.getCSRCode = function() {
-        var addCSR = {};
-        let alternativeNames = $scope.names.map(name => name.Value);
-
-        // if user provided a first alternative name then push to alternative
-        // names array
-        $scope.newCSR.firstAlternativeName ?
-            alternativeNames.push($scope.newCSR.firstAlternativeName) :
-            $scope.newCSR.firstAlternativeName = '';
-
-        addCSR.CertificateCollection = {
-          '@odata.id': $scope.newCSR.certificateCollection.location
-        };
-        addCSR.CommonName = $scope.newCSR.commonName;
-        addCSR.ContactPerson = $scope.newCSR.contactPerson || '';
-        addCSR.City = $scope.newCSR.city;
-        addCSR.AlternativeNames = alternativeNames || [];
-        addCSR.ChallengePassword = $scope.newCSR.challengePassword || '';
-        addCSR.Email = $scope.newCSR.emailAddress || '';
-        addCSR.Country = $scope.newCSR.countryCode.code;
-        addCSR.Organization = $scope.newCSR.organization;
-        addCSR.OrganizationalUnit = $scope.newCSR.companyUnit;
-        addCSR.KeyCurveId = $scope.newCSR.keyCurveId || '';
-        addCSR.KeyBitLength = $scope.newCSR.keyBitLength
-        addCSR.KeyPairAlgorithm = $scope.newCSR.keyPairAlgorithm || '';
-        addCSR.State = $scope.newCSR.state;
-
-        APIUtils.createCSRCertificate(addCSR).then(
-            function(data) {
-              $scope.csrCode = data;
-              openDownloadCsrModal();
-            },
-            function(error) {
-              toastService.error('Unable to generate CSR. Try again.');
-              console.log(JSON.stringify(error));
-            })
-      };
-
-      function openDownloadCsrModal() {
-        const modalTemplateCsrDownload =
-            require('./certificate-modal-csr-download.html');
-        $uibModal
-            .open({
-              template: modalTemplateCsrDownload,
-              windowTopClass: 'uib-modal',
-              scope: $scope,
-              ariaLabelledBy: 'modal_label',
-              size: 'lg',
-            })
-            .result.catch(function() {
-              resetCSRModal();
-            });
-      };
-
       $scope.addCertModal = function(action) {
         openAddCertModal(action);
       };
@@ -216,45 +147,6 @@ window.angular && (function(angular) {
             .result.catch(function() {
               // do nothing
             });
-      };
-
-      $scope.addCsrModal = function() {
-        openCsrModal();
-      };
-
-      function openCsrModal() {
-        const modalTemplateCsrGen = require('./certificate-modal-csr-gen.html');
-        $uibModal
-            .open({
-              template: modalTemplateCsrGen,
-              windowTopClass: 'uib-modal',
-              scope: $scope,
-              ariaLabelledBy: 'modal_label',
-              size: 'lg',
-            })
-            .result.catch(function() {
-              resetCSRModal();
-            });
-      };
-
-      // resetting the modal when user clicks cancel/closes the
-      // modal
-      const resetCSRModal = function() {
-        $scope.newCSR.certificateCollection = $scope.selectOption;
-        $scope.newCSR.commonName = '';
-        $scope.newCSR.contactPerson = '';
-        $scope.newCSR.city = '';
-        $scope.names = [];
-        $scope.newCSR.challengePassword = '';
-        $scope.newCSR.emailAddress = '';
-        $scope.newCSR.countryCode = '';
-        $scope.newCSR.keyCurveId = '';
-        $scope.newCSR.firstAlternativeName = '';
-        $scope.newCSR.keyBitLength = $scope.selectOption;
-        $scope.newCSR.keyPairAlgorithm = $scope.selectOption;
-        $scope.newCSR.organization = '';
-        $scope.newCSR.companyUnit = '';
-        $scope.newCSR.state = '';
       };
 
       // copies the CSR code
