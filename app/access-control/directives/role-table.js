@@ -22,7 +22,7 @@ window.angular && (function(angular) {
 
           this.tableHeader = [
             {label: ''}, {label: 'Admin'}, {label: 'Operator'},
-            {label: 'ReadOnly'}, {label: 'Callback'}
+            {label: 'ReadOnly'}
           ];
 
           // TODO: When API changed from D-Bus to Redfish, 'Operator' role
@@ -36,27 +36,24 @@ window.angular && (function(angular) {
           this.tableData = [
             {
               uiData: [
-                'Configure components managed by this service', check, '', '',
-                ''
+                'Configure components managed by this service', check, '', ''
               ]
             },
-            {uiData: ['Configure manager resources', check, '', '', '']},
+            {uiData: ['Configure manager resources', check, '', '']},
+            {
+              uiData:
+                  ['Update password for current user account', check, '', '']
+            },
+            {uiData: ['Configure users and their accounts', check, '', '']},
             {
               uiData: [
-                'Update password for current user account', check, '', '', ''
+                'Log in to the service and read resources', check, check, check
               ]
             },
-            {uiData: ['Configure users and their accounts', check, '', '', '']},
-            {
-              uiData: [
-                'Log in to the service and read resources', check, check, check,
-                check
-              ]
-            },
-            {uiData: ['IPMI access point', check, check, check, check]},
-            {uiData: ['Redfish access point', check, check, check, check]},
-            {uiData: ['SSH access point', check, check, check, check]},
-            {uiData: ['WebUI access point', check, check, check, check]},
+            {uiData: ['IPMI access point', check, check, check]},
+            {uiData: ['Redfish access point', check, check, check]},
+            {uiData: ['SSH access point', check, check, check]},
+            {uiData: ['WebUI access point', check, check, check]},
           ];
 
           this.isCollapsed = true;

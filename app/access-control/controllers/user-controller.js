@@ -10,12 +10,13 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.accessControl').controller('userController', [
-    '$scope', 'APIUtils', 'toastService', '$uibModal', '$q',
-    function($scope, APIUtils, toastService, $uibModal, $q) {
+    '$scope', 'APIUtils', 'toastService', 'Constants', '$uibModal', '$q',
+    function($scope, APIUtils, toastService, Constants, $uibModal, $q) {
       $scope.loading;
       $scope.accountSettings;
       $scope.userRoles;
       $scope.localUsers;
+      $scope.removeUserAccessRole = Constants.RESTRICTED_USER_ACCESS_ROLE;
 
       $scope.tableData = [];
       $scope.tableHeader = [
@@ -107,6 +108,9 @@ window.angular && (function(angular) {
         APIUtils.getAccountServiceRoles()
             .then((roles) => {
               $scope.userRoles = roles;
+              // Remove 'No Access' as user role option
+              $scope.userRoles.splice(
+                  $scope.userRoles.indexOf($scope.removeUserAccessRole), 1);
             })
             .catch((error) => {
               console.log(JSON.stringify(error));

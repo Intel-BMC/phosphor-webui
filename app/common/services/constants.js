@@ -94,6 +94,7 @@ window.angular && (function(angular) {
         'xyz.openbmc_project.Sensor.Value.Unit.Meters'
       ],
       SENSOR_SORT_ORDER_DEFAULT: 8,
+      RESTRICTED_USER_ACCESS_ROLE: 'NoAccess',
       FIRMWARE: {
         ACTIVATE_FIRMWARE:
             'xyz.openbmc_project.Software.Activation.RequestedActivations.Active',
