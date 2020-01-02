@@ -193,12 +193,10 @@ window.angular && (function(angular) {
                             $scope.showDetails = false;
           })
 
-
           $scope.clear = function() {
             $scope.customSearch = '';
             $scope.searchTerms = [];
           };
-
 
 
           $scope.doSearchOnEnter = function(event) {
@@ -244,10 +242,18 @@ window.angular && (function(angular) {
 
           $scope.filterByDate = function(log) {
             var logDate = new Date(log.Created);
-            if ($scope.start_date && $scope.end_date) {
+
+            // Set time to 0
+            $scope.filteredStartDate = new Date($scope.start_date.value);
+            $scope.filteredStartDate.setHours(0, 0, 0, 0);
+
+            $scope.filteredEndDate = new Date($scope.end_date.value);
+            $scope.filteredEndDate.setHours(23, 59, 59, 999);
+
+            if ($scope.filteredStartDate && $scope.filteredEndDate) {
               return (
-                  logDate >= $scope.start_date.value &&
-                  logDate <= $scope.end_date.value);
+                  logDate >= $scope.filteredStartDate &&
+                  logDate <= $scope.filteredEndDate);
             } else {
               return true;
             }
