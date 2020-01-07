@@ -12,6 +12,7 @@ window.angular && (function(angular) {
   angular.module('app.configuration').controller('dateTimeController', [
     '$scope', 'APIUtils', '$filter', '$route', '$q', 'toastService', '$timeout',
     function($scope, APIUtils, $filter, $route, $q, toastService, $timeout) {
+      $scope.editNTPSettings = [];
       $scope.ntp = {servers: []};
       $scope.editNTPSettings = {};
       $scope.use = 'Server';
@@ -67,7 +68,7 @@ window.angular && (function(angular) {
       };
 
       $scope.refresh = function() {
-        $route.reload();
+        //  $route.reload();
       };
 
       $scope.updatedRow = function() {
@@ -82,6 +83,7 @@ window.angular && (function(angular) {
       };
 
       $scope.removeNTPField = function(index) {
+        $scope.updatedRow();
         $scope.ntp.servers.splice(index, 1);
       };
 

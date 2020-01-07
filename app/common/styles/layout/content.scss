@@ -42,6 +42,12 @@
   font-size:12px;
 }
 
+.first-section{
+  &.highlighted{
+  padding-top: 50px;
+  }
+}
+
 .content__container{
   background-image: url('../assets/images/logo-OpenBmc-builton.svg');
   background-position: bottom 8px right 50px;

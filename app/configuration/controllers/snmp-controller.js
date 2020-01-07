@@ -15,7 +15,7 @@ window.angular && (function(angular) {
       $scope.managers = [];
       $scope.loading = true;
       $scope.managersToDelete = [];
-      $scope.editSNMPSettings = true;
+      $scope.editSNMPSettings = false;
 
       var getSNMPManagers = APIUtils.getSNMPManagers().then(
           function(data) {
@@ -108,7 +108,7 @@ window.angular && (function(angular) {
             .then(
                 function() {
                   $scope.refresh();
-                  $scope.editSNMPSettings = false;
+                  $scope.editSNMPSettings = true;
                   toastService.success('SNMP settings have been saved.');
                 },
                 function(errors) {

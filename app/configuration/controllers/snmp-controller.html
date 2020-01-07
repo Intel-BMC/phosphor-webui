@@ -1,13 +1,25 @@
 <loader loading="loading"></loader>
 <div id="configuration-snmp">
-  <div class="float-right padding">
-    <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;refresh()">Reset</button>
-    <button type="button" class="btn btn-tertiary" ng-click="submitted=true;  snmp__form.$valid && setSNMP();"
-      ng-class="rowUpdate ? 'highlighted' : ''">Save
-      Page Settings</button>
-  </div>
 
   <section class="columns col-12">
+    <div class="page-controls" ng-class="{'highlighted' : rowUpdate, 'collapsed' : $root.toggleNavState}">
+      <button type="button" class="offset-close float-left btn btn--close" ng-click="rowUpdate=false;dismiss=true"
+        aria-label="close">
+        <icon file="icon-close.svg" aria-hidden="true"></icon>
+      </button>
+
+      <p class="float-left trim-text-medium">Click "Save Page Settings" to save all changes.</p>
+
+      <div class="float-right padding">
+        <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;dismiss=false;refresh()">Reset</button>
+        <button type="button" class="btn btn-tertiary" ng-click="submitted=true;  snmp__form.$valid && setSNMP();"
+          ng-class="(rowUpdate || dismiss) ? 'highlighted' : ''" ng-disabled="!rowUpdate && !dismiss">Save
+          Page Settings</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="columns col-12  first-section" ng-class="{'highlighted': rowUpdate}">
     <form id="snmp__form" name="snmp__form" novalidate>
       <div class="page-content-box">
         <h5>Simple Network Management Protocol (SNMP) Managers</h5>
@@ -21,21 +33,24 @@
             </div>
           </div>
           <div class="table__body">
-            <div class="table__row" ng-repeat="manager in managers track by $index">
+            <div class="table__row" ng-class="editSNMPSettings ? 'showborders' : 'hideborders'"
+              ng-repeat="manager in managers track by $index">
               <div class="table__cell">
-                <input ng-class="!editSNMPSettings ? 'showborders' : 'hideborders'"
+                <input ng-class="editSNMPSettings ? 'showborders' : 'hideborders'"
                   id="snmp-manager{{ $index + 1 }}-address" name="snmp-manager{{ $index + 1 }}-address" type="text"
-                  ng-change="manager.updateAddress=true" ng-model="manager.address" required />
+                  ng-change="manager.updateAddress=true" ng-model="manager.address" required
+                  ng-disabled="!editSNMPSettings" />
                 <div ng-messages="manager_group['snmp-manager'+($index+1)+'-address'].$error" class="form-error"
-                  ng-class="{'visible': manager_group['snmp-manager'+($index+1)+'-address'].$touched || submitted}">
-                  <p ng-message="required" role="alert">Field is required</p>
+                  ng-class="{'visible': manager_group['snmp-manager'+($index+1)+'-address'].$touched || submitted}"">
+                  <p ng-message=" required" role="alert">Field is required</p>
                 </div>
               </div>
               <div class="table__cell">
-                <input ng-class="!editSNMPSettings ? 'showborders' : 'hideborders'"
+                <input ng-class="editSNMPSettings ? 'showborders' : 'hideborders'"
                   id="snmp-manager{{ $index + 1 }}-port" name="snmp-manager{{ $index + 1 }}-port" type="number" min="0"
-                  max="65535" step="1" ng-change="manager.updatePort=true" ng-model="manager.port" required />
-                <div ng-messages="manager_group['snmp-manager'+($index+1)+'-port'].$error" class="form-error"
+                  max="65535" step="1" ng-change="manager.updatePort=true" ng-model="manager.port" required
+                  ng-disabled="!editSNMPSettings" />
+                <div ng-messages=" manager_group['snmp-manager'+($index+1)+'-port'].$error" class="form-error"
                   ng-class="{'visible': manager_group['snmp-manager'+($index+1)+'-port'].$touched || submitted}">
                   <p ng-message="required" role="alert">Value must be between 0 - 65,535</p>
                 </div>
@@ -43,17 +58,18 @@
               <div class="table__cell action-wrapper">
 
                 <div class="bmc-table__row-actions ng-scope">
-                  <button ng-disabled="!manager.port || !manager.address" ng-show="!editSNMPSettings"
-                    class="btn btn-primary btn-small" ng-click="editSNMPSettings=true;updatedRow()">
+                  <button ng-disabled="!manager.port || !manager.address" ng-show="editSNMPSettings"
+                    class="btn btn-primary btn-small" ng-click="editSNMPSettings=false;updatedRow()">
                     <icon alt="Complete" title="Complete" file="icon-check.svg" aria-hidden="true"></icon>
                   </button>
-                  <button ng-show="editSNMPSettings" class="btn btn-primary btn-small"
-                    ng-click="editSNMPSettings=false">
+                  <button ng-show="!editSNMPSettings" class="btn btn-primary btn-small"
+                    ng-click="editSNMPSettings=true">
                     <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
                   </button>
-                  <button class="btn btn-primary btn-small" ng-click="removeSNMPManager($index);updatedRow()">
+                  <button ng-show="editSNMPSettings" class="btn btn-primary btn-small"
+                    ng-click="removeSNMPManager($index);updatedRow()">
                     <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
-                  </button>
+                  </button ng-show="!editSNMPSettings">
                 </div>
 
               </div>
@@ -67,7 +83,7 @@
         </div>
 
         <div>
-          <button ng-click="editSNMPSettings=false;submitted=false; addNewSNMPManager();" class="btn-icon">
+          <button ng-click="editSNMPSettings=true;submitted=false; addNewSNMPManager();" class="btn-icon">
             <icon file="add--alt.svg" aria-hidden="true"></icon>
             Add Manager
           </button>
@@ -76,5 +92,16 @@
       </div>
     </form>
   </section>
+
+
+  <div class="float-right padding" ng-class="rowUpdate ? 'highlighted' : ''">
+    <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;dismiss=false;refresh()">Reset</button>
+    <button type="button" class="btn btn-tertiary" ng-click="submitted=true;  snmp__form.$valid && setSNMP();"
+      ng-class="(rowUpdate || dismiss) ? 'highlighted' : ''" ng-disabled="!rowUpdate && !dismiss">
+      Save Page Settings
+    </button>
+  </div>
+
+
   <br clear="all">
 </div>

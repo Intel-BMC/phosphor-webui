@@ -17,7 +17,6 @@
 /* FORM STYLE */
 input[type='email'], input[type='number'], input[type='password'], input[type='search'], input[type='tel'], input[type='url'], input[type='text'], input[type='date'], input[type='time'], textarea {
   @include form-inputs("");
- // border-color: transparent;
   margin:0;
   color: $color--grey-100;
   &:focus{
@@ -61,7 +60,7 @@ input[type="date"] {
 input[type='text'],input[type='number']{
   &.hideborders{
     border: 0;
-    background: none;
+    background-color: #f8fbfe !important;
     outline: 0;
     box-shadow: none;
     text-overflow: ellipsis;
@@ -71,6 +70,13 @@ input[type='text'],input[type='number']{
   }
   &.showborders{
     text-align: center;
+  }
+}
+
+//Hides autofill background for inline editing fields
+input:-webkit-autofill,input[type='text']:-webkit-autofill, input[type='number']:-webkit-autofill {
+  &.hideborders{
+  -webkit-box-shadow:0 0 0 50px #f8fbfe inset;
   }
 }
 
@@ -604,4 +610,8 @@ textarea[readonly],input[type='number']:disabled {
   border-color: $color--grey-30;
   box-shadow: 0 0 0 0;
   color: #88898a;
+  &.hideborders{
+    border: 0;
+    color: #000000;
+  }
 }

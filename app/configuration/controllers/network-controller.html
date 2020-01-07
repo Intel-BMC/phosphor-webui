@@ -54,18 +54,18 @@
           </div>
         </div>
         <div class="table__body">
-          <div class="table__row">
+          <div class="table__row" ng-class="editCommonSettings ? 'showborders' : 'hideborders'">
             <div class="table__cell">
               <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__mac" type="text"
-                ng-model="interface.HostName" />
+                ng-model="interface.HostName" ng-disabled="!editCommonSettings" />
             </div>
             <div class="table__cell">
               <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__host" type="text"
-                ng-model="interface.MACAddress" />
+                ng-model="interface.MACAddress" ng-disabled="!editCommonSettings" />
             </div>
             <div class="table__cell">
               <input ng-class="editCommonSettings ? 'showborders' : 'hideborders'" id="net-config__domain" type="text"
-                ng-model="interface.IPv6DefaultGateway" />
+                ng-model="interface.IPv6DefaultGateway" ng-disabled="!editCommonSettings" />
             </div>
             <div class="table__cell action-wrapper">
 
@@ -131,15 +131,18 @@
             ng-repeat="ipv4 in interface.IPv4Addresses track by $index">
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" ng-model="ipv4.Address" ng-disabled="interface.DHCPv4.DHCPEnabled" />
+                type="text" ng-model="ipv4.Address"
+                ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" value="" ng-model="ipv4.Gateway" ng-disabled="interface.DHCPv4.DHCPEnabled" />
+                type="text" value="" ng-model="ipv4.Gateway"
+                ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" ng-model="ipv4.SubnetMask" ng-disabled="interface.DHCPv4.DHCPEnabled" />
+                type="text" ng-model="ipv4.SubnetMask"
+                ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell action-wrapper">
 
@@ -190,7 +193,7 @@
           </div>
         </div>
         <div class="table__body">
-          <div class="table__row" ng-class="!editDNSSettings[$index] ? 'hideborders' : 'showborders'"
+          <div class="table__row" ng-class="!editDNSSettings ? 'showborders' : 'hideborders'"
             ng-repeat="dns in interface.StaticNameServers track by $index">
             <div class="table__cell">{{$index+1}}
             </div>
@@ -198,7 +201,8 @@
             <div class="table__cell">
               <input ng-class="!editDNSSettings[$index] ? 'hideborders' : 'showborders'"
                 id="net-config__prime-dns{{$index+1}}" type="text" ng-model="dns" ng-change="updatedDNS()"
-                ng-blur="interface.StaticNameServers[$index] = dns" set-focus-on-new-input />
+                ng-blur="interface.StaticNameServers[$index] = dns" set-focus-on-new-input
+                ng-disabled="!editDNSSettings[$index]" />
             </div>
 
             <div class="table__cell action-wrapper">
