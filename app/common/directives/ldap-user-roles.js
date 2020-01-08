@@ -193,9 +193,13 @@ window.angular && (function(angular) {
               });
             };
 
-            $scope.sortBy = (propertyName, isReverse) => {
-              $scope.reverse = isReverse;
-              $scope.sortPropertyName = propertyName;
+            $scope.sortBy = function(keyname) {
+              $scope.reverse =
+                  (keyname !== null && $scope.keyname === keyname) ?
+                  !$scope.reverse :
+                  false;
+              $scope.keyname = keyname;
+              $scope.sortPropertyName = keyname;
             };
           }
         ]

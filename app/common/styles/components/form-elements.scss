@@ -349,7 +349,6 @@ label.dropdown-label {
 /* Disabled state */
 .control-radio input:disabled ~ .control__indicator{
   pointer-events: none;
-  opacity: .6;
   background: $base-02--04;
   border: 1px solid $border-color-01;
 }
@@ -442,6 +441,17 @@ label.dropdown-label {
   font-size:1.7em;
   padding: 5px;
   color: $color--grey-90;
+}
+
+.form-message{
+  margin-bottom: .7em;
+  font-size: 0.8rem;
+  height: 1rem;
+  display: block;
+  visibility: hidden;
+  .visible {
+    visibility: visible;
+  }
 }
 
 .form-error {

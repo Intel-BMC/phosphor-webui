@@ -114,20 +114,20 @@
         </ul>
       </li>
       <li class="nav-item" ng-class="{opened: firstLevel == 'access-control'}">
-        <button class="btn-users" ng-click="change('access-control'); RedirectToURL('/access-control/ldap')">
+        <button class="btn-users" ng-click="change('access-control'); RedirectToURL('/access-control/local-users')">
           <icon class="nav-icon" file="icon-user.svg" aria-hidden="true"></icon>
           <span class="nav-link">Access</span>
         </button>
         <ul class="nav__second-level btn-users" ng-style="navStyle"
           ng-class="{opened: (showSubMenu && firstLevel == 'access-control')}">
-          <li ng-class="{'active': (path == '/access-control' || path == '/access-control/ldap')}">
-            <a href="#/access-control/ldap"
-              tabindex="{{(showSubMenu && firstLevel == 'access-control') ? 0 : -1}}"><span>LDAP</span></a>
-          </li>
           <li ng-class="{'active': (path == '/access-control' || path == '/access-control/local-users')}">
             <a href="#/access-control/local-users"
               tabindex="{{(showSubMenu && firstLevel == 'access-control') ? 0 : -1}}"><span>Local
                 users</span></a>
+          </li>
+          <li ng-class="{'active': (path == '/access-control' || path == '/access-control/ldap')}">
+            <a href="#/access-control/ldap"
+              tabindex="{{(showSubMenu && firstLevel == 'access-control') ? 0 : -1}}"><span>LDAP</span></a>
           </li>
           <li ng-class="{'active': (path == '/access-control' || path == '/access-control/ssl-certificates')}">
             <a href="#/access-control/ssl-certificates"
