@@ -21,9 +21,7 @@ window.angular && ((angular) => {
           return;
         }
         const svg = require(`../../assets/icons/${file}`);
-        element.html(svg);
-        // required for local environment
-        // element.html('<img src="' + svg + '">');
+        element.html('<img src="' + svg + '">');
         element.addClass('icon');
       }
     };
