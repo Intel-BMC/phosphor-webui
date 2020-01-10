@@ -1,14 +1,12 @@
 <div id="led-switch">
 
-  <section class="page-content-box">
+  <section class="page-content-box padding">
     <div class="column" ng-class="{disabled: dataService.server_unreachable || dataService.loading}">
-      <div class="led-switch__label">
-        <p>
-          Turn the LED light on or off.
-        </p>
-        <p class="helper-text">If the server has an LCD, use this control
-          to display text (on) or not to display text (off) on the LCD.</p>
-      </div>
+      <h5>
+        Turn the LED light on or off
+      </h5>
+      <p class="helper-text">If the server has an LCD, use this control
+        to display text (on) or not to display text (off) on the LCD.</p>
       <div class="toggle-container">
         <div class="toggle">
           <input id="toggle__switch-round" class="toggle-switch toggle-switch__round-flat" type="checkbox" tabindex="0"

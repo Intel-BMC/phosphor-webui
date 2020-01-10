@@ -16,25 +16,25 @@ window.angular && (function(angular) {
         function($routeProvider) {
           $routeProvider
               .when('/configuration/network', {
-                title: 'Network Settings',
+                title: 'Network',
                 'template': require('./controllers/network-controller.html'),
                 'controller': 'networkController',
                 authenticated: true
               })
               .when('/configuration/date-time', {
-                title: 'Date and Time',
+                title: 'Date Settings',
                 'template': require('./controllers/date-time-controller.html'),
                 'controller': 'dateTimeController',
                 authenticated: true
               })
               .when('/configuration', {
-                title: 'Network Settings',
+                title: 'Network',
                 'template': require('./controllers/network-controller.html'),
                 'controller': 'networkController',
                 authenticated: true
               })
               .when('/configuration/snmp', {
-                title: 'SNMP Settings',
+                title: 'SNMP',
                 'template': require('./controllers/snmp-controller.html'),
                 'controller': 'snmpController',
                 authenticated: true

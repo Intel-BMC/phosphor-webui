@@ -60,9 +60,6 @@ $loginfield-max-width: 310px;
     @include greyFilter;
 }
 
-.input-ip.input-wrapper::before{
-  background-image: url(../assets/icons/icon-ipfield.svg);
-}
 .input-login.input-wrapper::before{
   background-image: url(../assets/icons/icon-user.svg);
 }
