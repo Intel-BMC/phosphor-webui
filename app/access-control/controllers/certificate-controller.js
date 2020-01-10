@@ -163,7 +163,7 @@ window.angular && (function(angular) {
 
       var getBmcTime = function() {
         APIUtils.getBMCTime().then(function(data) {
-          $scope.bmcTime = data.Elapsed;
+          $scope.bmcTime = data.DateTime;
         });
 
         return $scope.bmcTime;
