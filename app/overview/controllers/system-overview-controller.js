@@ -135,6 +135,7 @@ window.angular && (function(angular) {
       /************* GET EVENT LOGS **************/
       $scope.iterateBackwards = false;
       $scope.loadInitial = false;
+      $scope.eventLoading = true;
       $scope.sysLogs = [];
       $scope.outputCount = 1000;
       $scope.logDetailQuantity = 25;
@@ -174,7 +175,7 @@ window.angular && (function(angular) {
             .then(
                 function(res) {
                   $scope.sysLogs = [].concat($scope.sysLogs, res);
-                  $scope.loading = false;
+                  $scope.eventLoading = false;
                 },
                 function(error) {
                   console.log(JSON.stringify(error));
@@ -618,7 +619,7 @@ window.angular && (function(angular) {
 
         if ($scope.countWarning > 0 || $scope.countCritical > 0) {
           $scope.sensorsOutofRange = true;
-          $scope.sensorHeading = 'Sensors Out of Range';
+          $scope.sensorHeading = 'Out of Range';
         } else {
           $scope.filterSeverity = 'all';
           $scope.sensorHeading = 'Sensors Detail';

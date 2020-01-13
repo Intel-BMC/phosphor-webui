@@ -47,6 +47,9 @@
   @include page-boxcorners;
   @include page-spaceafter;
   @include page-boxformatting;
+  &.center{
+    text-align: center;
+  }
 }
 
 .page-content-rnd{
@@ -107,6 +110,15 @@
     padding: 15px 0 15px 0;
    }
  }
+
+  .individual-component-loader{
+    color: $color--blue-50;
+  }
+
+  .spinner-border{
+    width: 3rem;
+    height: 3rem;
+  }
 
  .offset-close{
   @include greyFilter;

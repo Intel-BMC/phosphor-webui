@@ -91,6 +91,12 @@ dd {
   &.no-footer{
     max-height:285px;
   }
+  transition: all .3s linear;
+}
+.row-1 .overview-box-height{
+  min-height: 322px;
+  max-height: 322px;
+  overflow: hidden;
 }
 
 .row-2 .overview-box-body{
@@ -101,9 +107,16 @@ dd {
     overflow-y: auto;
   }
   &.no-footer{
-    height:296px;
-    max-height:296px;
+    height:287px;
+    max-height:287px;
   }
+  transition: all .3s linear;
+}
+
+.row-2 .overview-box-height{
+  min-height: 348px;
+  max-height: 348px;
+  overflow: hidden;
 }
 
 /* Sensors Detail */
@@ -454,6 +467,11 @@ dd {
 
 /* Event Log */
 #event-detail{
+
+  .overview-box-heading{
+    margin-bottom: 0;
+  }
+
   .status-icon {
     background-size: 2em;
     max-width:20px;
@@ -694,7 +712,7 @@ dd {
   }
   .icon-wrapper{
     width: 45px;
-    height: 35px;
+    //height: 35px;
     margin: 10px auto 0 auto;
     overflow:hidden;
     .icon,svg,img{
