@@ -159,7 +159,9 @@ window.angular && (function(angular) {
           $scope.sortBySeverity = function() {
             $scope.reverseSeverity = !$scope.reverseSeverity;
             $scope.sortKey = true;
-            $scope.orderDatabySeverity($scope.log.severity);
+            if ($scope.log) {
+              $scope.orderDatabySeverity($scope.log.severity);
+            };
           };
 
           $scope.toggleSeverity = function(severity) {
