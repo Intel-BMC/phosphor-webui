@@ -77,6 +77,43 @@
   }
 }
 
+.page-controls{
+   transform: scaleY(0);
+   transform-origin: 0 0;
+   transition: all .8s ease-in-out;
+   position: fixed;
+   margin-top:-100px;
+   z-index: 1;
+   display: block;
+   background-color: #f2f7fe;
+   height: 54px;
+   border-bottom: 1px solid $color--blue-30;
+   right: 0;
+   @include header-height(page-controls);
+   @include nav-width(second-level-navigation,false);
+   padding-right: 1rem;
+   padding-left: 1rem;
+   opacity: .9;
+   &.highlighted{
+     transform: scaleY(1);
+     margin-top:0;
+     transform-origin: top;
+     transition: all .8s ease-in-out;
+     &.collapsed{
+      @include nav-width(second-level-navigation,true);
+    }
+   }
+   p{
+    padding: 15px 0 15px 0;
+   }
+ }
+
+ .offset-close{
+  @include greyFilter;
+  padding: 17px;
+  padding-right: 0;
+ }
+
 .right-border{
   border-right: 1px solid $color--grey-90;
 }

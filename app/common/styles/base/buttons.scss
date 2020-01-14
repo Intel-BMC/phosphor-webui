@@ -19,7 +19,8 @@ $btn-tertiary__bg--hover: $color--blue-30;
 $btn-tertiary__border: $color--blue-20;
 $btn-tertiary__txt: #ffffff;
 $btn-tertiary__txt--hover: #ffffff;
-$btn-tertiary__txt--disabled: $base-02--03;
+$btn-tertiary__bg--disabled: $base-02--04;
+$btn-tertiary__txt--disabled: #ffffff;
 
 @mixin resize-button($size){
   @if ($size=="x-small") {
@@ -190,7 +191,7 @@ optional actions given on a page.
 ***/
 .btn-tertiary {
   background-color: $btn-tertiary__bg;
-  border: 1px solid $btn-tertiary__border;
+  border: 0px solid $btn-tertiary__border;
   color: $btn-tertiary__txt;
   padding: 1em;
   border-radius: 0;
@@ -211,6 +212,7 @@ optional actions given on a page.
   &[disabled],
   &.disabled {
     color: $btn-tertiary__txt--disabled;
+    background-color: $btn-tertiary__bg--disabled;
     .icon {
       fill: $btn-tertiary__txt--disabled;
     }

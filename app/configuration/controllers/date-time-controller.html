@@ -2,92 +2,120 @@
 <div id="configuration-date-time">
   <form class="time__form" role="form" action="">
 
-    <div class="float-right padding">
-      <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;refresh()">Reset</button>
-      <button type="button" class="btn btn-tertiary" ng-click="saveDateTimeSettings()"
-        ng-class="rowUpdate ? 'highlighted' : ''">Save Page Settings</button>
-    </div>
+    <section class="columns col-12">
+      <div class="page-controls" ng-class="{'highlighted' : rowUpdate, 'collapsed' : $root.toggleNavState}">
+        <button type="button" class="offset-close float-left btn btn--close" ng-click="rowUpdate=false;dismiss=true"
+          aria-label="close">
+          <icon file="icon-close.svg" aria-hidden="true"></icon>
+        </button>
 
-    <br clear="all">
-    <div class="row">
+        <p class="float-left trim-text-medium">Click "Save Page Settings" to save all<span
+            class="inline trim-text-large">
+            changes</span>.</p>
 
-      <div class="columns col-md-12 col-sm-12">
+        <div class="float-right padding">
+          <button type="button" class="btn btn-tertiary"
+            ng-click="rowUpdate=false;dismiss=false;refresh()">Reset</button>
+          <button type="button" class="btn btn-tertiary"
+            ng-disabled="!rowUpdate && !dismiss && ((ntp.servers.length == 0) && (use == 'NTP'))"
+            ng-click="saveDateTimeSettings()"
+            ng-class="((ntp.servers.length == 0) && (use == 'NTP')) ? 'disabled' : (rowUpdate || dismiss) ? 'highlighted' : ''">Save
+            Page
+            Settings</button>
+        </div>
+      </div>
+    </section>
 
-        <div class="page-content-box">
-          <legend>Date and time configuration:</legend>
-          <div class="row">
-            <label class="control-radio indent" for="ntp-time">Obtain Automatically from a Network Time Protocol (NTP)
-              Server
-              <input type="radio" id="ntp-time" ng-model="time.mode" value="NTP">
-              <span class="control__indicator control__indicator-on"></span>
-            </label>
+    <section class="columns col-md-12 col-sm-12 first-section" ng-class="{'highlighted': rowUpdate}">
 
-            <div class="page-content-rnd slide-in" ng-class="time.mode == 'NTP' ? 'opened' : ''"
-              ng-show="time.mode == 'NTP'">
-              <h5>NTP Servers</h5>
-              <div class="table row column dns-settings" ng-show="ntp.servers.length > 0">
-                <div class="table__head fixed-table-header">
-                  <div class="table__row">
-                    <div class="table__cell">Entry</div>
-                    <div class="table__cell">NTP Server</div>
-                    <div class="table__cell action-wrapper"></div>
-                  </div>
-                </div>
-                <div class="table__body">
-                  <div class="table__row date-time__ntp-servers" ng-repeat="server in ntp.servers track by $index">
-                    <div class="table__cell">{{$index+1}} <span ng-if="$first">(Primary)</span>
-                    </div>
+      <div class="page-content-box">
+        <legend>Date and time configuration:</legend>
+        <div class="row">
+          <label class="control-radio indent" for="ntp-time">Obtain automatically from a Network Time Protocol (NTP)
+            Server
+            <input type="radio" id="ntp-time" ng-model="use" value="NTP" ng-click="updatedRow()">
+            <span class="control__indicator control__indicator-on"></span>
+          </label>
 
-                    <div class="table__cell">
-                      <input id="ntp-server{{$index+1}}" type="text" ng-readonly="time.mode != 'NTP'" ng-model="server"
-                        ng-blur="ntp.servers[$index] = server" set-focus-on-new-input />
-                    </div>
-
-                    <div class="table__cell action-wrapper">
-
-                      <div class="bmc-table__row-actions ng-scope">
-                        <button ng-class="!server ? 'disabled' : ''" ng-show="!editNTPSettings"
-                          class="btn btn-primary btn-small" ng-click="editNTPSettings=true;updatedRow()">
-                          <icon alt="Complete" title="Complete" file="icon-check.svg" aria-hidden="true"></icon>
-                        </button>
-                        <button ng-show="editNTPSettings" class="btn btn-primary btn-small"
-                          ng-click="editNTPSettings=false">
-                          <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
-                        </button>
-                        <button class="btn btn-primary btn-small" ng-click="removeNTPField($index)">
-                          <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
-                        </button>
-                      </div>
-
-                    </div>
-
-                  </div>
+          <div class="page-content-rnd slide-in" ng-class="use == 'NTP' ? 'opened' : ''" ng-show="use == 'NTP'">
+            <h5>NTP Servers</h5>
+            <div class="table row column dns-settings" ng-show="ntp.servers.length > 0">
+              <div class="table__head fixed-table-header">
+                <div class="table__row">
+                  <div class="table__cell">Entry</div>
+                  <div class="table__cell">NTP Server</div>
+                  <div class="table__cell action-wrapper"></div>
                 </div>
               </div>
+              <div class="table__body">
+                <div class="table__row date-time__ntp-servers"
+                  ng-class="!editNTPSettings ? 'showborders' : 'hideborders'"
+                  ng-repeat="server in ntp.servers track by $index">
+                  <div class="table__cell">{{$index+1}} <span ng-if="$first">(Primary)</span>
+                  </div>
 
-              <div class="message-box" ng-show="ntp.servers.length == 0">
-                No NTP Servers currently specified.
+                  <div class="table__cell">
+                    <input id="ntp-server{{$index+1}}"
+                      ng-class="editNTPSettings[$index] ? 'showborders' : 'hideborders'" type="text"
+                      ng-readonly="use == 'Server'" ng-model="server" ng-blur="ntp.servers[$index] = server"
+                      set-focus-on-new-input />
+                  </div>
+
+                  <div class="table__cell action-wrapper">
+
+                    <div class="bmc-table__row-actions ng-scope">
+                      <button ng-class="!server ? 'disabled' : ''" ng-show="editNTPSettings[$index]"
+                        class="btn btn-primary btn-small" ng-click="editNTPSettings[$index]=false;updatedRow()">
+                        <icon alt="Complete" title="Complete" file="icon-check.svg" aria-hidden="true"></icon>
+                      </button>
+                      <button ng-show="!editNTPSettings[$index]" class="btn btn-primary btn-small"
+                        ng-click="editNTPSettings[$index]=true">
+                        <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
+                      </button>
+                      <button ng-show="editNTPSettings[$index]" class="btn btn-primary btn-small"
+                        ng-click="removeNTPField($index)">
+                        <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
+                      </button>
+                    </div>
+
+                  </div>
+
+                </div>
               </div>
-
-              <div>
-                <button ng-click="addNTPField()" class="btn-icon">
-                  <icon file="add--alt.svg" aria-hidden="true"></icon>
-                  Add NTP server
-                </button>
-              </div>
-
             </div>
+
+            <div class="message-box" ng-show="ntp.servers.length == 0">
+              Add at least one NTP Server to save this setting.
+            </div>
+
+            <div>
+              <button ng-click="addNTPField(false)" class="btn-icon">
+                <icon file="add--alt.svg" aria-hidden="true"></icon>
+                Add NTP server
+              </button>
+            </div>
+
           </div>
+        </div>
 
-          <div class="row">
-            <label class="control-radio indent" for="manual-time">Manually set date and time
-              <input type="radio" id="manual-time" ng-model="time.mode" value="Manual" />
-              <span class="control__indicator control__indicator-on"></span>
-            </label>
+        <div class="row">
+          <label class="control-radio indent" for="manual-time">Use server date and time
+            <input type="radio" id="manual-time" ng-model="use" value="Server" ng-click="updatedRow()" />
+            <span class="control__indicator control__indicator-on"></span>
+          </label>
 
-            <div class="page-content-rnd slide-in" ng-class="time.mode != 'NTP' ? 'opened' : ''"
-              ng-show="time.mode != 'NTP'">
+          <div class="page-content-rnd slide-in" ng-class="use == 'Server' ? 'opened' : ''" ng-show="use == 'Server'">
 
+            <table class="overview-config-table">
+              <tr>
+                <td>Server time</td>
+                <td>{{ UTCTime | localeDate }}
+                  <div class="grey-small">{{ UTCTime | localeDate : true }}</div>
+                </td>
+              </tr>
+            </table>
+
+            <div ng-show="false">
               <h5>Time Owner</h5>
               <select id="date-time-owner" ng-model="time.owner" class="minimal">
                 <option ng-repeat="owner in timeOwners">{{owner}}</option>
@@ -100,13 +128,13 @@
                 <table class="overview-config-table">
                   <tr>
                     <td>Date</td>
-                    <td><input type="date" ng-change="updatedRow()" ng-model="bmc.date" ng-readonly="time.mode == 'NTP'"
+                    <td><input type="date" ng-change="updatedRow()" ng-model="bmc.date" ng-readonly="use == 'NTP'"
                         min="2018-01-01" max="2099-12-31" /></td>
                   </tr>
                   <tr>
                     <td>Time</td>
-                    <td><input type="time" ng-change="updatedRow()" ng-model="bmc.date"
-                        ng-readonly="time.mode == 'NTP'" /></td>
+                    <td><input type="time" ng-change="updatedRow()" ng-model="bmc.date" ng-readonly="use == 'NTP'" />
+                    </td>
                   </tr>
                   <tr>
                     <td>Time Zone</td>
@@ -134,12 +162,26 @@
                 </table>
               </div>
             </div>
-          </div>
 
+
+          </div>
         </div>
 
       </div>
+
+    </section>
+
+    <div class="float-right padding">
+      <button type="button" class="btn btn-tertiary" ng-click="rowUpdate=false;dismiss=false;refresh()">Reset</button>
+      <button type="button" class="btn btn-tertiary"
+        ng-disabled="!rowUpdate && !dismiss && ((ntp.servers.length == 0) && (use == 'NTP'))"
+        ng-click="saveDateTimeSettings()"
+        ng-class="((ntp.servers.length == 0) && (use == 'NTP')) ? 'disabled' : (rowUpdate || dismiss) ? 'highlighted' : ''">Save
+        Page
+        Settings</button>
     </div>
+
+
 
   </form>
   <br clear="all">
