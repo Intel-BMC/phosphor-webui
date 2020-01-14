@@ -581,6 +581,9 @@ dd {
     margin-left:2px;
     padding:0;
     opacity: .8;
+    span:hover{
+        border: 1px solid #eef1f3;
+    }
   }
   .bar-chart .x-axis .year .col .bar {
     background-color: $overviewNormal;
@@ -589,6 +592,7 @@ dd {
     -moz-transition: height, 1s ease;
     -ms-transition: height, 1s ease;
     transition: height, 1s ease;
+    cursor: pointer;
   }
   .bar-chart .x-axis .year .col .bar + .bar {
     background-color: $overviewWarning;
@@ -607,6 +611,7 @@ dd {
     padding: .5em 0 0;
     line-height: 1em;
     text-align: center;
+    width: 83%;
   }
   .bar-chart .x-axis .label:not(.number) {
     padding-top: 1em;

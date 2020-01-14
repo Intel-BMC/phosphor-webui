@@ -11,28 +11,29 @@
                 <table class="overview-config-table">
                   <tr class="more-info" ng-click="RedirectToURL('/configuration/date-time')">
                     <td>
-                      <a href="/#/configuration/date-time">BMC Time
-                        <icon file="double-caret.svg"></icon>
-                      </a>
+                      BMC Time<icon file="double-caret.svg"></icon>
                     </td>
                     <td>{{ curTime }}
                       <div class="grey-small">{{ curTime2 }}</div>
                     </td>
                   </tr>
-                  <tr>
-                    <td>Firmware Version</td>
+                  <tr class="more-info" ng-click="RedirectToURL('/configuration/firmware')">
+                    <td>Firmware Version<icon file="double-caret.svg"></icon>
+                    </td>
                     <td>{{ bmc_firmware }}</td>
                   </tr>
-                  <tr>
-                    <td>Mac Addresses</td>
+                  <tr class="more-info" ng-click="RedirectToURL('/configuration/network')">
+                    <td>Mac Addresses<icon file="double-caret.svg"></icon>
+                    </td>
                     <td>
                       <dd ng-repeat="nic in network_info">
                         {{ nic.MACAddress }} ({{ nic.Id }})
                       </dd>
                     </td>
                   </tr>
-                  <tr>
-                    <td>IP Addresses</td>
+                  <tr class="more-info" ng-click="RedirectToURL('/configuration/network')">
+                    <td>IP Addresses<icon file="double-caret.svg"></icon>
+                    </td>
                     <td>
                       <dd ng-repeat="nic in network_info" ng-show="nic.IPv4Addresses[0].Address">
                         <span ng-repeat="item in nic.IPv4Addresses track by $index">
@@ -41,8 +42,9 @@
                       </dd>
                     </td>
                   </tr>
-                  <tr>
-                    <td>BMC Hostname</td>
+                  <tr class="more-info" ng-click="RedirectToURL('/configuration/network')">
+                    <td>BMC Hostname<icon file="double-caret.svg"></icon>
+                    </td>
                     <td>{{ dataService.hostname }}</td>
                   </tr>
                 </table>
@@ -162,11 +164,12 @@
                 <div class="x-axis">
                   <div class="year wrap" ng-repeat="day in eventCount">
                     <div class="col">
-                      <span title="{{sumEvents.count}} {{sumEvents.severity}} events" class="bar"
+                      <span ng-click="sendParamsToEventPage(sumEvents.severity,day[0].fullDate,day[0].fullDate);"
+                        title="{{sumEvents.count}} {{sumEvents.severity}} events" class="bar"
                         ng-style="setBarChart(sumEvents.count)" ng-repeat="sumEvents in day track by $index"></span>
                     </div>
                     <span class="label">
-                      {{(day[0].dayName) | date:'yyyy'}}
+                      {{(day[0].dayName)}}
                     </span>
                   </div>
 

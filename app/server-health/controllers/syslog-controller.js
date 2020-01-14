@@ -18,9 +18,11 @@ window.angular && (function(angular) {
       ])
 
       .controller('sysLogController', [
-        '$scope', '$filter', '$timeout', 'APIUtils', 'toastService',
-        'Constants',
-        function($scope, $filter, $timeout, APIUtils, toastService, Constants) {
+        '$scope', '$filter', '$location', '$timeout', 'APIUtils',
+        'toastService', 'Constants',
+        function(
+            $scope, $filter, $location, $timeout, APIUtils, toastService,
+            Constants) {
           $scope.itemsPerPage = Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
           $scope.loading = true;
           $scope.sysLogs = [];
@@ -45,8 +47,6 @@ window.angular && (function(angular) {
           $scope.startdate.setDate(
               $scope.startdate.getDate() - $scope.defaultDaysShown);
           $scope.enddate = new Date();
-          $scope.start_date = {value: $scope.startdate};
-          $scope.end_date = {value: $scope.enddate};
           $scope.keyname = 'Created';
           $scope.reverseSeverity = true;
           $scope.reverse = true;
@@ -57,6 +57,24 @@ window.angular && (function(angular) {
           $scope.filterTypes = [];
           $scope.iterateBackwards = false;
 
+          $scope.formatDate = function(date) {
+            var dateOut = new Date(date);
+            return dateOut;
+          };
+
+          // Update variables with passed in querystring
+          if ($location.search().severity) {
+            $scope.selectedSeverity = $location.search().severity;
+          };
+          if ($location.search().startdate) {
+            $scope.startdate = new Date($location.search().startdate);
+          };
+          if ($location.search().enddate) {
+            $scope.enddate = new Date($location.search().enddate);
+          };
+
+          $scope.start_date = {value: $scope.startdate};
+          $scope.end_date = {value: $scope.enddate};
 
           APIUtils.getSystemLogCount().then(
               function(totallogCount) {

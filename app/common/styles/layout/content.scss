@@ -98,17 +98,21 @@
   text-decoration: none; }
 
 .more-info .icon, .more-info img {
-  width: 8px;
+  width: 12px;
   filter: brightness(0) saturate(100%) invert(59%) sepia(0%) saturate(298%) hue-rotate(252deg) brightness(92%) contrast(88%);
   fill: #979a9d;
-  display: none; }
+  display: none;
+  padding-left: 3px;
+  margin-top: -1px;
+ }
 
 .more-info:hover {
   cursor: pointer; }
   .more-info:hover .icon, .more-info:hover img {
     display: inline; }
   .more-info:hover td, .more-info:hover td:nth-child(2) {
-    background-color: #f0f2f5; }
+    background-color: #f0f2f5;
+ }
 
 .trim-text{
   @include mediaQuery(x-small) {

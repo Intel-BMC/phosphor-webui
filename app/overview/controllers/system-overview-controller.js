@@ -36,6 +36,13 @@ window.angular && (function(angular) {
         $location.url(destinationURL);
       };
 
+      $scope.sendParamsToEventPage = function(severity, fulldate) {
+        $location.path('/server-health/sys-log')
+            .search('severity', severity.toLowerCase())
+            .search('startdate', fulldate + 'T00:00:00.000')
+            .search('enddate', fulldate + 'T00:00:00.000');
+      };
+
       function loadOverviewData() {
         $scope.loading = true;
 
@@ -250,12 +257,22 @@ window.angular && (function(angular) {
           7;  // sets default bar chart days; overwritten if not enough data
 
       $scope.addEventArray = function(
-          d1, countOK, countWarning, countCritical) {
+          d1, d1Formatted, countOK, countWarning, countCritical) {
         var update = false;
         var obj = [
-          {dayName: d1, count: countOK, severity: 'OK'},
-          {dayName: d1, count: countWarning, severity: 'Warning'},
-          {dayName: d1, count: countCritical, severity: 'Critical'}
+          {dayName: d1, fullDate: d1Formatted, count: countOK, severity: 'OK'},
+          {
+            dayName: d1,
+            fullDate: d1Formatted,
+            count: countWarning,
+            severity: 'Warning'
+          },
+          {
+            dayName: d1,
+            fullDate: d1Formatted,
+            count: countCritical,
+            severity: 'Critical'
+          }
         ];
 
         for (var i = 0; i < $scope.eventCount.length; i++) {
@@ -281,11 +298,13 @@ window.angular && (function(angular) {
         var countWarning = 0;
         var countCritical = 0;
         var d1 = '';
+        var d1Formatted = '';
 
         angular.forEach($scope.sysLogs, function(log, index) {
           if (log.Created.length > 0) {
             if (index == 0) {
               d1 = new Date(log.Created);
+              d1Formatted = $filter('date')(d1, 'yyyy-MM-dd');
               d1 = $filter('date')(d1, 'MMM d');
 
               var presentDate = new Date();
@@ -302,6 +321,8 @@ window.angular && (function(angular) {
               for (var i = (-$scope.daysToShow + 1); i < 1; i++) {
                 var barChartStartDate =
                     new Date(new Date().getTime() + (i * 24 * 60 * 60 * 1000));
+
+                d1Formatted = $filter('date')(barChartStartDate, 'yyyy-MM-dd');
                 if (i == (-$scope.daysToShow + 1)) {
                   $scope.firstDate =
                       $filter('date')(barChartStartDate, 'MMM d');
@@ -309,7 +330,7 @@ window.angular && (function(angular) {
                   d1 = $filter('date')($scope.firstDate, 'MMM d');
                 };
                 barChartStartDate = $filter('date')(barChartStartDate, 'MMM d');
-                $scope.addEventArray(barChartStartDate, 0, 0, 0);
+                $scope.addEventArray(barChartStartDate, d1Formatted, 0, 0, 0);
               }
             }
 
@@ -318,11 +339,13 @@ window.angular && (function(angular) {
 
             if (Date.parse(d2) >= Date.parse($scope.firstDate)) {
               if (Date.parse(d2) != Date.parse(d1)) {
-                $scope.addEventArray(d1, countOK, countWarning, countCritical)
+                $scope.addEventArray(
+                    d1, d1Formatted, countOK, countWarning, countCritical)
                 countOK = 0;
                 countWarning = 0;
                 countCritical = 0;
                 d1 = new Date(log.Created);
+                d1Formatted = $filter('date')(d1, 'yyyy-MM-dd');
                 d1 = $filter('date')(d1, 'MMM d');
               }
               if (log.Severity == 'OK') {
@@ -337,7 +360,8 @@ window.angular && (function(angular) {
             };
           };
         });
-        $scope.addEventArray(d1, countOK, countWarning, countCritical)
+        $scope.addEventArray(
+            d1, d1Formatted, countOK, countWarning, countCritical)
         $scope.eventOverviewLoading = false;
       };
 
