@@ -24,13 +24,17 @@ window.angular && (function(angular) {
       $scope.server_firmware = '';
       $scope.power_consumption = '';
       $scope.power_cap = '';
-      $scope.bmc_ip_addresses = [];
+      $scope.network_info = [];
       $scope.loading = false;
       $scope.edit_hostname = false;
       $scope.newHostname = '';
       $scope.curTime = '';
 
       loadOverviewData();
+
+      $scope.RedirectToURL = function(destinationURL) {
+        $location.url(destinationURL);
+      };
 
       function loadOverviewData() {
         $scope.loading = true;
@@ -64,13 +68,16 @@ window.angular && (function(angular) {
               console.log(JSON.stringify(error));
             });
 
+        // Commented out until Redfish power consumption available
+        /*
         var getPowerConsumptionPromise = APIUtils.getPowerConsumption().then(
-            function(data) {
-              $scope.power_consumption = data;
-            },
-            function(error) {
-              console.log(JSON.stringify(error));
-            });
+        function(data) {
+          $scope.power_consumption = data;
+        },
+        function(error) {
+          console.log(JSON.stringify(error));
+        });*/
+        var getPowerConsumptionPromise = true;
 
         var getPowerCapPromise = APIUtils.getPowerCap().then(
             function(data) {
@@ -89,8 +96,8 @@ window.angular && (function(angular) {
             function(data) {
               // TODO: openbmc/openbmc#3150 Support IPV6 when
               // officially supported by the backend
-              $scope.bmc_ip_addresses = data.formatted_data.ip_addresses.ipv4;
-              $scope.newHostname = data.hostname;
+              $scope.network_info = data;
+              $scope.newHostname = data.HostName;
             },
             function(error) {
               console.log(JSON.stringify(error));
@@ -136,6 +143,7 @@ window.angular && (function(angular) {
       $scope.iterateBackwards = false;
       $scope.loadInitial = false;
       $scope.eventLoading = true;
+      $scope.eventOverviewLoading = true;
       $scope.sysLogs = [];
       $scope.outputCount = 1000;
       $scope.logDetailQuantity = 25;
@@ -330,6 +338,7 @@ window.angular && (function(angular) {
           };
         });
         $scope.addEventArray(d1, countOK, countWarning, countCritical)
+        $scope.eventOverviewLoading = false;
       };
 
       /************* SENSORS************* */

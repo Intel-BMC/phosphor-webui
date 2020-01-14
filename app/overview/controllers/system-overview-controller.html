@@ -1,5 +1,4 @@
 <div id="overview">
-
   <div class="row row-1">
     <div class="col col-lg-6 col-md-5 col-sm-12 col-12">
       <div class="page-content-box">
@@ -10,31 +9,41 @@
             <uib-tabset active="activeJustified" justified="true">
               <uib-tab index="0" heading="BMC">
                 <table class="overview-config-table">
-                  <tr>
-                    <td>BMC Hostname</td>
-                    <td>{{ dataService.hostname }}</td>
+                  <tr class="more-info" ng-click="RedirectToURL('/configuration/date-time')">
+                    <td>
+                      <a href="/#/configuration/date-time">BMC Time
+                        <icon file="double-caret.svg"></icon>
+                      </a>
+                    </td>
+                    <td>{{ curTime }}
+                      <div class="grey-small">{{ curTime2 }}</div>
+                    </td>
                   </tr>
                   <tr>
                     <td>Firmware Version</td>
                     <td>{{ bmc_firmware }}</td>
                   </tr>
                   <tr>
-                    <td>Mac Address</td>
-                    <td>{{ dataService.mac_address }}</td>
-                  </tr>
-                  <tr>
-                    <td>IP Addresses</td>
+                    <td>Mac Addresses</td>
                     <td>
-                      <dd ng-repeat="ip_address in bmc_ip_addresses">
-                        {{ ip_address }}
+                      <dd ng-repeat="nic in network_info">
+                        {{ nic.MACAddress }} ({{ nic.Id }})
                       </dd>
                     </td>
                   </tr>
                   <tr>
-                    <td>BMC Time</td>
-                    <td>{{ curTime }}
-                      <div class="grey-small">{{ curTime2 }}</div>
+                    <td>IP Addresses</td>
+                    <td>
+                      <dd ng-repeat="nic in network_info" ng-show="nic.IPv4Addresses[0].Address">
+                        <span ng-repeat="item in nic.IPv4Addresses track by $index">
+                          {{ item.Address }} <span>({{ nic.Id }})</span><br>
+                        </span>
+                      </dd>
                     </td>
+                  </tr>
+                  <tr>
+                    <td>BMC Hostname</td>
+                    <td>{{ dataService.hostname }}</td>
                   </tr>
                 </table>
               </uib-tab>
@@ -100,16 +109,16 @@
     </div>
 
     <div class="col col-lg-6 col-md-7 col-sm-12">
-      <div class="page-content-box box-padding" ng-class="{'overview-box-height center' : eventLoading}">
+      <div class="page-content-box box-padding" ng-class="{'overview-box-height center' : eventOverviewLoading}">
         <!--Begin Event Overview Bar Chart-->
 
-        <div class="loader-holder" ng-hide="!eventLoading">
-          <div ng-show="eventLoading" class="spinner-border m-5 individual-component-loader" role="status">
+        <div class="loader-holder" ng-hide="!eventOverviewLoading">
+          <div ng-show="eventOverviewLoading" class="spinner-border m-5 individual-component-loader" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </div>
 
-        <section id="events-overview" ng-hide="eventLoading">
+        <section id="events-overview" ng-hide="eventOverviewLoading">
 
           <div class="overview-box-heading">Daily Event Count</div>
 
@@ -172,7 +181,7 @@
         </section>
         <!--End Events Overview-->
 
-        <div class="row bottom-moreinfo" ng-hide="eventLoading">
+        <div class="row bottom-moreinfo" ng-hide="eventOverviewLoading">
           <div class="col col-sm-6 grey-medium padding-none">Last {{daysToShow}} days</div>
           <div class="col col-sm-6 align-right more-info-link padding-none"><a href
               ng-click="RedirectToURL('/server-health/sys-log')">EVENTS
@@ -351,7 +360,7 @@
             <div class="table__row status-row__{{log.Severity}}"
               ng-repeat="log in sysLogs | orderBy:sortKey:reverse  | limitTo:logDetailQuantity"
               ng-click="expandit = !expandit">
-              <div class="table__cell status-icon status__{{log.Severity}} trim-text-large">&nbsp;</div>
+              <div class="table__cell status-icon status__{{log.Severity}}">&nbsp;</div>
               <div class="table__cell sys-log__col-wrapper sys-log__col-desc align-left" title="{{log.Message}}"
                 ng-class="(expandit) ? 'expand' : 'ellipsis-active'">
 
@@ -413,7 +422,7 @@
         </div>
         <div class="float-left">
           <div class="normal-text">Power Consumption</div>
-          <div class="grey-small">{{power_consumption}}</div>
+          <div class="grey-small">{{power_consumption || 'Not available'}}</div>
         </div>
       </div>
     </div>

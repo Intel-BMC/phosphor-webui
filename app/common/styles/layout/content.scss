@@ -57,6 +57,28 @@
   margin-top: 2em;
 }
 
+.more-info{
+  a{
+    font-weight: normal;
+    color: $color--grey-90;
+    text-decoration: none;
+  }
+  .icon, img{
+    width: 8px;
+    @include greyFilter;
+    display: none;
+  }
+  &:hover{
+    cursor: pointer;
+    .icon, img{
+      display: inline;
+    }
+    td, td:nth-child(2){
+      background-color: $color--grey-20;
+    }
+  }
+}
+
 // Page header
 .page-header {
   width: 100%;

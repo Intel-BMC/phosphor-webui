@@ -94,9 +94,11 @@ dd {
   transition: all .3s linear;
 }
 .row-1 .overview-box-height{
-  min-height: 322px;
-  max-height: 322px;
-  overflow: hidden;
+  @include mediaQuery(medium) {
+    min-height: 347px;
+    max-height: 347px;
+    overflow: hidden;
+  }
 }
 
 .row-2 .overview-box-body{
@@ -114,9 +116,11 @@ dd {
 }
 
 .row-2 .overview-box-height{
-  min-height: 348px;
-  max-height: 348px;
-  overflow: hidden;
+  @include mediaQuery(medium) {
+    min-height: 348px;
+    max-height: 348px;
+    overflow: hidden;
+  }
 }
 
 /* Sensors Detail */
@@ -420,6 +424,11 @@ dd {
     tr td:nth-child(2) {
       background-color:#fafafa;
     }
+    tr.more-info:hover{
+      td:nth-child(2) {
+        background-color: $color--grey-20;
+      }
+    }
     td {
       padding: 8px;
       text-align: left;
@@ -473,7 +482,8 @@ dd {
   }
 
   .status-icon {
-    background-size: 2em;
+    background-size: 1.4em;
+    background-position-y: center;
     max-width:20px;
   }
   .table__cell {
