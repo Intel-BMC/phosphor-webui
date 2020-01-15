@@ -16,7 +16,7 @@ window.angular && (function(angular) {
         function($routeProvider) {
           $routeProvider
               .when('/server-control/bmc-reboot', {
-                title: 'BMC Reboot',
+                title: 'Reboot BMC ',
                 'template': require('./controllers/bmc-reboot-controller.html'),
                 'controller': 'bmcRebootController',
                 authenticated: true

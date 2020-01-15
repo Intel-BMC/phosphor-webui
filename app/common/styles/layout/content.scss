@@ -2,7 +2,7 @@
 .page-header {
   width: 100%;
   position: relative;
-  margin: 0.5em 0 2.2em;
+  margin: 0;
   padding-left: 0;
 }
 
@@ -42,12 +42,6 @@
   font-size:12px;
 }
 
-.first-section{
-  &.highlighted{
-  padding-top: 50px;
-  }
-}
-
 .content__container{
   background-image: url('../assets/images/logo-OpenBmc-builton.svg');
   background-position: bottom 8px right 50px;
@@ -67,7 +61,6 @@
 .page-header {
   width: 100%;
   position: relative;
-  border-bottom: 1px solid $border-color-02;
   margin: 0.5em 0 2.2em;
   padding-left: 0;
 }
