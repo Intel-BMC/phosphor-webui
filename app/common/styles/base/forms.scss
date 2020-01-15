@@ -1,6 +1,5 @@
 @mixin form-inputs($input-style){
-  box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.18);
- // padding: 15px 18px 15px 18px;
+  box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
   padding: 15px 8px 15px 8px;
   @if ($input-style=="icon"){
     padding-left: 30px;
@@ -10,7 +9,7 @@
   }
   border-radius: 4px;
   background-repeat:no-repeat;
-  min-height:44px;
+  min-height:45px;
   max-height:none;
   font-size:14px;
   box-sizing: border-box;

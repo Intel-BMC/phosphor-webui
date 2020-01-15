@@ -8,7 +8,7 @@
   background-repeat:no-repeat;
   background-position: top 8px left 5px;
   background-size: 24px;
-  min-height:44px;
+  min-height:45px;
   max-height:none;
   @include greyFilter;
   background-image: url(../assets/icons/search.svg);
@@ -24,7 +24,7 @@
     border: 1px solid $input-border;
     padding-left: 40px;
     padding-right: 5px;
-    height: 3em;
+    height: 3.2em;
     max-height: none;
     position: relative;
     min-width:130px;

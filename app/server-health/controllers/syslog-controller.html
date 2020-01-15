@@ -18,22 +18,22 @@
   <section id='filters-date-type-search'>
     <div class="page-content-box">
       <div class="columns col-lg-6 col-md-7 col-12">
-        <div class="inline sys-log__date-filter">
-          <div class="inline">
-            <label for="sys-log-filter-start-date">Start Date</label>
+        <div class="row sys-log__date-filter">
+          <div class="columns col-6">
+            <label for="sys-log-filter-start-date" class="small-label">Start Date</label>
             <input id="sys-log-filter-start-date" type="date" max="{{end_date | date:'yyyy-MM-dd'}}"
               placeholder="MM/DD/YYYY" ng-model="start_date.value" />
           </div>
-          <div class="inline padding-left">
-            <label for="sys-log-filter-end-date">End Date</label>
+          <div class="columns col-6 padding-left">
+            <label for="sys-log-filter-end-date" class="small-label">End Date</label>
             <input id="sys-log-filter-end-date" type="date" min="{{start_date | date:'yyyy-MM-dd'}}"
               placeholder="MM/DD/YYYY" ng-model="end_date.value" />
           </div>
         </div>
       </div>
       <div class="columns col-lg-6 col-md-5 col-12">
-        <div class="inline">
-          <label class="col-label" for="content__search-input">Search event log</label>
+        <div class="row">
+          <label class="small-label trim-text-medium" for="content__search-input">Search event log</label>
           <div class="content__search search-box">
             <input id="content__search-input" placeholder="Keyword" type="text" ng-model="customSearch"
               ng-keydown="doSearchOnEnter($event)" />

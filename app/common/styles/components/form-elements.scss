@@ -9,8 +9,8 @@
   text-align:left;
   padding-left: 35px;
   @include mediaQuery(small) {
-    background-size: 2em;
-    background-position: 5px 12px;
+    background-size: 1.8em;
+    background-position: 8px center;
   }
 }
 
@@ -35,7 +35,7 @@ input[type='email'], input[type='number'], input[type='password'], input[type='s
 }
 
 .select-box{
-  margin: .5em 1em;
+  margin: .5em 0;
 }
 
 select[disabled]{
@@ -102,40 +102,6 @@ select {
   -moz-appearance: none;
 }
 
-select {
-  background-image:
-    linear-gradient(45deg, transparent 50%, gray 50%),
-    linear-gradient(135deg, gray 50%, transparent 50%),
-    linear-gradient(to right, #ccc, #ccc);
-  background-position:
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px),
-    calc(100% - 2.5em) 0.5em;
-  background-size:
-    5px 5px,
-    5px 5px,
-    1px 1.5em;
-  background-repeat: no-repeat;
-}
-
-select:focus {
-  background-image:
-    linear-gradient(45deg, #0f8dc3 50%, transparent 50%),
-    linear-gradient(135deg, transparent 50%, #0f8dc3 50%),
-    linear-gradient(to right, #ccc, #ccc);
-  background-position:
-    calc(100% - 15px) 1em,
-    calc(100% - 20px) 1em,
-    calc(100% - 2.5em) 0.5em;
-  background-size:
-    5px 5px,
-    5px 5px,
-    1px 1.5em;
-  background-repeat: no-repeat;
-  border-color: #0f8dc3;
-  outline: 0;
-}
-
   /* Removes the clear button from date inputs */
   input[type="date"]::-webkit-clear-button {
     display: none;
@@ -156,11 +122,6 @@ select:focus {
   display:block;
 }
 
-.small-label, .inline label{
-  font-size:12px;
-  padding:0;
-}
-
 label {
   margin: 0;
   font-size: 14px;
@@ -168,6 +129,15 @@ label {
   font-weight: normal;
   line-height: 1.8;
   color: $text-02;
+  &.small-label{
+    font-size:12px;
+    padding:0;
+  }
+}
+
+.small-label, .inline label{
+  font-size:12px;
+  padding:0;
 }
 
 label.dropdown-label {
@@ -549,10 +519,9 @@ select{
 }
 
 .search-box{
-  min-width: 76%;
+  width: 100%;
   float:left;
   box-sizing: border-box;
-  margin-right:1%;
 }
 
 select {
@@ -567,9 +536,9 @@ select {
     linear-gradient(135deg, gray 50%, transparent 50%),
     linear-gradient(to right, #ccc, #ccc);
   background-position:
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px),
-    calc(100% - 2.5em) 0.5em;
+    calc(100% - 17px) calc(.5em + 2px),
+    calc(100% - 12px) calc(.5em + 2px),
+    calc(100% - 2.5em) .1em;
   background-size:
     5px 5px,
     5px 5px,
@@ -577,7 +546,7 @@ select {
   background-repeat: no-repeat;
   margin: 0;
   padding-right: 5px;
-  padding-top: 4px;
+  padding-top: 10px;
   height: 3.2em;
   max-height: none;
   position: relative;
@@ -590,9 +559,9 @@ select {
         linear-gradient(135deg, transparent 50%, #0f8dc3 50%),
         linear-gradient(to right, #ccc, #ccc);
       background-position:
-        calc(100% - 15px) 1em,
-        calc(100% - 20px) 1em,
-        calc(100% - 2.5em) 0.5em;
+        calc(100% - 11px) calc(.5em + 2px),
+        calc(100% - 16px) calc(.5em + 2px),
+        calc(100% - 2.5em) .1em;
       background-size:
         5px 5px,
         5px 5px,

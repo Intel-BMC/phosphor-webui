@@ -1,7 +1,25 @@
 #sys-log {
   input[type='date']{
-    width:110px;
     padding: 15px 5px 15px 5px;
+  }
+
+  #filters-date-type-search .sys-log__date-filter .columns {
+    padding-right: 0;
+    padding-left: 0;
+    &:first-child {
+      padding-right: 3px;
+    }
+    padding-bottom: 3px;
+    &:first-child {
+      @include mediaQuery(medium) {
+          padding-left: 0;
+          padding-right: 0.75rem;
+      }
+    }
+    @include mediaQuery(medium) {
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+    }
   }
 
   .row {
@@ -11,6 +29,7 @@
   .sys-log__col-date{
     line-height: 1;
     padding-top:10px;
+    margin: auto;
     &.table__head{
       padding: 0;
     }

@@ -16,19 +16,17 @@
   </section>
 
   <div class="page-content-box">
-    <div class="columns col-lg-6 col-md-6 col-12">
+    <div class="columns col-md-6 col-12">
       <div class="select-box">
-        <div class="inline">
-          <select id="component" ng-model="selectedChoice" name="dropdown" class="minimal"
-            ng-change="selectComponent(selectedChoice);">
-            <option value="All" name="All">All Components</option>
-            <option ng-selected="{{$index}}" ng-repeat="component in fullSensorsInfo track by $index"
-              value="{{component.Name}}">{{component.Name}}</option>
-          </select>
-        </div>
+        <select id="component" ng-model="selectedChoice" name="dropdown" class="minimal"
+          ng-change="selectComponent(selectedChoice);">
+          <option value="All" name="All">All Components</option>
+          <option ng-selected="{{$index}}" ng-repeat="component in fullSensorsInfo track by $index"
+            value="{{component.Name}}">{{component.Name}}</option>
+        </select>
       </div>
     </div>
-    <div class="columns col-lg-6 col-md-6 col-12">
+    <div class="columns col-md-6 col-12">
       <div class="content__search search-box">
         <input id="content__search-input" placeholder="Keyword" type="text" ng-model="customSearch"
           ng-keydown="doSearchOnEnter($event)" />
