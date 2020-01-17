@@ -74,24 +74,22 @@
     <div class="table row column sys-log__table">
       <div class="table__head fixed-table-header">
         <div class="table__row">
-          <div class="table__cell two-column status-icon trim-text-medium"></div>
-          <div class="table__cell two-column sys-log__col-wrapper align-left sys-log__col-date sort_button_wrapper"
-            ng-click="sortBy('Created')">
-            <div class="column col-10">Timestamp</div>
-            <div class="column col-2"><span class="sortorder" ng-class="{reverse: reverse}"></span>
+
+          <div class="table__cell status-icon_wrapper sys-log__col-date sort_button_wrapper"
+            ng-click='sortBy("Created")' ng-class="{reverse: reverse}">
+            <div class="inline">
+              Timestamp
             </div>
           </div>
-          <div class="table__cell sys-log__col-wrapper sys-log__col-sev sort_button_wrapper"
-            ng-click="sortBySeverity()">
-            <div class="column col-10">&nbsp;&nbsp;Status</div>
-            <div class="column col-2">
-              <span class="sortorder" ng-class="{reverseSeverity: reverseSeverity}"></span>
-            </div>
-          </div>
-          <div class="table__cell sys-log__col-wrapper sys-log__col-desc align-left">Description</div>
-          <div class="table__cell sys-log__col-wrapper sys-log__col-id align-left trim-text-medium sort_button_wrapper"
-            ng-show="showDetails" ng-click="sortBy('Id')">
-            <div class="column col-12">ID</div>
+          <div class="table__cell status-icon trim-text-medium"></div>
+
+          <div class="table__cell sys-log__col-sev sort_button_wrapper" ng-click="sortBySeverity()"
+            ng-class="{reverse: reverseSeverity}">Status</div>
+
+          <div class="table__cell sys-log__col-desc align-left">Description</div>
+          <div class="table__cell sys-log__col-id align-left trim-text-medium sort_button_wrapper" ng-show="showDetails"
+            ng-click="sortBy('Id')">
+            ID
           </div>
         </div>
       </div>
