@@ -11,6 +11,13 @@ window.angular && (function(angular) {
             '$scope', '$rootScope', '$location', 'dataService',
             function($scope, $rootScope, $location, dataService) {
               $scope.dataService = dataService;
+              var configJSON = require('../../../config.json');
+              if (configJSON.VirtualMediaEnabled == true) {
+                $scope.VMEnabled = true;
+              } else {
+                $scope.VMEnabled = false;
+              }
+
 
               $scope.$watch('toggleNav', function() {
                 $rootScope.toggleNavState = $scope.toggleNav;

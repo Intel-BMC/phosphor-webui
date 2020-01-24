@@ -1,67 +1,55 @@
-<div id="virtual-media">
-
-  <section class="page-content-box">
-
-    <primary>
-      <div class="columns col-12">
-        <legend for="boot-selected align-left">
-          Virtual media device</legend>
-        <p class="vm__page-description" ng-if="devices.length >= 1">Specify image file location to start session.</p>
-        <div class="message-box" ng-show="1 > devices.length">
-          There are no Virtual Media devices available.
+<div class="page">
+  <h1 class="h1">Virtual Media</h1>
+  <section class="section">
+    <div class="section-header">
+      <h2 class="h2">Serve image in a web browser</h2>
+    </div>
+    <div class="section-content">
+      <div id="virtual_media-proxy" class="vm__upload ng-scope">
+        <p ng-if="!proxyDevices.length">
+            There are no Virtual Media proxy devices available.
+        </p>
+        <div ng-repeat="dev in proxyDevices track by $index" class="row column">
+          <div id="vm_{{dev.name}}" class="column">
+          <!-- name and error message -->
+          <h3 class="inline column"><span>{{dev.name}}</span><span ng-if="dev.isActive"> (Active)</span></h3>
+          <!-- Button -->
+          <label for="vm_{{dev.name}}_file-upload" class="btn btn-primary"ng-disabled="dev.isActive">Browse...</label>
+          <input class="inline" hidden id="vm_{{dev.name}}_file-upload" type="file" file="dev.file" ng-disabled="dev.isActive"/>
+          <span ng-if="dev.file">{{dev.file.name}}</span>
+          <span ng-if="!dev.file">No file chosen</span>
+          <button id="vm_{{dev.name}}_start_stop" type="button" ng-disabled="!dev.file" class="btn btn-primary float-right" ng-click="dev.isActive? stopVM($index) : startVM($index)">
+            <span ng-if="!dev.isActive">Start</span>
+            <span ng-if="dev.isActive">Stop</span>
+          </button>
+         </div>
         </div>
       </div>
-    </primary>
-
-    <div class="table row vm__upload">
-      <div class="table__head fixed-table-header">
-        <div class="table__row">
-          <div class="table__cell">Device Name</div>
-          <div class="table__cell vm__upload-chooser">File Upload</div>
-          <div class="table__cell">Status</div>
-          <div class="table__cell">File Action</div>
-        </div>
-      </div>
-
-      <div class="table__row" ng-repeat="device in devices track by $index">
-
-        <div class="table__cell">
-          {{device.deviceName}}</div>
-
-        <div class="table__cell vm__upload-chooser">
-
-          <label for="file-upload" class="inline vm__upload-name">
-            <input id="file-upload" type="file" file="device.file" class="hide" ng-disabled="device.isActive" />
-            <span class="btn btn-primary btn-small" ng-class="{disabled:device.isActive}">Choose a file</span>
-            <span class="inline"><span ng-if="!device.file">No file chosen</span><span
-                ng-if="device.file.name !== undefined">{{device.file.name}}</span></span>
-            <span class="icon__exit" ng-if="device.file && !device.isActive" ng-click="resetFile($index);">
-              <icon file="icon-close.svg"></icon>
-            </span>
-          </label>
-
-        </div>
-
-        <div class="table__cell">
-          <div class="vm__active-text vm__active-border" ng-if="device.isActive">
-            <span>Active Session</span>
-          </div>
-          <div class="vm__active-text vm__error-border" ng-if="device.hasError">
-            <span>Error in connecting to the selected file</span>
-          </div>
-        </div>
-
-        <div class="table__cell">
-          <div class="vm__upload-start">
-            <button type="button" ng-class="{disabled:!device.file}" class="btn btn-primary"
-              ng-click="device.isActive? stopVM($index) : startVM($index)">
-              <span ng-show="device.isActive">Stop</span><span ng-show="!device.isActive">Start</span>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-header">
+      <h2 class="h2">Load image from external server</h2>
+    </div>
+    <div class="section-content">
+      <div id="virtual_media-legacy" class="vm__upload ng-scope">
+        <p ng-if="legacyDevices.length < 1">
+            There are no Virtual Media legacy devices available.
+        </p>
+        <div ng-repeat="dev in legacyDevices track by $index" class="row column">
+          <div id="vm_{{dev.name}}" class="column">
+            <!-- name and error message -->
+            <h3 class="inline column"><span>{{dev.name}}</span><span ng-if="dev.isActive"> (Active)</span></h3>
+            <button id="vm_{{dev.name}}_config" type="button" class="btn btn-primary" ng-click="legacyConfigModal($index)">
+              <span>Configure connection</span>
+            </button>
+            <button id="vm_{{dev.name}}_start_stop" type="button" ng-disabled="!dev.configured" class="btn btn-primary float-right" ng-click="dev.isActive? stopLegacy($index) : startLegacy($index)">
+              <span ng-if="!dev.isActive">Start</span>
+              <span ng-if="dev.isActive">Stop</span>
             </button>
           </div>
         </div>
-
       </div>
     </div>
-
   </section>
 </div>

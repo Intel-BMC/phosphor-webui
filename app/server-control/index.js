@@ -69,7 +69,15 @@ window.angular && (function(angular) {
                 'template':
                     require('./controllers/virtual-media-controller.html'),
                 'controller': 'virtualMediaController',
-                authenticated: true
+                authenticated: true,
+                redirectTo: function(routeParams, path, search) {
+                  var configJSON = require('../../config.json');
+                  if (configJSON.VirtualMediaEnabled == true) {
+                    return undefined;
+                  } else {
+                    return '../404.html';
+                  }
+                }
               })
               .when('/server-control', {
                 title: 'Power Operations',

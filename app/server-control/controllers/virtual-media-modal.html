@@ -1,0 +1,52 @@
+<!-- Legacy mode configuration modal -->
+<div class="uib-modal__content">
+    <button
+      aria-label="Close"
+      type="button"
+      class="btn  btn--close  float-right"
+      ng-click="$dismiss()"
+    >
+    <img src="../../assets/icons/icon-close.svg">
+    </button>
+    <div class="modal-header" id="modal-vm">
+        <h2 class="modal-title">Legacy mode configuration</h2>
+    </div>
+    <div class="modal-body" >
+        <form name="configModal">
+            <p>
+              <label for="uri">External server URI</label>
+              <input type="text" id="uri" name="uri" ng-model="config.uri" required/>
+              <p ng-if="configModal.uri.$error.required" class="alert">
+                Server URI is required.
+              </p>
+            </p>
+            <p>
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" ng-model="config.username"/>
+            </p>
+            <p>
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" ng-model="config.password"/>
+            </p>
+            <p>
+              <label for="readwrite">RW</label>
+              <input type="checkbox" id="readwrite" name="readwrite" ng-model="config.rw"/>
+            </p>
+        </form>
+    </div>
+    <div class="modal-footer">
+      <!-- Save VM config button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        ng-click="$close(config)"
+        ng-disabled="configModal.uri.$error.required"
+      >
+        Save
+      </button>
+      <!-- Cancel button-->
+      <button type="button" class="btn btn-secondary" ng-click="$dismiss()">
+        Cancel
+      </button>
+    </div>
+</div>
