@@ -1603,6 +1603,52 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
+        getVMCollection: function() {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() +
+                       '/redfish/v1/Managers/bmc/VirtualMedia',
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
+        getRedfishObject: function(objectPath) {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + objectPath,
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
+        mountImage: function(index, data) {
+          return $http({
+                   method: 'POST',
+                   url: DataService.getHost() +
+                       '/redfish/v1/Managers/bmc/VirtualMedia/' + index +
+                       '/Actions/VirtualMedia.InsertMedia',
+                   data: data,
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
+        unmountImage: function(index) {
+          return $http({
+                   method: 'POST',
+                   url: DataService.getHost() +
+                       '/redfish/v1/Managers/bmc/VirtualMedia/' + index +
+                       '/Actions/VirtualMedia.EjectMedia',
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
       };
       return SERVICE;
     }

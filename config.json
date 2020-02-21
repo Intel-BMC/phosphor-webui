@@ -1,3 +1,4 @@
 {
-  "redfishEventLogDisabled": false
+  "redfishEventLogDisabled": false,
+  "VirtualMediaEnabled" : false
 }
