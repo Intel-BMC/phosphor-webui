@@ -542,6 +542,11 @@ window.angular && (function(angular) {
               console.log('error handle_cmd: ' + err);
               var resp = this._create_cmd_response(req, err);
               this.ws.send(resp);
+              if (err == ENOSPC) {
+                toastService.error('Error reading file. Closing server.');
+                this.stop();
+                $scope.proxyDevices[index].file = null;
+              }
             }
             return consumed;
           };
