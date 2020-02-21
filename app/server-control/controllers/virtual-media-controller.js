@@ -11,50 +11,114 @@ window.angular && (function(angular) {
 
   angular.module('app.serverControl').controller('virtualMediaController', [
     '$scope', 'APIUtils', '$q', 'toastService', 'dataService',
-    'nbdServerService', 'virtualMediaModel', '$uibModal',
+    'nbdServerService', 'virtualMediaModel', '$uibModal', '$timeout',
     function(
         $scope, APIUtils, $q, toastService, dataService, nbdServerService,
-        virtualMediaModel, $uibModal) {
+        virtualMediaModel, $uibModal, $timeout) {
       var vms = [];
+      var refreshRateMs = 5000;
+      var refreshPromise;
       $scope.showModal = false;
       const modalTemplate = require('./virtual-media-modal.html');
 
       $scope.proxyDevices = [];
       $scope.legacyDevices = [];
 
-      APIUtils.getVMCollection().then(
-          function(res) {
-            vms = res.Members;
-            for (let dev of vms) {
-              APIUtils.getRedfishObject(dev['@odata.id'])
-                  .then(
-                      function(res) {
-                        if (res.TransferProtocolType == 'OEM') {
-                          $scope.proxyDevices.push(createVMDevice(res));
-                        } else {
-                          $scope.legacyDevices.push(createVMDevice(res));
-                        }
-                        console.log(
-                            'Virtual Media ' + dev['@odata.id'] +
-                            ' device created.');
-                      },
-                      function(error) {
-                        console.log(JSON.stringify(error));
-                        if (error.status != 401) {
-                          toastService.error('Retrieving VM device failed.');
-                          toastService.error('Error: Unauthorized');
-                        }
-                      });
-            }
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-            if (error.status != 401) {
-              toastService.error('Retrieving VM collection failed.');
-            } else {
-              toastService.error('Error: Unauthorized');
-            }
-          });
+      function getVMData() {
+        APIUtils.getVMCollection().then(
+            function(res) {
+              vms = res.Members;
+              for (let dev of vms) {
+                APIUtils.getRedfishObject(dev['@odata.id'])
+                    .then(
+                        function(res) {
+                          if (res.TransferProtocolType == 'OEM') {
+                            var tempDev = createVMDevice(res);
+                            var found = false;
+                            for (let oldDev of $scope.proxyDevices) {
+                              if (tempDev.id == oldDev.id) {
+                                console.log(
+                                    tempDev.id + ' proxy device already here');
+                                // device is already here, do not add.
+                                found = true;
+                                if (compareVms(tempDev, oldDev)) {
+                                  // there were no changes since last update.
+                                  console.log('No update on ' + tempDev.id);
+                                } else {
+                                  oldDev = tempDev;
+                                  console.log('UPDATE on ' + tempDev.id);
+                                }
+                              }
+                            }
+                            if (!found) {
+                              $scope.proxyDevices.push(tempDev);
+                            }
+                          } else {
+                            var tempDev = createVMDevice(res);
+                            var found = false;
+                            for (let oldDev of $scope.legacyDevices) {
+                              if (tempDev.id == oldDev.id) {
+                                // device is already here, do not add.
+                                console.log(
+                                    tempDev.id + ' legacy device already here');
+                                found = true;
+                                if (compareVms(tempDev, oldDev)) {
+                                  // there were no changes since last update.
+                                  console.log('No update on ' + tempDev.id);
+                                } else {
+                                  oldDev = tempDev;
+                                  console.log('UPDATE on ' + tempDev.id);
+                                }
+                              }
+                            }
+                            if (!found) {
+                              $scope.legacyDevices.push(tempDev);
+                            }
+                          }
+                          console.log(
+                              'Virtual Media ' + dev['@odata.id'] +
+                              ' device created.');
+                        },
+                        function(error) {
+                          console.log(JSON.stringify(error));
+                          if (error.status != 401) {
+                            toastService.error('Retrieving VM device failed.');
+                            toastService.error('Error: Unauthorized');
+                          }
+                        });
+              }
+              refreshVM();
+            },
+            function(error) {
+              console.log(JSON.stringify(error));
+              if (error.status != 401) {
+                toastService.error('Retrieving VM collection failed.');
+              } else {
+                toastService.error('Error: Unauthorized');
+              }
+            });
+      }
+
+      function refreshVm(timeoutMs) {
+        timeoutMs = timeoutMs || refreshRateMs;
+        // When request takes longer than refresh rate.
+        cancelRefreshVm();
+        refreshPromise = $timeout(getVMData, timeoutMs);
+      }
+
+      function cancelRefreshVm() {
+        $timeout.cancel(refreshPromise);
+      }
+
+      function compareVms(first, second) {
+        if (JSON.stringify(first) == JSON.stringify(second)) return true;
+        return false;
+      }
+
+      getVMData();
+      $scope.$on('$destroy', function() {
+        cancelRefreshVm();
+      });
 
       function createVMDevice(redfishData) {
         var vmDevice = {};
