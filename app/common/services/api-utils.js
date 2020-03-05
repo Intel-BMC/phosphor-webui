@@ -1188,82 +1188,47 @@ window.angular && (function(angular) {
                    })
                 .then(
                     function(r1) {
-                      angular.forEach(r1.data['PCIeDevices'], function(system) {
-                        return $http({
-                                 method: 'GET',
-                                 url: DataService.getHost() +
-                                     system['@odata.id'],
-                                 withCredentials: true
-                               })
+                      const pciDevices = r1.data['PCIeDevices'];
+                      if (!pciDevices || pciDevices.length === 0) {
+                        return deferred.resolve(Devices);
+                      }
+                      angular.forEach(pciDevices, function(system) {
+                        getRequest(system['@odata.id'])
                             .then(
                                 function(r2) {
                                   // nested 2nd level
-                                  angular.forEach(r2.data['PCIeFunctions'], function(system) {
-                                    return $http({
-                                             method: 'GET',
-                                             url: DataService.getHost() +
-                                                 r2.data['PCIeFunctions']
-                                                        ['@odata.id'],
-                                             withCredentials: true
-                                           })
-                                        .then(
-                                            function(r3) {
-                                              // nested 3rd level
-                                              angular.forEach(
-                                                  r3.data['Members'],
-                                                  function(system) {
-                                                    return $http({
-                                                             method: 'GET',
-                                                             url:
-                                                                 DataService
-                                                                     .getHost() +
-                                                                 system
-                                                                     ['@odata.id'],
-                                                             withCredentials:
-                                                                 true
-                                                           })
-                                                        .then(
-                                                            function(r4) {
-                                                              addinFunctions =
-                                                                  r4.data;
-                                                              addinFunctions
-                                                                  .Manufacturer =
-                                                                  r2.data
-                                                                      ['Manufacturer'];
-                                                              cId =
-                                                                  r2.data['Id'];
-                                                              if (pId != cId) {
-                                                                addinFunctions
-                                                                    .GroupedBy =
-                                                                    cId;
-                                                                evenOdd =
-                                                                    !evenOdd;
-                                                              };
-                                                              addinFunctions
-                                                                  .ParentId =
-                                                                  cId;
-                                                              addinFunctions
-                                                                  .EvenOdd =
-                                                                  evenOdd;
-                                                              Devices.push(
-                                                                  addinFunctions);
-                                                              pId =
-                                                                  r2.data['Id'];
-                                                              deferred.resolve(
-                                                                  Devices);
-                                                            },
-                                                            function(error) {
-                                                              console.log(
-                                                                  JSON.stringify(
-                                                                      error));
-                                                            });
-                                                  });
-                                            },
-                                            function(error) {
-                                              console.log(
-                                                  JSON.stringify(error));
-                                            });
-                                  });
+                                  angular.forEach(
+                                      r2.data['PCIeFunctions'],
+                                      function(system) {
+                                        getRequest(r2.data['PCIeFunctions']
+                                                          ['@odata.id'])
+                                            .then(
+                                                function(r3) {
+                                                  // nested 3rd level
+                                                  angular.forEach(
+                                                      r3.data['Members'],
+                                                      function(system) {
+                                                        getRequest(
+                                                            system['@odata.id'])
+                                                            .then(
+                                                                function(r4) {
+                                                                  getManufacturer(
+                                                                      addinFunctions,
+                                                                      r4)
+                                                                },
+                                                                function(
+                                                                    error) {
+                                                                  console.log(
+                                                                      JSON.stringify(
+                                                                          error));
+                                                                });
+                                                      });
+                                                },
+                                                function(error) {
+                                                  console.log(
+                                                      JSON.stringify(error));
+                                                });
+                                      });
                                 },
                                 function(error) {
                                   console.log(JSON.stringify(error));
@@ -1275,6 +1240,27 @@ window.angular && (function(angular) {
                       console.log(JSON.stringify(error));
                     });
           });
+        },
+        getRequest(urlString) {
+          return $http({
+            method: 'GET',
+            url: DataService.getHost() + urlString,
+            withCredentials: true
+          })
+        },
+        getManufacturer(addinFunctions, r4) {
+          addinFunctions = r4.data;
+          addinFunctions.Manufacturer = r2.data['Manufacturer'];
+          cId = r2.data['Id'];
+          if (pId != cId) {
+            addinFunctions.GroupedBy = cId;
+            evenOdd = !evenOdd;
+          };
+          addinFunctions.ParentId = cId;
+          addinFunctions.EvenOdd = evenOdd;
+          Devices.push(addinFunctions);
+          pId = r2.data['Id'];
+          deferred.resolve(Devices);
         },
         getDIMMs: function() {
           return this.getRedfishSysName().then(function(sysName) {
@@ -1288,7 +1274,11 @@ window.angular && (function(angular) {
                 .then(
                     function(response) {
                       var dimms = [];
-                      angular.forEach(response.data['Members'], function(dimm) {
+                      const members = response.data['Members'];
+                      if (!members || members.length === 0) {
+                        return deferred.resolve(dimms);
+                      }
+                      angular.forEach(members, function(dimm) {
                         return $http({
                                  method: 'GET',
                                  url: DataService.getHost() + dimm['@odata.id'],
@@ -1323,8 +1313,15 @@ window.angular && (function(angular) {
                 .then(
                     function(response) {
                       var cpu = [];
+                      const members = response.data['Members'];
+                      if (!members || members.length === 0) {
+                        return deferred.resolve(cpu);
+                      }
+                      console.log('nested 1  -> get processor cpu :', members);
                       angular.forEach(
                           response.data['Members'], function(system) {
+                            console.log(
+                                'nested 2 -> get processor cpu :', members);
                             return $http({
                                      method: 'GET',
                                      url: DataService.getHost() +
@@ -1360,23 +1357,26 @@ window.angular && (function(angular) {
                 .then(
                     function(response) {
                       var drive = [];
-                      angular.forEach(
-                          response.data['Drives'], function(system) {
-                            return $http({
-                                     method: 'GET',
-                                     url: DataService.getHost() +
-                                         system['@odata.id'],
-                                     withCredentials: true
-                                   })
-                                .then(
-                                    function(response) {
-                                      drive.push(response.data);
-                                      deferred.resolve(drive);
-                                    },
-                                    function(error) {
-                                      console.log(JSON.stringify(error));
-                                    })
-                          });
+                      const drives = response.data['Drives'];
+                      if (!drives || drives.length === 0) {
+                        return deferred.resolve(drive);
+                      }
+                      angular.forEach(drives, function(system) {
+                        return $http({
+                                 method: 'GET',
+                                 url: DataService.getHost() +
+                                     system['@odata.id'],
+                                 withCredentials: true
+                               })
+                            .then(
+                                function(response) {
+                                  drive.push(response.data);
+                                  deferred.resolve(drive);
+                                },
+                                function(error) {
+                                  console.log(JSON.stringify(error));
+                                })
+                      });
                     },
                     function(error) {
                       console.log(JSON.stringify(error));

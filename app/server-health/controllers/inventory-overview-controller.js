@@ -44,37 +44,53 @@ window.angular && (function(angular) {
              $scope.selectedSeverity == 'critical'));
       };
 
-      var getDimmsPromise = APIUtils.getDIMMs().then(
-          function(result) {
-            $scope.DimmTable = result;
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-          });
+      var getDimmsPromise = APIUtils.getDIMMs()
+                                .then(
+                                    function(result) {
+                                      $scope.DimmTable = result;
+                                    },
+                                    function(error) {
+                                      console.log(JSON.stringify(error));
+                                    })
+                                .finally(function() {
+                                  $scope.loading = false;
+                                });
 
-      var getCPUsPromise = APIUtils.getCPUs().then(
-          function(result) {
-            $scope.CPUData = result;
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-          });
+      var getCPUsPromise = APIUtils.getCPUs()
+                               .then(
+                                   function(result) {
+                                     $scope.CPUData = result;
+                                   },
+                                   function(error) {
+                                     console.log(JSON.stringify(error));
+                                   })
+                               .finally(function() {
+                                 $scope.loading = false;
+                               });
 
-      var getDrivesPromise = APIUtils.getDrives().then(
-          function(result) {
-            $scope.DriveData = result;
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-          });
+      var getDrivesPromise = APIUtils.getDrives()
+                                 .then(
+                                     function(result) {
+                                       $scope.DriveData = result;
+                                     },
+                                     function(error) {
+                                       console.log(JSON.stringify(error));
+                                     })
+                                 .finally(function() {
+                                   $scope.loading = false;
+                                 });
 
-      var getDevicesPromise = APIUtils.getDevices().then(
-          function(result) {
-            $scope.PCIData = result;
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-          });
+      var getDevicesPromise = APIUtils.getDevices()
+                                  .then(
+                                      function(result) {
+                                        $scope.PCIData = result;
+                                      },
+                                      function(error) {
+                                        console.log(JSON.stringify(error));
+                                      })
+                                  .finally(function() {
+                                    $scope.loading = false;
+                                  });
 
       var promises = [
         getDimmsPromise, getCPUsPromise, getDevicesPromise, getDrivesPromise
