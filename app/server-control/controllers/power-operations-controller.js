@@ -21,7 +21,7 @@ window.angular && (function(angular) {
       // one confirm is shown at a time.
       $scope.dataService = dataService;
 
-      $scope.loading = true;
+      $scope.loading = false;
       $scope.oneTimeBootEnabled = false;
       $scope.bootOverrideError = false;
       $scope.bootSources = [];
@@ -46,13 +46,13 @@ window.angular && (function(angular) {
        * Checks the host status provided by the dataService using an
        * interval timer
        * @param {string} statusType : host status type to check for
-       * @param {number} timeout : timeout limit, defaults to 5 minutes
+       * @param {number} timeout : timeout limit, defaults to 1 minutes
        * @param {string} error : error message, defaults to 'Time out'
        * @returns {Promise} : returns a deferred promise that will be fulfilled
        * if the status is met or be rejected if the timeout is reached
        */
       const checkHostStatus =
-          (statusType, timeout = 300000, error = 'Time out.') => {
+          (statusType, timeout = 60000, error = 'Time out.') => {
             const deferred = $q.defer();
             const start = new Date();
             const checkHostStatusInterval = $interval(() => {
@@ -65,10 +65,24 @@ window.angular && (function(angular) {
                 deferred.reject(error);
                 $interval.cancel(checkHostStatusInterval);
               }
-              if (dataService.server_state === statusType) {
-                deferred.resolve();
-                $interval.cancel(checkHostStatusInterval);
-              }
+              // we need to call API to get server_state information
+              // and check condition, if true then resolve
+              dataService.loading = false;
+              APIUtils.getServerStatus().then(
+                  function(result) {
+                    console.log(
+                        'get check result.PowerState :', result.PowerState,
+                        'statusType :', statusType)
+                    if (result.PowerState === statusType) {
+                      toastService.success(
+                          'Power ' + result.PowerState + ' successful');
+                      deferred.resolve();
+                      $interval.cancel(checkHostStatusInterval);
+                    }
+                  },
+                  function(error) {
+                    console.log(error);
+                  });
             }, Constants.POLL_INTERVALS.POWER_OP);
             return deferred.promise;
           };
@@ -100,6 +114,7 @@ window.angular && (function(angular) {
             })
             .finally(() => {
               $scope.operationPending = false;
+              $scope.loading = false;
             });
       };
 
@@ -134,6 +149,7 @@ window.angular && (function(angular) {
             })
             .finally(() => {
               $scope.operationPending = false;
+              $scope.loading = false;
             });
       };
 
@@ -159,6 +175,7 @@ window.angular && (function(angular) {
             })
             .finally(() => {
               $scope.operationPending = false;
+              $scope.loading = false;
             });
       };
 
@@ -167,6 +184,7 @@ window.angular && (function(angular) {
        * Does not attempt to stop all software
        */
       const immediateShutdown = () => {
+        $scope.loading = true;
         $scope.operationPending = true;
         dataService.setUnreachableState();
 
@@ -188,6 +206,7 @@ window.angular && (function(angular) {
             })
             .finally(() => {
               $scope.operationPending = false;
+              $scope.loading = false;
             });
       };
 
@@ -195,11 +214,13 @@ window.angular && (function(angular) {
        * Initiate Power on
        */
       $scope.powerOn = () => {
+        $scope.loading = true;
         $scope.operationPending = true;
         dataService.setUnreachableState();
         APIUtils.hostPowerOn()
             .then(() => {
               // Check for on state
+              $scope.loading = false;
               return checkHostStatus(
                   Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_ON,
                   Constants.MESSAGES.POLL.HOST_ON_TIMEOUT);
@@ -210,6 +231,7 @@ window.angular && (function(angular) {
             })
             .finally(() => {
               $scope.operationPending = false;
+              $scope.loading = false;
             });
       };
 
@@ -245,6 +267,7 @@ window.angular && (function(angular) {
        *  Power operations modal
        */
       const initPowerOperation = function(powerOperation) {
+        $scope.loading = true;
         switch (powerOperation) {
           case powerOperations.WARM_REBOOT:
             warmReboot();
@@ -309,6 +332,7 @@ window.angular && (function(angular) {
        *   Get boot settings
        */
       const loadBootSettings = function() {
+        $scope.loading = true;
         APIUtils.getBootOptions()
             .then(function(response) {
               const boot = response.Boot;
@@ -336,8 +360,10 @@ window.angular && (function(angular) {
               toastService.error('Unable to get boot override values.');
               console.log(
                   'Error loading boot settings:', JSON.stringify(error));
+            })
+            .finally(function() {
+              $scope.loading = false;
             });
-        $scope.loading = false;
       };
 
       /*
@@ -346,6 +372,7 @@ window.angular && (function(angular) {
       const loadTPMStatus = function() {
         // TO DO: Redfish currently does not include TPM policy; function below
         // to be updated once it's completed
+        $scope.loading = true;
         APIUtils.getTPMStatus()
             .then(function(response) {
               $scope.TPMVersion = response.data(TrustedModules.InterfaceType);
@@ -358,8 +385,10 @@ window.angular && (function(angular) {
             .catch(function(error) {
               //  toastService.error('Unable to get TPM policy status.');
               console.log('Error loading TPM status', JSON.stringify(error));
+            })
+            .finally(function() {
+              $scope.loading = false;
             });
-        $scope.loading = false;
       };
 
       /*
@@ -395,16 +424,18 @@ window.angular && (function(angular) {
           }
           data.Boot.BootSourceOverrideEnabled = overrideEnabled;
           data.Boot.BootSourceOverrideTarget = overrideTarget;
-
+          $scope.loading = true;
           APIUtils.saveBootSettings(data).then(
               function(response) {
                 $scope.originalBoot = angular.copy($scope.boot);
                 toastService.success('Successfully updated boot settings.');
+                $scope.loading = false;
               },
               function(error) {
                 toastService.error('Unable to save boot settings.');
                 console.log(JSON.stringify(error));
-              });
+                $scope.loading = false;
+              })
         }
       };
 
@@ -421,7 +452,7 @@ window.angular && (function(angular) {
           if (tpmEnabled === undefined) {
             return;
           }
-
+          $scope.loading = true;
           APIUtils.saveTPMEnable(tpmVersion)
               .then(
                   function(response) {
@@ -433,7 +464,10 @@ window.angular && (function(angular) {
                   function(error) {
                     toastService.error('Unable to update TPM required policy.');
                     console.log(JSON.stringify(error));
-                  });
+                  })
+              .finally(() => {
+                $scope.loading = false;
+              });
         }
       };
 

@@ -388,8 +388,8 @@ window.angular && (function(angular) {
                          '/redfish/v1/Managers/bmc/EthernetInterfaces/' +
                          interfaceName,
                      withCredentials: true,
-                     data:
-                         JSON.stringify({'StaticNameServers': dnsServersArray})
+                     data: JSON.stringify(
+                         {'StaticNameServers': dnsServersArray})
                    })
                 .then(function(response) {
                   return response.data;
@@ -1217,7 +1217,8 @@ window.angular && (function(angular) {
                                                                   r4.data;
                                                               addinFunctions
                                                                   .Manufacturer =
-                                                                  r2.data['Manufacturer'];
+                                                                  r2.data
+                                                                      ['Manufacturer'];
                                                               cId =
                                                                   r2.data['Id'];
                                                               if (pId != cId) {

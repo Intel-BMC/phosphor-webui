@@ -380,6 +380,7 @@ window.angular && (function(angular) {
         },
         POWER_OP: {
           POWER_ON_FAILED: 'Power on failed.',
+          POWER_ON_PASS: 'Power on successful.',
           WARM_REBOOT_FAILED: 'Warm reboot failed.',
           COLD_REBOOT_FAILED: 'Cold reboot failed.',
           ORDERLY_SHUTDOWN_FAILED: 'Orderly shutdown failed.',
