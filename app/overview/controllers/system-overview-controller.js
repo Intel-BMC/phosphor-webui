@@ -29,6 +29,7 @@ window.angular && (function(angular) {
       $scope.edit_hostname = false;
       $scope.newHostname = '';
       $scope.curTime = '';
+      $scope.bmc_info = {};
 
       loadOverviewData();
 
@@ -46,10 +47,9 @@ window.angular && (function(angular) {
       function loadOverviewData() {
         $scope.loading = true;
 
-        var getFirmwaresPromise = APIUtils.getFirmwares().then(
-            function(data) {
-              $scope.bmc_firmware = data.bmcActiveVersion;
-              $scope.server_firmware = data.hostActiveVersion;
+        var getFirmwaresPromise = APIUtils.getBMCInformation().then(
+            function(res) {
+              $scope.bmc_info = res;
             },
             function(error) {
               console.log(JSON.stringify(error));
@@ -69,7 +69,7 @@ window.angular && (function(angular) {
 
         var getServerInfoPromise = APIUtils.getServerInfo().then(
             function(data) {
-              $scope.server_info = data.data;
+              $scope.server_info = data;
             },
             function(error) {
               console.log(JSON.stringify(error));
@@ -125,8 +125,6 @@ window.angular && (function(angular) {
           getLEDStatePromise,
           getBMCTimePromise,
           getServerInfoPromise,
-          getPowerConsumptionPromise,
-          getPowerCapPromise,
           getNetworkInfoPromise,
         ];
 

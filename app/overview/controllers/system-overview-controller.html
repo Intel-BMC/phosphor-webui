@@ -20,7 +20,7 @@
                   <tr class="more-info" ng-click="RedirectToURL('/configuration/firmware')">
                     <td>Firmware Version<icon file="double-caret.svg"></icon>
                     </td>
-                    <td>{{ bmc_firmware }}</td>
+                    <td>{{ bmc_info.FirmwareVersion }}</td>
                   </tr>
                   <tr class="more-info" ng-click="RedirectToURL('/configuration/network')">
                     <td>Mac Addresses<icon file="double-caret.svg"></icon>
@@ -53,7 +53,7 @@
                 <table class="overview-config-table">
                   <tr>
                     <td>Server ID</td>
-                    <td>{{ dataService.server_id  || "N/A"  }}</td>
+                    <td>{{ bmc_info.UUID  || "N/A"  }}</td>
                   </tr>
                   <tr>
                     <td>Model</td>
@@ -69,7 +69,7 @@
                   </tr>
                   <tr>
                     <td>Firmware version</td>
-                    <td>{{ server_firmware || "N/A"  }}</td>
+                    <td>{{ server_info.AssetTag || "N/A"  }}</td>
                   </tr>
                 </table>
               </uib-tab>
@@ -77,23 +77,19 @@
                 <table class="overview-config-table">
                   <tr>
                     <td>Bios Version</td>
-                    <td>{{ "N/A"  }}</td>
+                    <td>{{ server_info.BiosVersion || "N/A"  }}</td>
                   </tr>
                   <tr>
-                    <td>Boot Mode</td>
-                    <td>{{ "N/A"  }}</td>
+                    <td>Boot Override Enabled</td>
+                    <td>{{ server_info.Boot.BootSourceOverrideEnabled || "N/A"  }}</td>
                   </tr>
                   <tr>
-                    <td>Firmware Version</td>
-                    <td>{{ "N/A"  }}</td>
+                    <td>Boot Override Mode</td>
+                    <td>{{ server_info.Boot.BootSourceOverrideMode || "N/A"  }}</td>
                   </tr>
                   <tr>
-                    <td>Nic Boot</td>
-                    <td>{{ "N/A"  }}</td>
-                  </tr>
-                  <tr>
-                    <td>Power Profile</td>
-                    <td>{{ "N/A"  }}</td>
+                    <td>Boot Override Target</td>
+                    <td>{{ server_info.Boot.BootSourceOverrideTarget || "N/A"  }}</td>
                   </tr>
                 </table>
               </uib-tab>

@@ -863,6 +863,16 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
+        getBMCInformation: function() {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + '/redfish/v1/Managers/bmc',
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
         getFirmwares: function() {
           var deferred = $q.defer();
           $http({
@@ -1054,8 +1064,7 @@ window.angular && (function(angular) {
           // for the system interface.
           return $http({
                    method: 'GET',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/inventory/system',
+                   url: DataService.getHost() + '/redfish/v1/Systems/system',
                    withCredentials: true
                  })
               .then(function(response) {
