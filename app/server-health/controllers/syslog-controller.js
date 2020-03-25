@@ -73,9 +73,8 @@ window.angular && (function(angular) {
             $scope.enddate = new Date($location.search().enddate);
           };
 
-          $scope.start_date = {value: $scope.startdate};
-          $scope.end_date = {value: $scope.enddate};
-
+          $scope.start_date = {value: null};
+          $scope.end_date = {value: null};
           APIUtils.getSystemLogCount().then(
               function(totallogCount) {
                 var firstRecord =
