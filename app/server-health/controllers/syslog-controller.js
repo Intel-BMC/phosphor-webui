@@ -75,17 +75,21 @@ window.angular && (function(angular) {
 
           $scope.start_date = {value: null};
           $scope.end_date = {value: null};
-          APIUtils.getSystemLogCount().then(
-              function(totallogCount) {
-                var firstRecord =
-                    totallogCount - Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
-                $scope.displaySystemLogs(
-                    $scope.loadInitial, $scope.outputCount, firstRecord,
-                    totallogCount);
-              },
-              function(error) {
-                console.log(JSON.stringify(error));
-              })
+          onLoadPage();
+
+          function onLoadPage() {
+            APIUtils.getSystemLogCount().then(
+                function(totallogCount) {
+                  var firstRecord =
+                      totallogCount - Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
+                  $scope.displaySystemLogs(
+                      $scope.loadInitial, $scope.outputCount, firstRecord,
+                      totallogCount);
+                },
+                function(error) {
+                  console.log(JSON.stringify(error));
+                })
+          }
 
           $scope.displaySystemLogs = function(
               loadInitial, outputCount, firstRecord, logCount) {
@@ -99,12 +103,16 @@ window.angular && (function(angular) {
             APIUtils.getSystemLogs(outputAmount, firstRecord)
                 .then(
                     function(res) {
-                      $scope.sysLogs = [].concat($scope.sysLogs, res);
-                      $scope.sysLogs.forEach(function(log) {
-                        if ($scope.filterTypes.indexOf(log.SensorType) < 0) {
-                          $scope.filterTypes.push(log.SensorType);
-                        }
-                      });
+                      if (res && res.length > 0) {
+                        $scope.sysLogs = [].concat($scope.sysLogs, res);
+                        $scope.sysLogs.forEach(function(log) {
+                          if ($scope.filterTypes.indexOf(log.SensorType) < 0) {
+                            $scope.filterTypes.push(log.SensorType);
+                          }
+                        });
+                      } else {
+                        $scope.sysLogs = [];
+                      }
                     },
                     function(error) {
                       console.log(JSON.stringify(error));
@@ -152,16 +160,21 @@ window.angular && (function(angular) {
 
           $scope.clearSystemLogEntries = function() {
             $scope.confirm = false;
+            $scope.loading = true;
             APIUtils.clearSystemLogs()
                 .then(
                     function(res) {
-                      console.log(JSON.stringify(res));
+                      onLoadPage();
+                      toastService.success(
+                          Constants.MESSAGES.EVENTLOG_CLEAR_SUCCESS);
                     },
                     function(error) {
+                      toastService.error(
+                          Constants.MESSAGES.EVENTLOG_CLEAR_FALIED);
                       console.log(JSON.stringify(error));
                     })
                 .finally(function() {
-                  $scope.selectRecordType($scope.selectedRecordType, false);
+                  $scope.loading = false;
                 });
           };
 

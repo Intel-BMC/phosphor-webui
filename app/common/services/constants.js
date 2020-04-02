@@ -394,6 +394,8 @@ window.angular && (function(angular) {
           NORMAL_NO_SENSOR_DATA: 'There are no sensors in normal state.'
         },
         ERROR_MESSAGE_DESC_TEMPLATE: '{{status}} - {{description}}',
+        EVENTLOG_CLEAR_SUCCESS: 'Event logs cleared successfully.',
+        EVENTLOG_CLEAR_FALIED: 'Event logs failed.'
       },
       POWER_CAP_TEXT: {unit: 'W', disabled: 'Not Enabled'},
       POWER_CONSUMPTION_TEXT: {
