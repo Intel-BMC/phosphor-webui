@@ -12,8 +12,8 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverControl').directive('kvmConsole', [
-    '$log', 'dataService', '$location',
-    function($log, dataService, $location) {
+    '$log', '$cookies', 'dataService', '$location',
+    function($log, $cookies, dataService, $location) {
       return {
         restrict: 'E', template: require('./kvm-console.html'),
             scope: {newWindowBtn: '=?'}, link: function(scope, element) {
@@ -44,7 +44,10 @@ window.angular && (function(angular) {
                   document.querySelector('#noVNC_container'))[0];
 
               try {
-                rfb = new RFB(target, 'wss://' + host + '/kvm/0', {});
+                var token = $cookies.get('XSRF-TOKEN');
+                rfb = new RFB(
+                    target, 'wss://' + host + '/kvm/0',
+                    {'wsProtocols': [token]});
 
                 rfb.addEventListener('connect', connected);
                 rfb.addEventListener('disconnect', disconnected);
