@@ -28,8 +28,9 @@ window.angular && (function(angular) {
       $scope.boot = {};
       $scope.defaultRebootSetting = 'warm-reboot';
       $scope.defaultShutdownSetting = 'warm-shutdown';
-
+      $scope.status = '';
       $scope.activeModal;
+      $scope.flag = true;
 
       // When a power operation is in progress, set to true,
       // when a power operation completes (success/fail) set to false.
@@ -52,33 +53,48 @@ window.angular && (function(angular) {
        * if the status is met or be rejected if the timeout is reached
        */
       const checkHostStatus =
-          (statusType, timeout = 60000, error = 'Time out.') => {
+          (serverOperation, statusType, timeout = 60000,
+           error = 'Time out.') => {
             const deferred = $q.defer();
             const start = new Date();
             const checkHostStatusInterval = $interval(() => {
-              if (!dataService.server_unreachable) {
-                $scope.operationPending = false;
-              }
               let now = new Date();
               let timePassed = now.getTime() - start.getTime();
               if (timePassed > timeout) {
+                setPowerState();
+                toastService.error(error);
                 deferred.reject(error);
                 $interval.cancel(checkHostStatusInterval);
               }
               // we need to call API to get server_state information
               // and check condition, if true then resolve
-              dataService.loading = false;
               APIUtils.getServerStatus().then(
                   function(result) {
-                    console.log(
-                        'get check result.PowerState :', result.PowerState,
-                        'statusType :', statusType)
-                    if (result.PowerState === statusType) {
-                      toastService.success(
-                          'Power ' + result.PowerState + ' successful');
-                      deferred.resolve();
-                      $interval.cancel(checkHostStatusInterval);
-                    }
+                    if (result) {
+                      $scope.status = result.PowerState;
+                      console.log(
+                          'PowerState :', result.PowerState,
+                          '& status :', statusType);
+                      if (serverOperation === 'reboot' &&
+                          result.PowerState === Constants.HOST_STATE_TEXT.on) {
+                        setPowerState();
+                        deferred.resolve();
+                        $interval.cancel(checkHostStatusInterval);
+                        if ($scope.flag) {
+                          toastService.success(
+                              'Power ' + result.PowerState + ' successful');
+                          $scope.flag = false;
+                        }
+                      } else if (result.PowerState === statusType) {
+                        setPowerState();
+                        deferred.resolve();
+                        $interval.cancel(checkHostStatusInterval);
+                        if ($scope.flag) {
+                          toastService.success(
+                              'Power ' + result.PowerState + ' successful');
+                        }
+                      };
+                    };
                   },
                   function(error) {
                     console.log(error);
@@ -88,23 +104,41 @@ window.angular && (function(angular) {
           };
 
       /**
+       * Set server state (On/Off)
+       */
+      const setPowerState = () => {
+        if (Constants.HOST_STATE_TEXT.on === $scope.status) {
+          dataService.setPowerOnState();
+        } else if (Constants.HOST_STATE_TEXT.off === $scope.status) {
+          dataService.setPowerOffState();
+        }
+      };
+
+      /**
        * Initiate Orderly reboot
        * Attempts to stop all software
        */
       const warmReboot = () => {
         $scope.operationPending = true;
+        $scope.loading = true;
         dataService.setUnreachableState();
         APIUtils.gracefulRestart()
             .then(() => {
               // Check for off state
+              $scope.loading = false;
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.off, Constants.TIMEOUT.HOST_OFF,
+                  'reboot', Constants.HOST_STATE_TEXT.off,
+                  Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_OFF_TIMEOUT);
             })
             .then(() => {
               // Check for on state
+              if ($scope.status === Constants.HOST_STATE_TEXT.on) {
+                dataService.setUnreachableState();
+              }
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_ON,
+                  'reboot', Constants.HOST_STATE_TEXT.on,
+                  Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_ON_TIMEOUT);
             })
             .catch(error => {
@@ -124,22 +158,28 @@ window.angular && (function(angular) {
        */
       const coldReboot = () => {
         $scope.operationPending = true;
+        $scope.loading = true;
         dataService.setUnreachableState();
         APIUtils.forceOff()
             .then(() => {
               // Check for off state
+              $scope.loading = false;
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.off,
-                  Constants.TIMEOUT.HOST_OFF_IMMEDIATE,
+                  'reboot', Constants.HOST_STATE_TEXT.off,
+                  Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_OFF_TIMEOUT);
             })
             .then(() => {
+              $scope.loading = false;
+              if ($scope.status === Constants.HOST_STATE_TEXT.on) {
+                dataService.setUnreachableState();
+              }
               return APIUtils.hostPowerOn();
             })
             .then(() => {
               // Check for on state
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_ON,
+                  '', Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_ON_TIMEOUT);
             })
             .catch(error => {
@@ -159,13 +199,15 @@ window.angular && (function(angular) {
        */
       const orderlyShutdown = () => {
         $scope.operationPending = true;
+        $scope.loading = true;
         dataService.setUnreachableState();
-
         APIUtils.gracefulShutdown()
             .then(() => {
               // Check for off state
+              $scope.loading = false;
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.off, Constants.TIMEOUT.HOST_OFF,
+                  '', Constants.HOST_STATE_TEXT.off,
+                  Constants.TIMEOUT.HOST_OFF_IMMEDIATE,
                   Constants.MESSAGES.POLL.HOST_OFF_TIMEOUT);
             })
             .catch(error => {
@@ -187,16 +229,17 @@ window.angular && (function(angular) {
         $scope.loading = true;
         $scope.operationPending = true;
         dataService.setUnreachableState();
-
         APIUtils.forceOff()
             .then(() => {
               // Check for off state
+              $scope.loading = false;
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.off,
-                  Constants.TIMEOUT.HOST_OFF_IMMEDIATE,
+                  '', Constants.HOST_STATE_TEXT.off,
+                  Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_OFF_TIMEOUT);
             })
             .then(() => {
+              $scope.loading = false;
               dataService.setPowerOffState();
             })
             .catch(error => {
@@ -222,7 +265,7 @@ window.angular && (function(angular) {
               // Check for on state
               $scope.loading = false;
               return checkHostStatus(
-                  Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_ON,
+                  '', Constants.HOST_STATE_TEXT.on, Constants.TIMEOUT.HOST_FAST,
                   Constants.MESSAGES.POLL.HOST_ON_TIMEOUT);
             })
             .catch(error => {
@@ -267,7 +310,6 @@ window.angular && (function(angular) {
        *  Power operations modal
        */
       const initPowerOperation = function(powerOperation) {
-        $scope.loading = true;
         switch (powerOperation) {
           case powerOperations.WARM_REBOOT:
             warmReboot();
@@ -287,6 +329,7 @@ window.angular && (function(angular) {
       };
 
       const powerOperationModal = function() {
+        $scope.flag = true;
         $uibModal
             .open({
               template: modalTemplate,

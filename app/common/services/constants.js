@@ -106,11 +106,12 @@ window.angular && (function(angular) {
         POWER_OP: 5000,
       },
       TIMEOUT: {
-        ACTIVATION: 1000 * 60 * 10,        // 10 mins
-        DOWNLOAD_IMAGE: 1000 * 60 * 2,     // 2 mins
-        HOST_ON: 1000 * 60 * 5,            // 5 mins
-        HOST_OFF: 1000 * 60 * 5,           // 5 mins
-        HOST_OFF_IMMEDIATE: 1000 * 60 * 2  // 2 mins
+        ACTIVATION: 1000 * 60 * 10,         // 10 mins
+        DOWNLOAD_IMAGE: 1000 * 60 * 2,      // 2 mins
+        HOST_ON: 1000 * 60 * 5,             // 5 mins
+        HOST_OFF: 1000 * 60 * 5,            // 5 mins
+        HOST_OFF_IMMEDIATE: 1000 * 60 * 2,  // 2 mins
+        HOST_FAST: 1000 * 60                // 1 mins
       },
       CERTIFICATE: {
         KEY_BIT_LENGTH: [2048],
