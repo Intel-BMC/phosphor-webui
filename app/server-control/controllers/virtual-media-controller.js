@@ -10,11 +10,11 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverControl').controller('virtualMediaController', [
-    '$scope', 'APIUtils', '$q', 'toastService', 'dataService',
+    '$scope', '$cookies', 'APIUtils', '$q', 'toastService', 'dataService',
     'nbdServerService', 'virtualMediaModel', '$uibModal', '$timeout',
     function(
-        $scope, APIUtils, $q, toastService, dataService, nbdServerService,
-        virtualMediaModel, $uibModal, $timeout) {
+        $scope, $cookies, APIUtils, $q, toastService, dataService,
+        nbdServerService, virtualMediaModel, $uibModal, $timeout) {
       var vms = [];
       var refreshRateMs = 5000;
       var refreshPromise;
@@ -148,8 +148,9 @@ window.angular && (function(angular) {
         APIUtils.getRedfishObject(dev).then(
             function(dev) {
               if (dev.Inserted == false) {
+                var token = $cookies.get('XSRF-TOKEN');
                 var server = new NBDServer(
-                    $scope.proxyDevices[index].wsURI, file, id, index);
+                    $scope.proxyDevices[index].wsURI, file, id, index, token);
                 $scope.proxyDevices[index].nbdServer = server;
                 nbdServerService.addConnection(id, server, file);
                 server.start();
@@ -325,7 +326,7 @@ window.angular && (function(angular) {
       const NBD_STATE_TRANSMISSION = 5;
 
       class NBDServer {
-        constructor(endpoint, file, id, index) {
+        constructor(endpoint, file, id, index, token) {
           this.file = file;
           this.id = id;
           this.endpoint = endpoint;
@@ -334,7 +335,7 @@ window.angular && (function(angular) {
           this.msgbuf = null;
           this.index = index;
           this.start = function() {
-            this.ws = new WebSocket(this.endpoint);
+            this.ws = new WebSocket(this.endpoint, [token]);
             this.state = NBD_STATE_OPEN;
             this.ws.binaryType = 'arraybuffer';
             this.ws.onmessage = this._on_ws_message.bind(this);
