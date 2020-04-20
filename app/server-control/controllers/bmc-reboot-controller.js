@@ -14,13 +14,6 @@ window.angular && (function(angular) {
     function($scope, $window, APIUtils, dataService, toastService) {
       $scope.dataService = dataService;
       $scope.confirm = false;
-      APIUtils.getLastRebootTime().then(
-          function(data) {
-            $scope.reboot_time = data.data;
-          },
-          function(error) {
-            console.log(JSON.stringify(error));
-          });
       $scope.rebootConfirm = function() {
         if ($scope.confirm) {
           return;
@@ -30,11 +23,12 @@ window.angular && (function(angular) {
       $scope.reboot = function() {
         APIUtils.bmcReboot().then(
             function(response) {
-              toastService.success('BMC is rebooting.')
+              toastService.success(
+                  'BMC reboot action successful. BMC is rebooting...')
             },
             function(error) {
               console.log(JSON.stringify(error));
-              toastService.error('Unable to reboot BMC.');
+              toastService.error('Unable to perform BMC reboot action.');
             });
       };
     }

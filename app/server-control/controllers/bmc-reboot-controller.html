@@ -1,14 +1,4 @@
 <div id="bmc-reboot">
-
-  <section class="page-content-simple">
-    <div class="column col-12" ng-class="{disabled: dataService.server_unreachable || dataService.loading}">
-      <div class="status-wrapper align-right">
-        <div>BMC last reboot:
-          <span>{{reboot_time | localeDate}}</span></div>
-      </div>
-    </div>
-  </section>
-
   <section class="page-content-box padding">
     <div class="row column">
       <div ng-class="{disabled: dataService.server_unreachable || dataService.loading, transitionAll: confirm}">
@@ -25,5 +15,4 @@
       </button>
     </div>
   </section>
-
 </div>

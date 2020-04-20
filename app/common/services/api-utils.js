@@ -681,24 +681,12 @@ window.angular && (function(angular) {
         },
         bmcReboot: function() {
           return $http({
-            method: 'PUT',
+            method: 'POST',
             url: DataService.getHost() +
-                '/xyz/openbmc_project/state/bmc0/attr/RequestedBMCTransition',
+                '/redfish/v1/Managers/bmc/Actions/Manager.Reset',
             withCredentials: true,
-            data: JSON.stringify(
-                {'data': 'xyz.openbmc_project.State.BMC.Transition.Reboot'})
+            data: JSON.stringify({'ResetType': 'GracefulRestart'})
           });
-        },
-        getLastRebootTime: function() {
-          return $http({
-                   method: 'GET',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/state/bmc0/attr/LastRebootTime',
-                   withCredentials: true
-                 })
-              .then(function(response) {
-                return response.data;
-              });
         },
         hostPowerOn: function() {
           return this.getRedfishSysName().then(function(sysName) {
