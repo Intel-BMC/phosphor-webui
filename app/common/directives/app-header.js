@@ -42,18 +42,22 @@ window.angular && (function(angular) {
               }
               APIUtils.getServerStatus().then(
                   function(result) {
-                    if (result.PowerState == Constants.HOST_STATE_TEXT.off) {
+                    if (result &&
+                        result.PowerState == Constants.HOST_STATE_TEXT.off) {
                       dataService.setPowerOffState();
                     } else if (
+                        result &&
                         result.PowerState == Constants.HOST_STATE_TEXT.on) {
                       dataService.setPowerOnState();
                     } else if (
+                        result &&
                         result.PowerState ==
-                        Constants.HOST_STATE_TEXT.poweringoff) {
+                            Constants.HOST_STATE_TEXT.poweringoff) {
                       dataService.setPowerOnState();
                     } else if (
+                        result &&
                         result.PowerState ==
-                        Constants.HOST_STATE_TEXT.poweringon) {
+                            Constants.HOST_STATE_TEXT.poweringon) {
                       dataService.setPowerOnState();
                     } else {
                       dataService.setErrorState();

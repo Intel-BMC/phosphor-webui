@@ -17,9 +17,8 @@
               Upload image file from workstation</legend>
           </div>
           <div class="columns col-12">
-            <p>Specify an image file located on your workstation or a TFTP server. An image file may contain
-              firmware images for the server, BMC, or other hardware devices. Each image that you upload
-              will be unpacked from the image file and added to the BMC image list or Server image list appropriately.
+            <p>
+              Select a BMC firmware file to use to update the BMC.
             </p>
             <label for="file-upload" class="inline firmware__upload-chooser">
               <input id="file-upload" name="uploadedfile" type="file" file="file" class="hide"
@@ -43,8 +42,7 @@
       <button type="reset" class="btn btn-secondary" ng-click="$dismiss();">
         Cancel
       </button>
-
-      <input type="button" value="Upload firmware" class="btn btn-primary float-right" ng-click="$close(form)" />
+      <input type="button" ng-disabled="!file" value="Upload firmware" class="btn btn-primary float-right" ng-click="$close(form)" />
     </div>
   </div>
 

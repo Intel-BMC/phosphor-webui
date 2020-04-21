@@ -25,6 +25,9 @@ window.angular && (function(angular) {
       };
 
       $scope.firmwares = [];
+      $scope.firmwareData = '';
+      $scope.applyTimeOptions = ['Immediate', 'OnReset'];
+      $scope.slectedFirmware = '';
       $scope.bmcActiveVersion = '';
       $scope.hostActiveVersion = '';
       $scope.activate_confirm = false;
@@ -103,6 +106,7 @@ window.angular && (function(angular) {
       /**
        * Upload file modal
        */
+
       function initAddImageFileModal(filetype) {
         // TODO: pass value into modal and just use one template
         var template = require('./firmware-modal-addimage.html');
@@ -116,11 +120,14 @@ window.angular && (function(angular) {
               scope: $scope,
               ariaLabelledBy: 'modal-operation',
               controllerAs: 'modalCtrl',
+              onChange: function() {
+                return name;
+              }
             })
             .result
             .then((form) => {
               if (filetype == 'upload') {
-                $scope.file = form.uploadedfile;
+                $scope.file = form.uploadedfile.$$scope.file;
                 $scope.upload();
               } else if (filetype == 'download') {
                 $scope.download_host = form.download_host.$modelValue;
@@ -134,11 +141,25 @@ window.angular && (function(angular) {
                 })
       }
 
+      $scope.selectFirmware = function(val) {
+        const json = {
+          HttpPushUriOptions: {HttpPushUriApplyTime: {ApplyTime: val}}
+        };
+        APIUtils.setHttpPushUriApplyTime(json)
+            .then(function(response) {
+              toastService.success(Constants.MESSAGES.FIRMWARE.SUCCESS);
+              return response;
+            })
+            .catch(function(error) {
+              console.log(JSON.stringify(error));
+              toastService.error(Constants.MESSAGES.FIRMWARE.FAILED);
+            });
+      };
+
       $scope.activateConfirmed = function() {
         APIUtils.activateImage($scope.activate_image_id)
             .then(
                 function(state) {
-                  $scope.loadFirmwares();
                   return state;
                 },
                 function(error) {
@@ -148,9 +169,7 @@ window.angular && (function(angular) {
             .then(function(activationState) {
               waitForActive($scope.activate_image_id)
                   .then(
-                      function(state) {
-                        $scope.loadFirmwares();
-                      },
+                      function(state) {},
                       function(error) {
                         console.log(JSON.stringify(error));
                         toastService.error('Unable to activate image');
@@ -239,13 +258,19 @@ window.angular && (function(angular) {
                         'Image file "' + $scope.file.name +
                         '" has been uploaded. Activate it to make it available for use.');
                     $scope.file = '';
+                    if ($scope.slectedFirmware == 'Immediate') {
+                      alert(Constants.MESSAGES.FIRMWARE.MESSAGE_IMMEDIATE);
+                    } else if ($scope.slectedFirmware == 'OnReset') {
+                      alert(Constants.MESSAGES.FIRMWARE.MESSAGE_ONRESET);
+                    }
                     $scope.$dismiss();
-                    $scope.loadFirmwares();
+                    loadFirmwares();
                   },
                   function(error) {
                     $scope.uploading = false;
                     console.log(error);
                     toastService.error('Unable to upload image file');
+                    alert(Constants.MESSAGES.FIRMWARE.MESSAGE_FAILED);
                   });
         }
       };
@@ -313,7 +338,7 @@ window.angular && (function(angular) {
                   $scope.download_filename = '';
                   $scope.downloading = false;
                   toastService.success('Download complete');
-                  $scope.loadFirmwares();
+                  loadFirmwares();
                 },
                 function(error) {
                   console.log(error);
@@ -340,7 +365,7 @@ window.angular && (function(angular) {
               if (response.status == 'error') {
                 toastService.error('Unable to update boot priority');
               } else {
-                $scope.loadFirmwares();
+                loadFirmwares();
               }
             });
         $scope.confirm_priority = false;
@@ -357,7 +382,7 @@ window.angular && (function(angular) {
           if (response.status == 'error') {
             toastService.error('Unable to delete image');
           } else {
-            $scope.loadFirmwares();
+            loadFirmwares();
           }
         });
         $scope.confirm_delete = false;
@@ -365,15 +390,33 @@ window.angular && (function(angular) {
 
       $scope.filters = {bmc: {imageType: 'BMC'}, host: {imageType: 'Host'}};
 
-      $scope.loadFirmwares = function() {
-        APIUtils.getFirmwares().then(function(result) {
-          $scope.firmwares = result.data;
-          $scope.bmcActiveVersion = result.bmcActiveVersion;
-          $scope.hostActiveVersion = result.hostActiveVersion;
-        });
+      $scope.loadFirmwareUpdate = function() {
+        APIUtils.getFirmwareUpdateTarget().then(function(response) {
+          if (response.HttpPushUriOptions) {
+            $scope.slectedFirmware =
+                response.HttpPushUriOptions.HttpPushUriApplyTime.ApplyTime;
+          }
+        })
       };
 
-      $scope.loadFirmwares();
+      function loadFirmwares() {
+        var firmwareInfoPromise = APIUtils.getBMCInformation().then(
+            function(response) {
+              $scope.firmwareData = response;
+            },
+            function(error) {
+              console.log(JSON.stringify(error));
+            });
+
+        var promises = [firmwareInfoPromise]
+
+        $q.all(promises).finally(function() {
+          $scope.loading = false;
+        });
+      }
+
+      loadFirmwares();
+      $scope.loadFirmwareUpdate();
     }
   ]);
 })(angular);

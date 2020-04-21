@@ -257,7 +257,9 @@ optional actions given on a page.
     display: inline;
   }
 }
-
+.firmware-btn-icon {
+  padding-left: 2px;
+}
 /***
 Filter text buttons are used for toggle filters, such as on the sensors page
 ***/

@@ -387,6 +387,16 @@ window.angular && (function(angular) {
           ORDERLY_SHUTDOWN_FAILED: 'Orderly shutdown failed.',
           IMMEDIATE_SHUTDOWN_FAILED: 'Immediate shutdown failed.',
         },
+        FIRMWARE: {
+          SUCCESS: 'Successfully modified the firmware update options.',
+          FAILED: 'Failed to update the firmware update options.',
+          MESSAGE_IMMEDIATE:
+              'Programming has begun, and will take several minutes to complete. Do not remove power from the server. The BMC will reboot and run the new firmware.',
+          MESSAGE_ONRESET:
+              'Programming has begun, and will take several minutes to complete. Do not remove power from the server. The BMC will continue to run its current firmware. The new firmware takes effect the next time the BMC reboots.',
+          MESSAGE_FAILED:
+              'Firmware image upload failed. Check the firmware image file before upload again.'
+        },
         SENSOR: {
           NO_SENSOR_DATA: 'There are no sensors found.',
           CRITICAL_NO_SENSOR_DATA: 'There are no sensors in critical state.',

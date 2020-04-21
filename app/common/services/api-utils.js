@@ -1041,11 +1041,33 @@ window.angular && (function(angular) {
           return $http({
                    method: 'POST',
                    timeout: 5 * 60 * 1000,
-                   url: DataService.getHost() + '/upload/image',
+                   url: DataService.getHost() + '/redfish/v1/UpdateService',
                    // Overwrite the default 'application/json' Content-Type
-                   headers: {'Content-Type': 'application/octet-stream'},
+                   headers: {'Content-Type': file.type},
                    withCredentials: true,
                    data: file
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
+        getFirmwareUpdateTarget: function() {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + '/redfish/v1/UpdateService',
+                   withCredentials: true
+                 })
+              .then(function(response) {
+                return response.data;
+              });
+        },
+        setHttpPushUriApplyTime: function(json) {
+          return $http({
+                   method: 'PATCH',
+                   url: DataService.getHost() + '/redfish/v1/UpdateService',
+                   headers: {'Content-Type': 'application/json'},
+                   withCredentials: true,
+                   data: JSON.stringify(json)
                  })
               .then(function(response) {
                 return response.data;
