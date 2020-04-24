@@ -3,7 +3,7 @@
     <div class="header__info-section">
       <span class="page-title">{{page_title}}</span>
       <div class="header__title">
-        <div>{{ dataService.hostname | limitTo: 15 }}{{dataService.hostname.length > 15 ? '...' : ''}}</div>
+        <div>{{ dataService.hostname | limitTo: 64 }}{{dataService.hostname.length > 64 ? '...' : ''}}</div>
         <div>{{ dataService.server_id }}</div>
       </div>
     </div>
