@@ -83,6 +83,15 @@ window.angular && (function(angular) {
         $scope.rowUpdate = true;
       };
 
+      $scope.isValidIPv4Address = function(ipValue) {
+        const regex = /^(?=\d+\.\d+\.\d+\.\d+$)/;
+        const match = (ipValue) ? ipValue.split('.') : '';
+        if (match[0] < 256 && match[1] < 256 && match[2] < 256 &&
+            match[3] < 256) {
+          return regex.test(ipValue);
+        }
+      };
+
       $scope.updatedDNS = function() {
         $scope.dnsUpdate = true;
       };

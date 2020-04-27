@@ -131,17 +131,17 @@
             ng-repeat="ipv4 in interface.IPv4Addresses track by $index">
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" ng-model="ipv4.Address"
+                type="text" ng-model="ipv4.Address" ng-style="{ 'border-color' : (!isValidIPv4Address(ipv4.Address)) ? 'red' : 'transparent' }"
                 ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" value="" ng-model="ipv4.Gateway"
+                type="text" value="" ng-model="ipv4.Gateway" ng-style="{ 'border-color' : (!isValidIPv4Address(ipv4.Gateway)) ? 'red' : 'transparent' }"
                 ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell">
               <input ng-class="editIPV4Settings[$index] ? 'showborders' : 'hideborders'" ng-change="updatedipv4()"
-                type="text" ng-model="ipv4.SubnetMask"
+                type="text" ng-model="ipv4.SubnetMask" ng-style="{ 'border-color' : (!isValidIPv4Address(ipv4.SubnetMask)) ? 'red' : 'transparent' }"
                 ng-disabled="interface.DHCPv4.DHCPEnabled || (!interface.DHCPv4.DHCPEnabled && !editIPV4Settings[$index])" />
             </div>
             <div class="table__cell action-wrapper">
@@ -149,7 +149,7 @@
               <div class="bmc-table__row-actions ng-scope">
                 <button ng-show="editIPV4Settings[$index]"
                   ng-class="!ipv4.SubnetMask || !ipv4.Gateway || !ipv4.Address ? 'disabled' : ''"
-                  class="btn btn-primary btn-small" ng-disabled="!ipv4.SubnetMask || !ipv4.Gateway || !ipv4.Address"
+                  class="btn btn-primary btn-small" ng-disabled="!ipv4.SubnetMask || !ipv4.Gateway || !ipv4.Address || !isValidIPv4Address(ipv4.SubnetMask) || !isValidIPv4Address(ipv4.Gateway) || !isValidIPv4Address(ipv4.Address)"
                   ng-click="editIPV4Settings[$index]=false; updatedRow()" ng-disabled="interface.DHCPv4.DHCPEnabled">
                   <icon alt="Complete" title="Complete" ng-file="icon-check.svg"></icon>
                 </button>
