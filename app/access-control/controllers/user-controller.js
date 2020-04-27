@@ -130,8 +130,12 @@ window.angular && (function(angular) {
               toastService.success(`User '${username}' has been created.`);
             })
             .catch((error) => {
-              console.log(JSON.stringify(error));
-              toastService.error(`Failed to create new user '${username}'.`);
+              if (error.data && error.data['Password@Message.ExtendedInfo']) {
+                const msg = error.data['Password@Message.ExtendedInfo'][0];
+                toastService.error(msg.Message);
+              } else {
+                toastService.error(`Failed to create new user '${username}'.`)
+              }
             })
             .finally(() => {
               $scope.loading = false;
@@ -152,8 +156,13 @@ window.angular && (function(angular) {
               toastService.success('User has been updated successfully.')
             })
             .catch((error) => {
-              console.log(JSON.stringify(error));
-              toastService.error(`Unable to update user '${originalUsername}'.`)
+              if (error.data && error.data['Password@Message.ExtendedInfo']) {
+                const msg = error.data['Password@Message.ExtendedInfo'][0];
+                toastService.error(msg.Message);
+              } else {
+                toastService.error(
+                    `Unable to update user '${originalUsername}'.`);
+              }
             })
             .finally(() => {
               $scope.loading = false;
@@ -392,7 +401,7 @@ window.angular && (function(angular) {
               }
             })
             .catch(
-                () => {
+                (res) => {
                     // do nothing
                 })
       }
