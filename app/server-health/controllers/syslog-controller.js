@@ -55,7 +55,7 @@ window.angular && (function(angular) {
           $scope.loadInitial = true;
           $scope.outputCount = 200;
           $scope.filterTypes = [];
-          $scope.iterateBackwards = false;
+          $scope.iterateBackwards = true;
 
           $scope.formatDate = function(date) {
             var dateOut = new Date(date);
@@ -80,8 +80,11 @@ window.angular && (function(angular) {
           function onLoadPage() {
             APIUtils.getSystemLogCount().then(
                 function(totallogCount) {
-                  var firstRecord =
-                      totallogCount - Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
+                  var firstRecord = 0;
+                  if (totallogCount > Constants.PAGINATION.LOG_ITEMS_PER_PAGE) {
+                    firstRecord =
+                        totallogCount - Constants.PAGINATION.LOG_ITEMS_PER_PAGE;
+                  }
                   $scope.displaySystemLogs(
                       $scope.loadInitial, $scope.outputCount, firstRecord,
                       totallogCount);
@@ -99,7 +102,6 @@ window.angular && (function(angular) {
             } else {
               var outputAmount = outputCount;
             };
-
             APIUtils.getSystemLogs(outputAmount, firstRecord)
                 .then(
                     function(res) {

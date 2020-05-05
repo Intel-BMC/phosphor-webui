@@ -76,34 +76,29 @@ window.angular && (function(angular) {
           });
         },
         getSystemLogs: function(outputCount, firstRecord) {
-          return this.getRedfishSysName().then(function(sysName) {
-            var deferred = $q.defer();
-            var uri = '/redfish/v1/Systems/' + sysName +
-                '/LogServices/EventLog/Entries';
-            var logEntries = [];
-            var initparams = {$top: outputCount, $skip: firstRecord};
-
-            $http({
-              method: 'GET',
-              url: DataService.getHost() + uri,
-              params: initparams,
-              withCredentials: true
-            })
-                .then(
-                    function(response) {
-                      angular.forEach(response.data['Members'], function(log) {
-                        if (log.hasOwnProperty('Created')) {
-                          logEntries.push(log);
-                        }
-                      });
-                      deferred.resolve(logEntries);
-                    },
-                    function(error) {
-                      console.log(JSON.stringify(error));
+          var uri = '/redfish/v1/Systems/system/LogServices/EventLog/Entries';
+          var logEntries = [];
+          var initparams = {$top: outputCount, $skip: firstRecord};
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + uri,
+                   params: initparams,
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    var deferred = $q.defer();
+                    angular.forEach(response.data['Members'], function(log) {
+                      if (log.hasOwnProperty('Created')) {
+                        logEntries.push(log);
+                      }
                     });
-
-            return deferred.promise;
-          });
+                    deferred.resolve(logEntries);
+                    return deferred.promise;
+                  },
+                  function(error) {
+                    console.log(JSON.stringify(error));
+                  });
         },
         clearSystemLogs: function() {
           var uri = '/redfish/v1/Systems/' + DataService.systemName +
