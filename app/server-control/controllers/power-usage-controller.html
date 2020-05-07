@@ -11,7 +11,7 @@
             <div class="table__body">
               <div class="table__row">
                 <div class="table__cell">Power Consumption</div>
-                <div class="table__cell" class="padding-right">{{ power_consumption }}
+                <div class="table__cell" class="padding-right">{{ power_consumption || 'NA' }}
                 </div>
               </div>
               <div class="table__row">
@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div class="table__row">
-                <div class="table__cell"><span ng-show="editPowerCap">Set </span>Power Cap</div>
+                <div class="table__cell"><span ng-show="!editPowerCap">Set </span>Limit in Watts</div>
                 <div class="table__cell edit-box">
 
                   <!--start config table-->
@@ -45,12 +45,14 @@
                     <div class="table__body">
                       <div class="table__row">
                         <div class="table__cell">
-                          <span ng-show="!power_cap.PowerCapEnable">Not Set</span>
+                          <span ng-show="!power_cap.PowerCapEnable">
+                             {{ (!powerCap) ? 'Not Set' : powerCap }}
+                          </span>
 
                           <input ng-show="power_cap.PowerCapEnable"
                             ng-class="editPowerCap ? 'hideborders' : 'showborders'" id="power-cap" type="number"
-                            min="100" max="10000" step="1" ng-disabled="!power_cap.PowerCapEnable"
-                            ng-model="power_cap.PowerCap" />
+                            min="100" max="10000" step="1" ng-disabled="editPowerCap"
+                            ng-model="powerCap" />
 
                         </div>
                         <div class="table__cell action-wrapper" ng-show="power_cap.PowerCapEnable">
@@ -63,8 +65,8 @@
                               ng-click="editPowerCap=false">
                               <icon alt="Edit" title="Edit" file="icon-edit.svg" aria-hidden="true"></icon>
                             </button>
-                            <button class="btn btn-primary btn-small" ng-click="power_cap.PowerCapEnable=false">
-                              <icon alt="Remove" title="Remove" file="icon-trashcan.svg" aria-hidden="true"></icon>
+                            <button ng-show="!editPowerCap" class="btn btn-primary btn-small" ng-click="editPowerCap=true;unsetPowerCap()">
+                              <icon alt="Cancel" title="Cancel" file="icon-close.svg" aria-hidden="true"></icon>
                             </button>
                           </div>
 
@@ -76,8 +78,12 @@
 
                 </div>
               </div>
+              <div class="table__row">
+                <div class="table__cell">Limit Actions</div>
+                <div class="table__cell" class="padding-right">{{ LimitException }}
+                </div>
+              </div>
             </div>
-
           </div>
 
         </div>

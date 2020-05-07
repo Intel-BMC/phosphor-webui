@@ -23,6 +23,7 @@ window.angular && (function(angular) {
         }
         return value;
       };
+      var baseBoard = '';
       var SERVICE = {
         API_CREDENTIALS: Constants.API_CREDENTIALS,
         API_RESPONSE: Constants.API_RESPONSE,
@@ -1526,16 +1527,40 @@ window.angular && (function(angular) {
                     }
                   });
         },
-        getPowerCap: function() {
+        getChassisBaseboardUri: function() {
+          var deferred = $q.defer();
           return $http({
                    method: 'GET',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/control/host0/power_cap',
+                   url: DataService.getHost() + '/redfish/v1/Chassis',
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    const chassis = response.data.Members;
+                    angular.forEach(chassis, function(res) {
+                      if (res['@odata.id'].indexOf('_Baseboard') > -1) {
+                        baseBoard = res['@odata.id'];
+                      }
+                    });
+                    deferred.resolve(response.data);
+                    return response.data;
+                  },
+                  function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                  });
+        },
+        getPowerCap: function() {
+          var deferred = $q.defer();
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + baseBoard + '/Power',
                    withCredentials: true
                  })
               .then(function(response) {
+                deferred.resolve(response.data);
                 return response.data;
-              });
+              })
         },
         setPowerCapEnable: function(powerCapEnable) {
           return $http({
@@ -1550,12 +1575,12 @@ window.angular && (function(angular) {
               });
         },
         setPowerCap: function(powerCap) {
+          const json = {PowerControl: [{PowerLimit: {LimitInWatts: powerCap}}]};
           return $http({
-                   method: 'PUT',
-                   url: DataService.getHost() +
-                       '/xyz/openbmc_project/control/host0/power_cap/attr/PowerCap',
+                   method: 'PATCH',
+                   url: DataService.getHost() + baseBoard + '/Power',
                    withCredentials: true,
-                   data: JSON.stringify({'data': powerCap})
+                   data: JSON.stringify(json)
                  })
               .then(function(response) {
                 return response.data;
