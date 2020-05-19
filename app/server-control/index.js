@@ -57,6 +57,7 @@ window.angular && (function(angular) {
               .when('/server-control/kvm', {
                 title: 'KVM',
                 'template': require('./controllers/kvm-controller.html'),
+                'controller': 'kvmController',
                 authenticated: true
               })
               .when('/server-control/kvm-window', {

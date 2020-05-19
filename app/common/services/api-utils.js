@@ -431,6 +431,27 @@ window.angular && (function(angular) {
             return deferred.promise;
           });
         },
+        getUserPrivilleage: function(username) {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() +
+                       '/redfish/v1/AccountService/Accounts/' + username,
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    if (response.data) {
+                      const userValue = {
+                        UserName: username,
+                        RoleId: response.data.RoleId
+                      };
+                      return userValue;
+                    };
+                  },
+                  function(error) {
+
+                  })
+        },
         login: function(username, password, callback) {
           $http({
             method: 'POST',

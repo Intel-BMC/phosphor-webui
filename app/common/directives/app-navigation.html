@@ -48,7 +48,7 @@
           <span class="nav-link">Control</span>
         </button>
         <ul class="nav__second-level btn-control" ng-class="{opened: (showSubMenu && firstLevel == 'server-control')}">
-          <li ng-class="{'active': (path == '/server-control' || path == '/server-control/power-operations')}">
+          <li ng-if="checkPrivilege('Operator')" ng-class="{'active': (path == '/server-control' || path == '/server-control/power-operations')}">
             <a href="#/server-control/power-operations"
               tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
               <span>Server power operations</span>
@@ -66,24 +66,24 @@
               <span>Server LED</span>
             </a>
           </li>
-          <li ng-class="{'active': (path == '/server-control/bmc-reboot')}">
+          <li ng-if="checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/bmc-reboot')}">
             <a href="#/server-control/bmc-reboot"
               tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
               <span>Reboot BMC</span>
             </a>
           </li>
-          <li ng-class="{'active': (path == '/server-control/remote-console')}">
+          <li ng-if="checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/remote-console')}">
             <a href="#/server-control/remote-console"
               tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
               <span>Serial over LAN console</span>
             </a>
           </li>
-          <li ng-class="{'active': (path == '/server-control/kvm')}">
-            <a href="#/server-control/kvm" tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
+          <li ng-if="checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/kvm')}">
+            <a ng-click="RedirectToURL('/server-control/kvm')" tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
               <span>KVM</span>
             </a>
           </li>
-          <li ng-if="VMEnabled" ng-class="{'active': (path == '/server-control/virtual-media')}">
+          <li ng-if="VMEnabled || checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/virtual-media')}">
             <a href="#/server-control/virtual-media" tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
                <span>Virtual Media</span>
             </a>

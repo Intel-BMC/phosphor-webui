@@ -18,10 +18,31 @@ window.angular && (function(angular) {
                 $scope.VMEnabled = false;
               }
 
+              $scope.checkPrivilege = function(requiredPriv) {
+                const userValue =
+                    JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+                if (userValue && userValue.RoleId) {
+                  if (requiredPriv == 'Administrator') {
+                    return userValue.RoleId === 'Administrator';
+                  } else if (requiredPriv == 'Operator') {
+                    return (
+                        (userValue.RoleId === 'Administrator') ||
+                        (userValue.RoleId === 'Operator'));
+                  } else if (requiredPriv == 'ReadOnly') {
+                    return (
+                        (userValue.RoleId === 'Administrator') ||
+                        (userValue.RoleId === 'Operator') ||
+                        (userValue.RoleId === 'ReadOnly'));
+                  }
+                  return false;
+                } else {
+                  return false;
+                }
+              };
 
               $scope.$watch('toggleNav', function() {
                 $rootScope.toggleNavState = $scope.toggleNav;
-              })
+              });
 
               $scope.change = function(firstLevel) {
                 if (firstLevel != $scope.firstLevel) {

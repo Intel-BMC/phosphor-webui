@@ -10,9 +10,16 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverControl').controller('bmcRebootController', [
-    '$scope', '$window', 'APIUtils', 'dataService', 'toastService',
-    function($scope, $window, APIUtils, dataService, toastService) {
+    '$scope', '$window', 'APIUtils', 'dataService', 'toastService', '$location',
+    function($scope, $window, APIUtils, dataService, toastService, $location) {
       $scope.dataService = dataService;
+
+      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+      if (userValue && userValue.RoleId &&
+          userValue.RoleId != 'Administrator') {
+        $location.url('/unauthorized');
+      }
+
       $scope.confirm = false;
       $scope.rebootConfirm = function() {
         if ($scope.confirm) {

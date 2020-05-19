@@ -12,9 +12,10 @@ window.angular && (function(angular) {
   angular.module('app.serverControl').controller('virtualMediaController', [
     '$scope', '$cookies', 'APIUtils', '$q', 'toastService', 'dataService',
     'nbdServerService', 'virtualMediaModel', '$uibModal', '$timeout',
+    '$location',
     function(
         $scope, $cookies, APIUtils, $q, toastService, dataService,
-        nbdServerService, virtualMediaModel, $uibModal, $timeout) {
+        nbdServerService, virtualMediaModel, $uibModal, $timeout, $location) {
       var vms = [];
       var refreshRateMs = 5000;
       var refreshPromise;
@@ -23,6 +24,12 @@ window.angular && (function(angular) {
 
       $scope.proxyDevices = [];
       $scope.legacyDevices = [];
+
+      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+      if (userValue && userValue.RoleId &&
+          userValue.RoleId != 'Administrator') {
+        $location.url('/unauthorized');
+      }
 
       function getVMData() {
         APIUtils.getVMCollection().then(

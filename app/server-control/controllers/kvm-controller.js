@@ -16,5 +16,14 @@ window.angular && (function(angular) {
   angular.module('app.serverControl').controller('kvmController', [
     '$scope', 'dataService', '$location', '$log',
     function($scope, dataService, $location, $log) {
+      $scope.currentUrl = $location.url();
+
+      console.log('get kvm loca :', $location)
+      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+      if (userValue && userValue.RoleId &&
+          userValue.RoleId != 'Administrator') {
+        $location.url('/unauthorized');
+      }
+    }
   ]);
 })(angular);

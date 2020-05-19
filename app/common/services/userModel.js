@@ -20,6 +20,10 @@ window.angular && (function(angular) {
                 (response.status == APIUtils.API_RESPONSE.SUCCESS_STATUS ||
                  response.status === undefined)) {
               sessionStorage.setItem('LOGIN_ID', username);
+              APIUtils.getUserPrivilleage(username).then(function(response) {
+                sessionStorage.setItem(
+                    'USER_PERMISSION', JSON.stringify(response));
+              })
               callback(true);
             } else if (
                 response && response.data && response.data.data &&
@@ -49,6 +53,7 @@ window.angular && (function(angular) {
               sessionStorage.removeItem('LOGIN_ID');
               sessionStorage.removeItem(APIUtils.HOST_SESSION_STORAGE_KEY);
               $cookies.remove('IsAuthenticated');
+              sessionStorage.removeItem('USER_PERMISSION');
               callback(true);
             } else if (response.status == APIUtils.API_RESPONSE.ERROR_STATUS) {
               callback(false);

@@ -10,11 +10,11 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.serverControl').controller('powerOperationsController', [
-    '$scope', 'APIUtils', 'dataService', 'Constants', '$interval', '$q',
-    'toastService', '$uibModal',
+    '$scope', '$location', 'APIUtils', 'dataService', 'Constants', '$interval',
+    '$q', 'toastService', '$uibModal',
     function(
-        $scope, APIUtils, dataService, Constants, $interval, $q, toastService,
-        $uibModal) {
+        $scope, $location, APIUtils, dataService, Constants, $interval, $q,
+        toastService, $uibModal) {
       $scope.dataService = dataService;
 
       // Is a || of the other 4 "confirm" variables to ensure only
@@ -31,6 +31,12 @@ window.angular && (function(angular) {
       $scope.status = '';
       $scope.activeModal;
       $scope.flag = true;
+
+      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+      if (userValue && userValue.RoleId && userValue.RoleId != 'Operator' &&
+          userValue.RoleId != 'Administrators') {
+        $location.url('/unauthorized');
+      }
 
       // When a power operation is in progress, set to true,
       // when a power operation completes (success/fail) set to false.

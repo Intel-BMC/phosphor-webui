@@ -11,8 +11,17 @@ window.angular && (function(angular) {
 
   angular.module('app.serverControl').controller('serverLEDController', [
     '$scope', '$window', '$route', 'APIUtils', 'dataService', 'toastService',
-    function($scope, $window, $route, APIUtils, dataService, toastService) {
+    '$location',
+    function(
+        $scope, $window, $route, APIUtils, dataService, toastService,
+        $location) {
       $scope.dataService = dataService;
+
+      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
+      if (userValue && userValue.RoleId &&
+          userValue.RoleId != 'Administrator') {
+        $location.url('/unauthorized');
+      }
 
       APIUtils.getLEDState().then(function(state) {
         $scope.displayLEDState(state);
