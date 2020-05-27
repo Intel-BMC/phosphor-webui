@@ -122,19 +122,6 @@ window.angular && (function(angular) {
                       // Prepare Export file
                       $scope.loadMergedSensors().then(function() {
                         $scope.showAlert();
-                        $scope.mergedsensorsexport =
-                            ((JSON.stringify($scope.sensorsInfo.Voltages.concat(
-                                  $scope.sensorsInfo.Fans,
-                                  $scope.sensorsInfo.Temperatures)))
-                                 .replace('[', ''))
-                                .replace(']', '');
-                        // encode # ins export
-                        var i = 0;
-                        var strLength = $scope.mergedsensorsexport.length;
-                        for (i; i < strLength; i++) {
-                          $scope.mergedsensorsexport =
-                              $scope.mergedsensorsexport.replace('#', '%23');
-                        };
                       });
                     };
                   });
