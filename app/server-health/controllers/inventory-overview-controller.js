@@ -56,17 +56,24 @@ window.angular && (function(angular) {
                                   $scope.loading = false;
                                 });
 
-      var getCPUsPromise = APIUtils.getCPUs()
-                               .then(
-                                   function(result) {
-                                     $scope.CPUData = result;
-                                   },
-                                   function(error) {
-                                     console.log(JSON.stringify(error));
-                                   })
-                               .finally(function() {
-                                 $scope.loading = false;
-                               });
+      var getCPUsPromise =
+          APIUtils.getCPUs()
+              .then(
+                  function(result) {
+                    result.forEach(element => {
+                      if (element.ProcessorId) {
+                        element['EffectiveFamily'] =
+                            element.ProcessorId.EffectiveFamily;
+                      }
+                    });
+                    $scope.CPUData = result;
+                  },
+                  function(error) {
+                    console.log(JSON.stringify(error));
+                  })
+              .finally(function() {
+                $scope.loading = false;
+              });
 
       var getDrivesPromise = APIUtils.getDrives()
                                  .then(

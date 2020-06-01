@@ -18,7 +18,7 @@
 
   </section>
 
-  <section class="page-content-box">
+  <section class="page-content-box" ng-show="selectedHardwareType=='PCIe Devices'">
 
     <div class="columns col-lg-4 col-md-4 col-sm-12"><label class="trim-text-medium">
         Search hardware components:</label>
@@ -62,8 +62,10 @@
             <table class="overview-config-table">
               <tr ng-repeat="(key, value) in CPU"
                 ng-show="key.indexOf('@') != 0 && key.indexOf('Status') != 0 && key.indexOf('Id') != 0">
-                <td>{{parseNonSpacedWords(key)}}</td>
-                <td>{{value || 'N/A'}}</td>
+                <td>{{ parseNonSpacedWords(key) }}</td>
+                <td>{{(value && value.VendorId) ? value.VendorId : value || 'NA'}}</td>
+                <!-- <td *ng-If="value.ProcessorId">EffectiveFamily</td>
+                <td *ng-If="value.ProcessorId">{{ value.EffectiveFamily }}</td> -->
               </tr>
             </table>
 
@@ -163,7 +165,7 @@
           No drives available to display.
         </div>
 
-        <div class="text-intro" ng-show="(DriveData.length > 8) && (filteredDriveData.length != 0)">
+        <div class="text-intro" ng-show="(DriveData.length > 1) && (filteredDriveData.length != 0)">
           <div class="trim-text-medium inline">
             <input type='checkbox' ng-click="toggleDrivedetails = !toggleDrivedetails;">
             Show
@@ -186,7 +188,7 @@
               </div>
               <div class="table__cell status-icon trim-text-medium"></div>
               <div class="table__cell sort_button_wrapper" ng-click='sortDriveBy("Manufacturer")'
-                ng-class="{reverse: reverse}">
+                ng-class="{reverse: reverse}" ng-show="toggleDrivedetails">
                 Manufacturer
               </div>
               <div class="table__cell">
@@ -212,7 +214,7 @@
               <div class="table__cell status-icon status__{{drive.Status.Health}} trim-text-medium">&nbsp;
               </div>
               <div class="table__cell">{{drive.Name || 'N/A'}}</div>
-              <div class="table__cell">{{drive.Manufacturer || 'N/A'}}</div>
+              <div class="table__cell" ng-show="toggleDrivedetails">{{drive.Manufacturer || 'N/A'}}</div>
               <div class="table__cell">{{drive.Status.Health}} {{drive.Status.State}}</div>
               <div class="table__cell" ng-show="toggleDrivedetails">{{drive.Model || 'N/A'}}</div>
               <div class="table__cell" ng-show="toggleDrivedetails">{{drive.PartNumber || 'N/A'}}</div>
@@ -273,11 +275,15 @@
           <div class="table__row">
             <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceId",false)'
               ng-class="{reverse: reverse}">
-              Manufacturer
+              Device ID
+            </div>
+            <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("ParentId",false)'
+              ng-class="{reverse: reverse}">
+              Device name
             </div>
             <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceId",false)'
               ng-class="{reverse: reverse}">
-              Device ID
+              Manufacturer
             </div>
             <div class="table__cell sort_button_wrapper" ng-click='sortPCIBy("DeviceClass",false)'
               ng-class="{reverse: reverse}">
@@ -293,11 +299,12 @@
           <div class="table__row"
             ng-repeat="device in filteredPCIData = (PCIData  | orderBy:sortPCIKey:reverse | filter:filterBySearchTermsPCI)"
             ng-class="(device.EvenOdd || !showasGroups ? '' : 'device_group') + ' ' +  (device.GroupedBy && showasGroups ? 'device_sep' : '')">
+            <div class="table__cell">{{device.DeviceId}}</div>
+            <div class="table__cell">{{device.ParentId}}</div>
             <div class="table__cell">
-              <span ng-show="device.GroupedBy || !showasGroups">{{device.Manufacturer}} {{device.ParentId}}</span>
+              <span ng-show="device.GroupedBy || !showasGroups">{{device.Manufacturer}}</span>
               <span ng-show="!device.GroupedBy && showasGroups">&#8230;</span>
             </div>
-            <div class="table__cell">{{device.DeviceId}}</div>
             <div class="table__cell">{{parseNonSpacedWords(device.DeviceClass)}}</div>
             <div class="table__cell trim-text-medium" ng-show="toggleDevices">{{device.SubsystemId}}</div>
             <div class="table__cell trim-text-medium" ng-show="toggleDevices">{{device.RevisionId}}</div>

@@ -23,7 +23,6 @@ window.angular && (function(angular) {
         }
         return value;
       };
-
       var SERVICE = {
         API_CREDENTIALS: Constants.API_CREDENTIALS,
         API_RESPONSE: Constants.API_RESPONSE,
@@ -1163,87 +1162,45 @@ window.angular && (function(angular) {
             var cId = '';
             var pId = '';
             var evenOdd = true;
-            return $http({
-                     method: 'GET',
-                     url: DataService.getHost() + '/redfish/v1/Systems/' +
-                         sysName,
-                     withCredentials: true
-                   })
-                .then(
-                    function(r1) {
-                      const pciDevices = r1.data['PCIeDevices'];
-                      if (!pciDevices || pciDevices.length === 0) {
-                        return deferred.resolve(Devices);
-                      }
-                      angular.forEach(pciDevices, function(system) {
-                        getRequest(system['@odata.id'])
-                            .then(
-                                function(r2) {
-                                  // nested 2nd level
-                                  angular.forEach(
-                                      r2.data['PCIeFunctions'],
-                                      function(system) {
-                                        getRequest(r2.data['PCIeFunctions']
-                                                          ['@odata.id'])
-                                            .then(
-                                                function(r3) {
-                                                  // nested 3rd level
-                                                  angular.forEach(
-                                                      r3.data['Members'],
-                                                      function(system) {
-                                                        getRequest(
-                                                            system['@odata.id'])
-                                                            .then(
-                                                                function(r4) {
-                                                                  getManufacturer(
-                                                                      addinFunctions,
-                                                                      r4)
-                                                                },
-                                                                function(
-                                                                    error) {
-                                                                  console.log(
-                                                                      JSON.stringify(
-                                                                          error));
-                                                                });
-                                                      });
-                                                },
-                                                function(error) {
-                                                  console.log(
-                                                      JSON.stringify(error));
+            return $http(getRequest('/redfish/v1/Systems/' + sysName))
+                .then(function(r1) {
+                  const pciDevices = r1.data['PCIeDevices'];
+                  if (!pciDevices || pciDevices.length === 0) {
+                    return deferred.resolve(Devices);
+                  }
+                  angular.forEach(pciDevices, function(system) {
+                    return $http(getRequest(system['@odata.id']))
+                        .then(function(r2) {
+                          // nested 2nd level
+                          angular.forEach(
+                              r2.data['PCIeFunctions'], function(system) {
+                                return $http(getRequest(r2.data['PCIeFunctions']
+                                                               ['@odata.id']))
+                                    .then(function(r3) {
+                                      // nested 3rd level
+                                      angular.forEach(
+                                          r3.data['Members'], function(system) {
+                                            return $http({
+                                                     method: 'GET',
+                                                     url:
+                                                         DataService.getHost() +
+                                                         system['@odata.id'],
+                                                     withCredentials: true
+                                                   })
+                                                .then(function(r4) {
+                                                  Devices.push(getManufacturer(
+                                                      addinFunctions, r2, r4,
+                                                      pId, cId, evenOdd));
+                                                  deferred.resolve(Devices);
                                                 });
-                                      });
-                                },
-                                function(error) {
-                                  console.log(JSON.stringify(error));
-                                });
-                      });
-                      return deferred.promise;
-                    },
-                    function(error) {
-                      console.log(JSON.stringify(error));
-                    });
+                                          });
+                                    });
+                              });
+                        });
+                  });
+                  return deferred.promise;
+                });
           });
-        },
-        getRequest(urlString) {
-          return $http({
-            method: 'GET',
-            url: DataService.getHost() + urlString,
-            withCredentials: true
-          })
-        },
-        getManufacturer(addinFunctions, r4) {
-          addinFunctions = r4.data;
-          addinFunctions.Manufacturer = r2.data['Manufacturer'];
-          cId = r2.data['Id'];
-          if (pId != cId) {
-            addinFunctions.GroupedBy = cId;
-            evenOdd = !evenOdd;
-          };
-          addinFunctions.ParentId = cId;
-          addinFunctions.EvenOdd = evenOdd;
-          Devices.push(addinFunctions);
-          pId = r2.data['Id'];
-          deferred.resolve(Devices);
         },
         getDIMMs: function() {
           return this.getRedfishSysName().then(function(sysName) {
@@ -1300,11 +1257,8 @@ window.angular && (function(angular) {
                       if (!members || members.length === 0) {
                         return deferred.resolve(cpu);
                       }
-                      console.log('nested 1  -> get processor cpu :', members);
                       angular.forEach(
                           response.data['Members'], function(system) {
-                            console.log(
-                                'nested 2 -> get processor cpu :', members);
                             return $http({
                                      method: 'GET',
                                      url: DataService.getHost() +
@@ -1340,26 +1294,50 @@ window.angular && (function(angular) {
                 .then(
                     function(response) {
                       var drive = [];
-                      const drives = response.data['Drives'];
+                      const drives = response.data['Members'];
                       if (!drives || drives.length === 0) {
                         return deferred.resolve(drive);
                       }
-                      angular.forEach(drives, function(system) {
-                        return $http({
-                                 method: 'GET',
-                                 url: DataService.getHost() +
-                                     system['@odata.id'],
-                                 withCredentials: true
-                               })
-                            .then(
-                                function(response) {
-                                  drive.push(response.data);
-                                  deferred.resolve(drive);
-                                },
-                                function(error) {
-                                  console.log(JSON.stringify(error));
-                                })
-                      });
+                      angular.forEach(
+                          drives,
+                          function(system) {
+                            return $http({
+                                     method: 'GET',
+                                     url: DataService.getHost() +
+                                         system['@odata.id'],
+                                     withCredentials: true
+                                   })
+                                .then(
+                                    function(response2) {
+                                      angular.forEach(
+                                          response2.data['Drives'],
+                                          function(system) {
+                                            return $http({
+                                                     method: 'GET',
+                                                     url:
+                                                         DataService.getHost() +
+                                                         system['@odata.id'],
+                                                     withCredentials: true
+                                                   })
+                                                .then(
+                                                    function(response3) {
+                                                      drive.push(
+                                                          response3.data);
+                                                      deferred.resolve(drive);
+                                                    },
+                                                    function(error) {
+                                                      console.log(
+                                                          JSON.stringify(
+                                                              error));
+                                                    })
+                                          })
+                                    },
+                                    function(error) {
+                                      console.log(JSON.stringify(error));
+                                    })
+                          }
+
+                      )
                     },
                     function(error) {
                       console.log(JSON.stringify(error));
@@ -1644,6 +1622,26 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
+      };
+      var getRequest = function(urlString) {
+        return {
+          method: 'GET', url: DataService.getHost() + urlString,
+              withCredentials: true
+        }
+      };
+      var getManufacturer = function(
+          addinFunctions, r2, r4, pId, cId, evenOdd) {
+        addinFunctions = r4.data;
+        addinFunctions.Manufacturer = r2.data['Manufacturer'];
+        cId = r2.data['Id'];
+        if (pId != cId) {
+          addinFunctions.GroupedBy = cId;
+          evenOdd = !evenOdd;
+        };
+        addinFunctions.ParentId = cId;
+        addinFunctions.EvenOdd = evenOdd;
+        pId = r2.data['Id'];
+        return addinFunctions;
       };
       return SERVICE;
     }
