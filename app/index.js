@@ -200,10 +200,20 @@ window.angular && (function(angular) {
             if (next.$$route.originalPath == '/' ||
                 next.$$route.originalPath == '/login') {
               if (userModel.isLoggedIn()) {
+                const uri = next && next.params.next || '';
                 if (current && current.$$route) {
                   $location.path(current.$$route.originalPath);
-                } else {
-                  $location.path('/overview/server');
+                } else if (next) {
+                  const invalidChar =
+                      (next.indexOf('(') >= 0 || next.indexOf(')') >= 0 ||
+                       next.indexOf('.') >= 0 || next.indexOf(':') >= 0 ||
+                       next.indexOf('//') >= 0)
+                  if (!invalidChar) {
+                    $window.location.hash = '#/overview/server';
+                  }
+                  else {
+                    $window.location.href = next;
+                  }
                 }
               }
             }
