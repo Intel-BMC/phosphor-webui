@@ -34,6 +34,7 @@ window.angular && (function(angular) {
       $scope.sensorsInfo.Temperatures = [];
       $scope.sensorsInfo.Fans = [];
       $scope.sensorsInfo.Voltages = [];
+      $scope.sensorsInfo.Current = [];
       $scope.selectedChoice = 'All';
       $scope.reverseSeverity = false;
       $scope.reverse = false;
@@ -98,8 +99,8 @@ window.angular && (function(angular) {
       // SECOND
       function getComponentSensors(component, totalChassis, curChassis) {
         var data = component;
-        data['sensors'] = {'Temperatures': [], 'Fans': [], 'Voltages': []};
-
+        data['sensors'] =
+            {'Temperatures': [], 'Fans': [], 'Voltages': [], 'Current': []};
         APIUtils.getSensorsInfo(component.Power['@odata.id'])
             .then(function(res) {
               if (res.hasOwnProperty('Voltages')) {
@@ -113,21 +114,72 @@ window.angular && (function(angular) {
                     if (res.hasOwnProperty('Fans')) {
                       data.sensors['Fans'] = res.Fans;
                     }
+                    if (component.hasOwnProperty('Sensors')) {
+                      APIUtils.getSensorsInfo(component.Sensors['@odata.id'])
+                          .then(function(res) {
+                            if (res && res.Members && res.Members.length > 0) {
+                              const sensorList = [];
+                              angular.forEach(
+                                  res.Members, function(sensor, index) {
+                                    APIUtils.getSensorsInfo(sensor['@odata.id'])
+                                        .then(function(res) {
+                                          if (res.Thresholds &&
+                                              res.Thresholds.UpperCaution) {
+                                            res['UpperThresholdNonCritical'] =
+                                                res.Thresholds.UpperCaution
+                                                    .Reading;
+                                          }
+                                          if (res.Thresholds &&
+                                              res.Thresholds.UpperCritical) {
+                                            res['UpperThresholdCritical'] =
+                                                res.Thresholds.UpperCritical
+                                                    .Reading;
+                                          }
+                                          if (res.Thresholds &&
+                                              res.Thresholds.LowerCaution) {
+                                            res['LowerThresholdNonCritical'] =
+                                                res.Thresholds.LowerCaution
+                                                    .Reading;
+                                          }
+                                          if (res.Thresholds &&
+                                              res.Thresholds.LowerCritical) {
+                                            res['LowerThresholdCritical'] =
+                                                res.Thresholds.LowerCritical
+                                                    .Reading;
+                                          }
+                                          sensorList.push(res);
+                                          return;
+                                        })
+                                        .finally(function() {
+                                          if (curChassis == totalChassis) {
+                                            if (res.Members.length <=
+                                                index + 1) {
+                                              $scope.loadMergedSensors().then(
+                                                  function() {
+                                                    $scope.showAlert();
+                                                  });
+                                            }
+                                          };
+                                        });
+                                  })
+                              data.sensors['Current'] = sensorList;
+                            } else {
+                              if (curChassis == totalChassis) {
+                                $scope.loadMergedSensors().then(function() {
+                                  $scope.showAlert();
+                                });
+                              }
+                            }
+                            return;
+                          })
+                    }
                     return;
                   })
-                  .finally(function() {
-                    if (curChassis == totalChassis) {
-                      $scope.loading = false;
-
-                      // Prepare Export file
-                      $scope.loadMergedSensors().then(function() {
-                        $scope.showAlert();
-                      });
-                    };
-                  });
               return;
             })
-
+            .finally(function() {
+              $scope.loading = false;
+            })
         return data;
       };
 
@@ -143,11 +195,14 @@ window.angular && (function(angular) {
               [].concat($scope.sensorsInfo.Fans, record.sensors.Fans);
           $scope.sensorsInfo.Voltages =
               [].concat($scope.sensorsInfo.Voltages, record.sensors.Voltages);
+          $scope.sensorsInfo.Current =
+              [].concat($scope.sensorsInfo.Current, record.sensors.Current);
         });
 
         // FOURTH: merge all sensors into one array
         $scope.mergedSensors = $scope.sensorsInfo.Voltages.concat(
-            $scope.sensorsInfo.Fans, $scope.sensorsInfo.Temperatures);
+            $scope.sensorsInfo.Fans, $scope.sensorsInfo.Temperatures,
+            $scope.sensorsInfo.Current);
         deferred.resolve($scope.mergedSensors);
         return deferred.promise;
       };
@@ -255,10 +310,11 @@ window.angular && (function(angular) {
       };
 
       $scope.orderDatabySeverity = function(val) {
+        const value = (val && val.Status) ? val.Status.Health : '';
         if ($scope.reverseSeverity) {
-          return ['Critical', 'Warning', 'OK'].indexOf(val.Status.Health);
+          return ['Critical', 'Warning', 'OK'].indexOf(value);
         } else {
-          return ['Ok', 'Warning', 'Critical'].indexOf(val.Status.Health);
+          return ['Ok', 'Warning', 'Critical'].indexOf(value);
         }
       };
 

@@ -79,19 +79,19 @@
           </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
-            {{showReadingUnits(sensor.LowerThresholdCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits)}}
+            {{showReadingUnits(sensor.LowerThresholdCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits) || 'NA'}}
           </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
-            {{showReadingUnits(sensor.LowerThresholdNonCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits)}}
+            {{showReadingUnits(sensor.LowerThresholdNonCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits) || 'NA'}}
           </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
-            {{showReadingUnits(sensor.UpperThresholdNonCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits)}}
+            {{showReadingUnits(sensor.UpperThresholdNonCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits) || 'NA'}}
           </div>
 
           <div class="table__cell sensor__threshold trim-text-medium" ng-show="showThresholds">
-            {{showReadingUnits(sensor.UpperThresholdCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits)}}
+            {{showReadingUnits(sensor.UpperThresholdCritical,sensor.ReadingVolts, sensor.ReadingCelsius, sensor.ReadingUnits) || 'NA'}}
           </div>
         </div>
       </div>
