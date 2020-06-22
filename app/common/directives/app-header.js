@@ -30,7 +30,9 @@ window.angular && (function(angular) {
 
             $scope.loadServerHealth = function() {
               APIUtils.getServerStatus().then(function(result) {
-                dataService.updateServerHealth(result.Status.Health);
+                if (result && result.Status) {
+                  dataService.updateServerHealth(result.Status.Health);
+                }
               });
             };
 
