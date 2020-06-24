@@ -17,12 +17,6 @@ window.angular && (function(angular) {
         $location) {
       $scope.dataService = dataService;
 
-      const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
-      if (userValue && userValue.RoleId &&
-          userValue.RoleId != 'Administrator') {
-        $location.url('/unauthorized');
-      }
-
       APIUtils.getLEDState().then(function(state) {
         $scope.displayLEDState(state);
       });

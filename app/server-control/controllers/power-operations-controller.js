@@ -34,7 +34,7 @@ window.angular && (function(angular) {
 
       const userValue = JSON.parse(sessionStorage.getItem('USER_PERMISSION'));
       if (userValue && userValue.RoleId && userValue.RoleId != 'Operator' &&
-          userValue.RoleId != 'Administrators') {
+          userValue.RoleId != 'Administrator') {
         $location.url('/unauthorized');
       }
 

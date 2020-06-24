@@ -83,7 +83,7 @@
               <span>KVM</span>
             </a>
           </li>
-          <li ng-if="VMEnabled || checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/virtual-media')}">
+          <li ng-if="VMEnabled && checkPrivilege('Administrator')" ng-class="{'active': (path == '/server-control/virtual-media')}">
             <a href="#/server-control/virtual-media" tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">
                <span>Virtual Media</span>
             </a>
