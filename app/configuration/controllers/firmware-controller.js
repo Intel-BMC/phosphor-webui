@@ -26,6 +26,7 @@ window.angular && (function(angular) {
 
       $scope.firmwares = [];
       $scope.firmwareData = '';
+      $scope.serverInfo = '';
       $scope.applyTimeOptions = ['Immediate', 'OnReset'];
       $scope.slectedFirmware = '';
       $scope.bmcActiveVersion = '';
@@ -407,8 +408,15 @@ window.angular && (function(angular) {
             function(error) {
               console.log(JSON.stringify(error));
             });
+        var serverInfoPromise = APIUtils.getServerInfo().then(
+            function(response) {
+              $scope.serverInfo = response;
+            },
+            function(error) {
+              console.log(JSON.stringify(error));
+            });
 
-        var promises = [firmwareInfoPromise]
+        var promises = [serverInfoPromise, serverInfoPromise]
 
         $q.all(promises).finally(function() {
           $scope.loading = false;

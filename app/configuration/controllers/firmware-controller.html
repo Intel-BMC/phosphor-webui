@@ -5,7 +5,7 @@
     <h2 class="text-left firmware-header">Firmware Version</h2>
     <section class="columns col-12 first-section">
       <div class="columns col-md-4 col-sm-12">
-        <label>BMC Firmware Version</label>
+        <label>BMC Version</label>
       </div>
       <div class="columns col-md-8 col-sm-12">
         <label>
@@ -13,6 +13,19 @@
         </label>
       </div>
     </section>
+    <section class="columns col-12 first-section">
+      <div class="columns col-md-4 col-sm-12">
+        <label>BIOS Version</label>
+      </div>
+      <div class="columns col-md-8 col-sm-12">
+        <label>
+          {{ serverInfo.BiosVersion }}
+        </label>
+      </div>
+    </section>
+  </div>
+  <div class="page-content-box">
+    <h2 class="text-left firmware-header">Firmware Image</h2>
     <section class="columns col-12 first-section mt-2" ng-class="{'highlighted': rowUpdate}">
         <div class="columns col-md-4 col-sm-12">
           <label class="dropdown-label">Firmware update options</label>
@@ -37,12 +50,12 @@
           Add image file from workstation
         </button>
       </div>
-
       <div>
         <div class="inline uploading" ng-show="uploading">Upload in progress...</div>
       </div>
     </section>
   </div>
+
   <section class="page-content-simple">
     <div class="columns col-md-6 col-sm-12">
       <div class="status-wrapper" ng-show="bmcActiveVersion">
