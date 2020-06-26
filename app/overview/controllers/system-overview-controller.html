@@ -23,7 +23,7 @@
                     <td>{{ bmc_info.FirmwareVersion }}</td>
                   </tr>
                   <tr class="more-info" ng-click="RedirectToURL('/configuration/network')">
-                    <td>Mac Addresses<icon file="double-caret.svg"></icon>
+                    <td>MAC Addresses<icon file="double-caret.svg"></icon>
                     </td>
                     <td>
                       <dd ng-repeat="nic in network_info">
@@ -76,7 +76,7 @@
               <uib-tab index="2" heading="BIOS">
                 <table class="overview-config-table">
                   <tr>
-                    <td>Bios Version</td>
+                    <td>BIOS Version</td>
                     <td>{{ server_info.BiosVersion || "N/A"  }}</td>
                   </tr>
                   <tr>

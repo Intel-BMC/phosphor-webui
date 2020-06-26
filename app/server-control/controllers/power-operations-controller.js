@@ -449,7 +449,8 @@ window.angular && (function(angular) {
               .replace('Pxe', 'PXE')
               .replace('Hdd', 'Hard Drive')
               .replace('Diags', 'Diagnostics')
-              .replace('BiosSetup', 'Bios Setup')
+              .replace('BiosSetup', 'BIOS Setup')
+              .replace('Usb', 'USB')
         } else {
           return 'No override';
         }
