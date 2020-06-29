@@ -1,9 +1,15 @@
 #hardware_status{
-  .indent{
-
-  }
-  .indent::after {
-
+  .loader-holder{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 8%;
+    z-index: 99;
   }
   .search-box{
   width: 100%;
@@ -18,8 +24,15 @@
   .device_sep{
     border-top: 2px solid $color--grey-30;
   }
-  .row  .page-content-box{
+  .row .page-content-box{
     min-height: 270px;
+  }
+  .row .page-content-box .overflow-ht{
+    height: 330px;
+    overflow-x: hidden
+  }
+  .overview-config-table tr td{
+    word-break: break-all;
   }
   .filter-btn {
     white-space: nowrap;

@@ -23,6 +23,12 @@ window.angular && (function(angular) {
       $scope.showDetails = true;
       $scope.toggleDrive = false;
       $scope.showasGroups = true;
+      $scope.cpuLoading = true;
+      $scope.dimmsLoading = true;
+      $scope.drivesLoading = true;
+      $scope.devicesLoading = true;
+
+      loadData();
 
       $scope.toggleDrivedisabled = function() {
         $scope.toggleDrive = !$scope.toggleDrive;
@@ -43,69 +49,63 @@ window.angular && (function(angular) {
             ((sensor.Status.Health == 'Critical') &&
              $scope.selectedSeverity == 'critical'));
       };
+      function loadData() {
+        APIUtils.getCPUs()
+            .then(
+                function(result) {
+                  console.log('get CPUs Data :', result);
+                  result.forEach(element => {
+                    if (element.ProcessorId) {
+                      element['EffectiveFamily'] =
+                          element.ProcessorId.EffectiveFamily;
+                    }
+                  });
+                  $scope.CPUData = result;
+                },
+                function(error) {
+                  console.log(JSON.stringify(error));
+                })
+            .finally(function() {
+              $scope.cpuLoading = false;
+            });
 
-      var getDimmsPromise = APIUtils.getDIMMs()
-                                .then(
-                                    function(result) {
-                                      $scope.DimmTable = result;
-                                    },
-                                    function(error) {
-                                      console.log(JSON.stringify(error));
-                                    })
-                                .finally(function() {
-                                  $scope.loading = false;
-                                });
+        APIUtils.getDIMMs()
+            .then(
+                function(result) {
+                  $scope.DimmTable = result;
+                },
+                function(error) {
+                  console.log(JSON.stringify(error));
+                })
+            .finally(function() {
+              $scope.dimmsLoading = false;
+            });
 
-      var getCPUsPromise =
-          APIUtils.getCPUs()
-              .then(
-                  function(result) {
-                    result.forEach(element => {
-                      if (element.ProcessorId) {
-                        element['EffectiveFamily'] =
-                            element.ProcessorId.EffectiveFamily;
-                      }
-                    });
-                    $scope.CPUData = result;
-                  },
-                  function(error) {
-                    console.log(JSON.stringify(error));
-                  })
-              .finally(function() {
-                $scope.loading = false;
-              });
+        APIUtils.getDrives()
+            .then(
+                function(result) {
+                  $scope.DriveData = result;
+                },
+                function(error) {
+                  console.log(JSON.stringify(error));
+                })
+            .finally(function() {
+              $scope.drivesLoading = false;
+            });
 
-      var getDrivesPromise = APIUtils.getDrives()
-                                 .then(
-                                     function(result) {
-                                       $scope.DriveData = result;
-                                     },
-                                     function(error) {
-                                       console.log(JSON.stringify(error));
-                                     })
-                                 .finally(function() {
-                                   $scope.loading = false;
-                                 });
-
-      var getDevicesPromise = APIUtils.getDevices()
-                                  .then(
-                                      function(result) {
-                                        $scope.PCIData = result;
-                                      },
-                                      function(error) {
-                                        console.log(JSON.stringify(error));
-                                      })
-                                  .finally(function() {
-                                    $scope.loading = false;
-                                  });
-
-      var promises = [
-        getDimmsPromise, getCPUsPromise, getDevicesPromise, getDrivesPromise
-      ];
-
-      $q.all(promises).finally(function(data) {
-        $scope.loading = false;
-      });
+        APIUtils.getDevices()
+            .then(
+                function(result) {
+                  console.log('inventory PCI Devices Data -> ', result)
+                  $scope.PCIData = result;
+                },
+                function(error) {
+                  console.log(JSON.stringify(error));
+                })
+            .finally(function() {
+              $scope.devicesLoading = false;
+            });
+      }
 
       $scope.sortPCIBy = function(keyname, checkedGroup) {
         $scope.reverse = (keyname !== null && $scope.keyPCIname === keyname) ?
@@ -144,6 +144,7 @@ window.angular && (function(angular) {
 
       $scope.toggleHardware = function(hardwaretype) {
         $scope.selectedHardwareType = hardwaretype;
+        $scope.clear();
       };
 
       $scope.orderDatabySeverity = function(val) {

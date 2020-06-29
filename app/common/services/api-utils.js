@@ -1214,33 +1214,57 @@ window.angular && (function(angular) {
                   }
                   angular.forEach(pciDevices, function(system) {
                     return $http(getRequest(system['@odata.id']))
-                        .then(function(r2) {
-                          // nested 2nd level
-                          angular.forEach(
-                              r2.data['PCIeFunctions'], function(system) {
-                                return $http(getRequest(r2.data['PCIeFunctions']
-                                                               ['@odata.id']))
-                                    .then(function(r3) {
-                                      // nested 3rd level
-                                      angular.forEach(
-                                          r3.data['Members'], function(system) {
-                                            return $http({
-                                                     method: 'GET',
-                                                     url:
-                                                         DataService.getHost() +
-                                                         system['@odata.id'],
-                                                     withCredentials: true
-                                                   })
-                                                .then(function(r4) {
-                                                  Devices.push(getManufacturer(
-                                                      addinFunctions, r2, r4,
-                                                      pId, cId, evenOdd));
-                                                  deferred.resolve(Devices);
-                                                });
-                                          });
-                                    });
-                              });
-                        });
+                        .then(
+                            function(r2) {
+                              // nested 2nd level
+                              angular.forEach(
+                                  r2.data['PCIeFunctions'], function(system) {
+                                    return $http(getRequest(
+                                                     r2.data['PCIeFunctions']
+                                                            ['@odata.id']))
+                                        .then(
+                                            function(r3) {
+                                              // nested 3rd level
+                                              angular.forEach(
+                                                  r3.data['Members'],
+                                                  function(system) {
+                                                    return $http({
+                                                             method: 'GET',
+                                                             url:
+                                                                 DataService
+                                                                     .getHost() +
+                                                                 system
+                                                                     ['@odata.id'],
+                                                             withCredentials:
+                                                                 true
+                                                           })
+                                                        .then(
+                                                            function(r4) {
+                                                              Devices.push(
+                                                                  getManufacturer(
+                                                                      addinFunctions,
+                                                                      r2, r4,
+                                                                      pId, cId,
+                                                                      evenOdd));
+                                                              deferred.resolve(
+                                                                  Devices);
+                                                            },
+                                                            function(error) {
+                                                              console.log(
+                                                                  JSON.stringify(
+                                                                      error));
+                                                            });
+                                                  });
+                                            },
+                                            function(error) {
+                                              console.log(
+                                                  JSON.stringify(error));
+                                            });
+                                  });
+                            },
+                            function(error) {
+                              console.log(JSON.stringify(error));
+                            });
                   });
                   return deferred.promise;
                 });
@@ -1342,46 +1366,39 @@ window.angular && (function(angular) {
                       if (!drives || drives.length === 0) {
                         return deferred.resolve(drive);
                       }
-                      angular.forEach(
-                          drives,
-                          function(system) {
-                            return $http({
-                                     method: 'GET',
-                                     url: DataService.getHost() +
-                                         system['@odata.id'],
-                                     withCredentials: true
-                                   })
-                                .then(
-                                    function(response2) {
-                                      angular.forEach(
-                                          response2.data['Drives'],
-                                          function(system) {
-                                            return $http({
-                                                     method: 'GET',
-                                                     url:
-                                                         DataService.getHost() +
-                                                         system['@odata.id'],
-                                                     withCredentials: true
-                                                   })
-                                                .then(
-                                                    function(response3) {
-                                                      drive.push(
-                                                          response3.data);
-                                                      deferred.resolve(drive);
-                                                    },
-                                                    function(error) {
-                                                      console.log(
-                                                          JSON.stringify(
-                                                              error));
-                                                    })
-                                          })
-                                    },
-                                    function(error) {
-                                      console.log(JSON.stringify(error));
-                                    })
-                          }
-
-                      )
+                      angular.forEach(drives, function(system) {
+                        return $http({
+                                 method: 'GET',
+                                 url: DataService.getHost() +
+                                     system['@odata.id'],
+                                 withCredentials: true
+                               })
+                            .then(
+                                function(response2) {
+                                  angular.forEach(
+                                      response2.data['Drives'],
+                                      function(system) {
+                                        return $http({
+                                                 method: 'GET',
+                                                 url: DataService.getHost() +
+                                                     system['@odata.id'],
+                                                 withCredentials: true
+                                               })
+                                            .then(
+                                                function(response3) {
+                                                  drive.push(response3.data);
+                                                  deferred.resolve(drive);
+                                                },
+                                                function(error) {
+                                                  console.log(
+                                                      JSON.stringify(error));
+                                                })
+                                      })
+                                },
+                                function(error) {
+                                  console.log(JSON.stringify(error));
+                                })
+                      })
                     },
                     function(error) {
                       console.log(JSON.stringify(error));
