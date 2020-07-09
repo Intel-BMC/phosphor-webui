@@ -20,6 +20,7 @@ window.angular && (function(angular) {
       $scope.dropdown_selected = false;
 
       $scope.loading = true;
+      $scope.sensorLoading = true;
       $scope.sensorsInfo = {};
       $scope.fullSensorsInfo = [];
       $scope.showThresholds = false;
@@ -156,6 +157,8 @@ window.angular && (function(angular) {
                                                 index + 1) {
                                               $scope.loadMergedSensors().then(
                                                   function() {
+                                                    $scope.sensorLoading =
+                                                        false;
                                                     $scope.showAlert();
                                                   });
                                             }

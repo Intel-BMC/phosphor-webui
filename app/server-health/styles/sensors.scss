@@ -5,4 +5,16 @@
   .sensor__title.table__cell{
     text-align:left
   }
+  .loader-holder{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9;
+    background-color: #fff;
+  }
 }

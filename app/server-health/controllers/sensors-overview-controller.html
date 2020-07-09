@@ -39,7 +39,12 @@
     </div>
   </div>
 
-  <section class="page-content-rnd table row column" ng-hide="(filteredMergedSensors).length == 0">
+  <section class="page-content-rnd relative table row column" ng-hide="(filteredMergedSensors).length == 0">
+    <div class="loader-holder text-center" ng-hide="!sensorLoading">
+      <div ng-show="sensorLoading" class="spinner-border m-5 individual-component-loader" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
     <div class="text-intro">
       <div class="trim-text-medium">
         <input type='checkbox' id="toggleThresholdVisibility" ng-click="showThresholds = !showThresholds;"> Show

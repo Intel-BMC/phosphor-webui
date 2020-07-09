@@ -172,6 +172,10 @@
   text-align: left;
 }
 
+.relative{
+  position: relative;
+}
+
 .trim-text-large{
   display:none;
   @include mediaQuery(large) {
