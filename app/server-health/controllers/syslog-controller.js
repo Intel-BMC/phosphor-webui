@@ -275,6 +275,9 @@ window.angular && (function(angular) {
           };
 
           $scope.filterByDate = function(log) {
+            if (!$scope.start_date.value && !$scope.end_date.value) {
+              return true;
+            }
             var logDate = new Date(log.Created);
 
             // Set time to 0
