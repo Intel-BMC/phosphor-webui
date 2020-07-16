@@ -350,7 +350,7 @@ window.angular && (function(angular) {
             this.ws.onclose = this._on_ws_close.bind(this);
             this.ws.onerror = this._on_ws_error.bind(this);
             $scope.proxyDevices[index].isActive = true;
-            toastService.success('Server running');
+            toastService.success(`${this.id} is running`);
           };
           this.stop = function() {
             if (this.ws.readyState == 1) {
@@ -366,10 +366,10 @@ window.angular && (function(angular) {
             console.log(`${endpoint} closed with code: ${ev.code} + reason: ${
                 ev.reason}`);
             console.log(JSON.stringify(ev));
-            if (ev.code == 1000) {
-              toastService.success('Server closed successfully');
+            if (!ev.reason && ev.code == 1000) {
+              toastService.success(`${this.id} closed successfully`);
             } else {
-              toastService.error('Server closed with errors');
+              toastService.error(`${this.id} closed with error: ${ev.reason}`);
             }
             $scope.proxyDevices[index].isActive = false;
           };
