@@ -22,8 +22,6 @@ window.angular && (function(angular) {
       $scope.bmc_firmware = '';
       $scope.bmc_time = '';
       $scope.server_firmware = '';
-      $scope.power_consumption = '';
-      $scope.power_cap = '';
       $scope.network_info = [];
       $scope.loading = false;
       $scope.edit_hostname = false;
@@ -70,30 +68,6 @@ window.angular && (function(angular) {
         var getServerInfoPromise = APIUtils.getServerInfo().then(
             function(data) {
               $scope.server_info = data;
-            },
-            function(error) {
-              console.log(JSON.stringify(error));
-            });
-
-        // Commented out until Redfish power consumption available
-        /*
-        var getPowerConsumptionPromise = APIUtils.getPowerConsumption().then(
-        function(data) {
-          $scope.power_consumption = data;
-        },
-        function(error) {
-          console.log(JSON.stringify(error));
-        });*/
-        var getPowerConsumptionPromise = true;
-
-        var getPowerCapPromise = APIUtils.getPowerCap().then(
-            function(data) {
-              if (data.data.PowerCapEnable == false) {
-                $scope.power_cap = Constants.POWER_CAP_TEXT.disabled;
-              } else {
-                $scope.power_cap =
-                    data.data.PowerCap + ' ' + Constants.POWER_CAP_TEXT.unit;
-              }
             },
             function(error) {
               console.log(JSON.stringify(error));
