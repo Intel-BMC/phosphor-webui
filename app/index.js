@@ -201,20 +201,24 @@ window.angular && (function(angular) {
             if (next.$$route.originalPath == '/' ||
                 next.$$route.originalPath == '/login') {
               if (userModel.isLoggedIn()) {
-                const uri = next && next.params.next || '';
+                const uri = (next && next.params && next.params.next) ?
+                    next.params.next :
+                    null;
                 if (current && current.$$route) {
                   $location.path(current.$$route.originalPath);
-                } else if (next) {
+                } else if (uri) {
                   const invalidChar =
-                      (next.indexOf('(') >= 0 || next.indexOf(')') >= 0 ||
-                       next.indexOf('.') >= 0 || next.indexOf(':') >= 0 ||
-                       next.indexOf('//') >= 0)
-                  if (!invalidChar) {
-                    $window.location.hash = '#/overview/server';
+                      (uri.indexOf('(') >= 0 || uri.indexOf(')') >= 0 ||
+                       uri.indexOf('.') >= 0 || uri.indexOf(':') >= 0 ||
+                       uri.indexOf('//') >= 0)
+                  if (invalidChar) {
+                    $location.path('/overview/server');
                   }
                   else {
-                    $window.location.href = next;
+                    $window.location.href = uri;
                   }
+                } else {
+                  $location.path('/overview/server');
                 }
               }
             }

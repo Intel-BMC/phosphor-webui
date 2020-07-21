@@ -48,7 +48,7 @@ window.angular && (function(angular) {
                     (next.indexOf('(') >= 0 || next.indexOf(')') >= 0 ||
                      next.indexOf('.') >= 0 || next.indexOf(':') >= 0 ||
                      next.indexOf('//') >= 0)
-                if (!invalidChar) {
+                if (invalidChar) {
                   $window.location.hash = '#/overview/server';
                 }
                 else {
