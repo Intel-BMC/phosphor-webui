@@ -377,6 +377,27 @@ window.angular && (function(angular) {
         $scope.TPMVersion = angular.copy($scope.originalTPMVersion);
       };
 
+      const loadServerPowerState = function() {
+        $scope.loading = true;
+        APIUtils.getServerStatus()
+            .then(function(result) {
+              if (result) {
+                $scope.status = result.PowerState;
+                setPowerState();
+              } else {
+                console.log(
+                    'Failed to get server power state:', JSON.stringify(error));
+              }
+            })
+            .catch(function(error) {
+              console.log(
+                  'Failed to get server power state:', JSON.stringify(error));
+            })
+            .finally(function() {
+              $scope.loading = false;
+            });
+      };
+
       /*
        *   Get boot settings
        */
@@ -521,6 +542,7 @@ window.angular && (function(angular) {
         }
       };
 
+      loadServerPowerState();
       loadBootSettings();
       loadTPMStatus();
     }

@@ -385,8 +385,8 @@ window.angular && (function(angular) {
                          '/redfish/v1/Managers/bmc/EthernetInterfaces/' +
                          interfaceName,
                      withCredentials: true,
-                     data: JSON.stringify(
-                         {'StaticNameServers': dnsServersArray})
+                     data:
+                         JSON.stringify({'StaticNameServers': dnsServersArray})
                    })
                 .then(function(response) {
                   return response.data;
@@ -1546,21 +1546,18 @@ window.angular && (function(angular) {
           });
         },
         getServerStatus: function() {
-          return this.getRedfishSysName().then(function(sysName) {
-            return $http({
-                     method: 'GET',
-                     url: DataService.getHost() + '/redfish/v1/Systems/' +
-                         sysName,
-                     withCredentials: true
-                   })
-                .then(
-                    function(response) {
-                      return response.data;
-                    },
-                    function(error) {
-                      console.log(JSON.stringify(error));
-                    });
-          });
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + '/redfish/v1/Systems/system',
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    return response.data;
+                  },
+                  function(error) {
+                    console.log(JSON.stringify(error));
+                  });
         },
         getPowerConsumption: function() {
           return $http({
