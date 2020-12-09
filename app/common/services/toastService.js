@@ -11,47 +11,38 @@ window.angular && (function(angular) {
   'use strict';
 
   angular.module('app.common.services').service('toastService', [
-    'ngToast', '$sce',
-    function(ngToast, $sce) {
+    'toaster', '$sce',
+    function(toaster, $sce) {
       function initToast(
-          type = 'create', title = '', message = '', dismissOnTimeout = false) {
-        const iconStatus = type === 'success' ?
-            'on' :
-            type === 'danger' ? 'error' : type === 'warning' ? 'warn' : null;
-        const content = $sce.trustAsHtml(`
-          <div role="alert" class="alert-content-container">
-            <div class="alert-content">
-              <h2 class="alert-content__header">${title}</h2>
-              <p class="alert-content__body">${message}</p>
-            </div>
-          </div>`);
-        ngToast[type]({content, dismissOnTimeout, compileContent: true});
+          type = 'info', title = '', message = '', timeout = 10000) {
+        toaster.pop({
+          type: type,
+          title: title,
+          body: message,
+          bodyOutputType: 'trustedHtml',
+          timeout: timeout,
+          showCloseButton: true,
+          tapToDismiss: true
+        });
       };
 
       this.error = function(message) {
-        initToast('danger', 'Error', message);
+        initToast('error', 'Error!', message);
       };
 
       this.success = function(message) {
         initToast('success', 'Success!', message, true);
       };
 
-      this.warn = function(message) {
-        initToast('warning', 'Warning', message);
+      this.warning = function(message) {
+        initToast('warning', 'Warning!', message);
       };
 
       this.info = function(title, message) {
-        initToast('info', title, message);
+        initToast('note', title, message);
       };
       this.alert = function(message) {
-        var errorMessage = $sce.trustAsHtml(
-            '<div role="alert"><b>Alert</b><br>' + message + '</div>');
-        ngToast.create({className: 'danger', content: errorMessage});
-      };
-      this.warning = function(message) {
-        var errorMessage = $sce.trustAsHtml(
-            '<div role="alert"><b>Warning</b><br>' + message + '</div>');
-        ngToast.create({className: 'warning', content: errorMessage});
+        initToast('error', 'Error!', message);
       };
     }
   ]);

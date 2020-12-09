@@ -12,7 +12,7 @@
 <body ng-style="dataService.bodyStyle" ng-attr-id="{{!dataService.showNavigation ? 'login': ''}}">
     <app-navigation ng-if="dataService.showNavigation" path="dataService.path"
         show-navigation="dataService.showNavigation"></app-navigation>
-    <toast ng-if="dataService.showNavigation"></toast>
+    <toaster-container ng-if="dataService.showNavigation"></toaster-container>
     <app-header ng-if="dataService.showNavigation" path="dataService.path"></app-header>
 
     <main ng-view

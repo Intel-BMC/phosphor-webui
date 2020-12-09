@@ -3,8 +3,6 @@
 // Modules
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
-var HtmlWebpackInlineSourcePlugin =
-    require('html-webpack-inline-source-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
@@ -92,9 +90,9 @@ module.exports = (env, options) => {
         // You can add here any file extension you want to get copied
         // to your output
         // Excludes .svg files in icons directory
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        test: /\.(png|jpg|jpeg|gif|woff|woff2|ttf|eot|ico)$/,
         loader: 'file-loader',
-        options: {name: '[path][name].[ext]'}
+        options: {name: '[path][name].[ext]', esModule: false}
       },
       {
         // HTML LOADER
@@ -110,7 +108,14 @@ module.exports = (env, options) => {
       {
         test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
-      }
+      },
+      {
+        test: /\.svg/,
+        use: {
+          loader: 'svg-url-loader',
+          options: {stripdeclarations: false, encoding: 'base64'},
+        },
+      },
     ]
   };
 
@@ -120,9 +125,15 @@ module.exports = (env, options) => {
       inject: 'body',
       favicon: './app/assets/images/favicon.ico',
       minify: {removeComments: true, collapseWhitespace: true},
+      hash: true,
+      cache: false
 
     }),
     new MiniCssExtractPlugin(),
+
+    new CopyWebpackPlugin({
+      patterns: [{from: './app/assets/images/favicon.ico', to: '[path][name]'}]
+    }),
 
     new FilterChunkWebpackPlugin({
       patterns: [
@@ -136,7 +147,8 @@ module.exports = (env, options) => {
 
   // Add build specific plugins
   if (isProd) {
-    config.plugins.push(new CompressionPlugin({deleteOriginalAssets: true}));
+    config.plugins.push(new CompressionPlugin(
+        {deleteOriginalAssets: true, minRatio: Infinity}));
   }
 
   /**

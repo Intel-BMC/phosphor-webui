@@ -23,9 +23,8 @@ import angular_route from 'angular-route';
 import angular_sanitize from 'angular-sanitize';
 import angular_ui_bootstrap from 'angular-ui-bootstrap';
 import angular_ui_router from 'angular-ui-router';
-import ngToast from 'ng-toast';
-import ngToast_animate from 'ng-toast/dist/ngToast-animations.css';
-import ngToast_style from 'ng-toast/dist/ngToast.css';
+import toaster from 'angularjs-toaster';
+import toaster_style from 'angularjs-toaster/toaster.css';
 
 require('./styles/index.scss');
 var config = require('../config.json');
@@ -120,7 +119,7 @@ window.angular && (function(angular) {
           'app',
           [
             // Dependencies
-            'ngRoute', 'angular-clipboard', 'ngToast', 'ngAnimate',
+            'ngRoute', 'angular-clipboard', 'toaster', 'ngAnimate',
             'ngMessages', 'app.common.directives.dirPagination', 'ngSanitize',
             'ui.bootstrap', 'ngCookies',
             // Basic resources
@@ -144,7 +143,7 @@ window.angular && (function(angular) {
       .config([
         '$compileProvider',
         function($compileProvider) {
-          $compileProvider.aHrefSanitizationWhitelist(
+          $compileProvider.aHrefSanitizationTrustedUrlList(
               /^\s*(https?|ftp|mailto|tel|file|data|blob):/);
         }
       ])
@@ -164,19 +163,6 @@ window.angular && (function(angular) {
           $httpProvider.defaults.headers.patch = {
             'Content-Type': 'application/json; charset=utf-8'
           };
-        }
-      ])
-      .config([
-        'ngToastProvider',
-        function(ngToastProvider) {
-          ngToastProvider.configure({
-            animation: 'fade',
-            timeout: 10000,
-            dismissButton: true,
-            dismissOnTimeout: false,
-            dismissOnClick: false,
-            maxNumber: 6
-          });
         }
       ])
       .run([
