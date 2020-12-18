@@ -1704,6 +1704,24 @@ window.angular && (function(angular) {
                 return response.data;
               });
         },
+        isUserAuthenticated: function() {
+          return $http({
+                   method: 'GET',
+                   url: DataService.getHost() + '/redfish/v1/Managers',
+                   withCredentials: true
+                 })
+              .then(
+                  function(response) {
+                    if (response.status == 200) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  },
+                  function(error) {
+                    return false;
+                  });
+        },
       };
       var getRequest = function(urlString) {
         return {

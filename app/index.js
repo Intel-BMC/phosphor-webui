@@ -167,7 +167,9 @@ window.angular && (function(angular) {
       ])
       .run([
         '$rootScope', '$location', 'dataService', 'userModel', '$cookies',
-        function($rootScope, $location, dataService, userModel, $cookies) {
+        'APIUtils',
+        function(
+            $rootScope, $location, dataService, userModel, $cookies, APIUtils) {
           $rootScope.dataService = dataService;
           dataService.path = $location.path();
 
@@ -180,13 +182,19 @@ window.angular && (function(angular) {
             if (next.$$route == null || next.$$route == undefined) return;
             if (next.$$route.authenticated) {
               if (!userModel.isLoggedIn()) {
-                $location.path('/login');
+                APIUtils.isUserAuthenticated().then(
+                    auth => {
+                      if (!auth) $location.path('/login');
+                    },
+                    auth => {
+                      $location.path('/login');
+                    });
               }
             }
 
             if (next.$$route.originalPath == '/' ||
                 next.$$route.originalPath == '/login') {
-              if (userModel.isLoggedIn()) {
+              var redirect_logged_in = function() {
                 const uri = (next && next.params && next.params.next) ?
                     next.params.next :
                     null;
@@ -206,6 +214,18 @@ window.angular && (function(angular) {
                 } else {
                   $location.path('/overview/server');
                 }
+              };
+
+              if (userModel.isLoggedIn()) {
+                redirect_logged_in();
+              } else {
+                APIUtils.isUserAuthenticated().then(
+                    auth => {
+                      if (auth) redirect_logged_in();
+                    },
+                    auth => {
+                      return;
+                    });
               }
             }
           });
