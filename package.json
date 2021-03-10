@@ -64,7 +64,6 @@
     "babel-loader": "8.2.1",
     "@babel/polyfill": "7.12.1",
     "compression-webpack-plugin": "6.1.1",
-    "copy-webpack-plugin": "6.3.2",
     "css-loader": "5.0.1",
     "eslint-plugin-angular": "4.0.1",
     "event-stream": "4.0.1",

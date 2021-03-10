@@ -4,7 +4,6 @@
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var path = require('path');
 var FilterChunkWebpackPlugin = require('filter-chunk-webpack-plugin');
@@ -130,10 +129,6 @@ module.exports = (env, options) => {
 
     }),
     new MiniCssExtractPlugin(),
-
-    new CopyWebpackPlugin({
-      patterns: [{from: './app/assets/images/favicon.ico', to: '[path][name]'}]
-    }),
 
     new FilterChunkWebpackPlugin({
       patterns: [
